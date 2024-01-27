@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@1&display=swap');
+
+* {
+    margin: 0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    list-style: none;
+    text-decoration: none;
+}
+
+body {
+    height: 100v;
+    background: black;
+}
+
+/* Header */
+/* ======================================== */
+
+header {
+    z-index: 3;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(6, 0, 56);
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    padding: 0 8%;
+    box-shadow: 0 5px 10px rgb(255, 0, 0);
+    width: 90%;
+    margin-left: 5%;
+    height: 80px;
+}
+
+.logo {
+    font-size: 40px;
+    font-weight: 900;
+    color: rgb(255, 255, 255);
+    transition: .5s;
+    letter-spacing: -1px;
+}
+
+.logo:hover {
+   transform: scale(1.5);
+   color: rgb(255, 0, 0);
+}
+
+.navbar-item {
+    position: relative;
+    float: left;
+}
+
+.navbar-link {
+    padding: 15px;
+    color: rgb(255, 255, 255);
+    font-size: 25px;
+    display: block;
+    transition: background-color 0.3s ease;
+    border-radius: 30px;
+}
+
+.navbar-link:hover {
+    background-color: rgb(48, 3, 3);
+    color: rgb(255, 0, 0);
+}
+
+
+/* Buttons */
+
+/* ======================================== */
+
+.main-button, #executeButton {
+    display: block;
+    margin: 0 auto;
+    padding: 15px;
+    background: rgb(6, 0, 56);
+    color: white;
+    border: white solid;
+    border-radius: 25px;
+    font-size: 25px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    width: 300px;
+}
+
+.main-button:hover, #executeButton:hover {
+    background-color: rgb(255, 0, 0);
+    color: black;
+    border: black solid;
+    cursor: pointer;
+}
+
+#resultContainer {
+    color: white;
+    background: rgb(39, 25, 164);
+    font-size: 60px;
+    text-align: center;
+    margin-top: 10px;
+    width: 60%;
+    margin-left: 20%;
+    border-radius: 30px;
+}
