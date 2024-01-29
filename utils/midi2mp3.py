@@ -9,7 +9,7 @@ def midi2mp3(file_name):
         mp3_file = os.path.abspath(file_name.replace('.mid', '.mp3'))
         # print("saving wav", wav_file)
 
-        os.system(f'fluidsynth -ni piano_soundfont.sf2 {file_name} -F {wav_file} -r 44100')
+        os.system(f'fluidsynth -ni MuseGen/utils/piano_soundfont.sf2 {file_name} -F {wav_file} -r 44100')
     
         audio = AudioSegment.from_wav(wav_file)
         audio.export(mp3_file, format='mp3')
