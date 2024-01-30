@@ -10,6 +10,11 @@ def main_page():
     page = render_template("main_page.html")
     return page
 
+@app.route('/editing_page.html')
+def editing_page():
+    page = render_template("editing_page.html")
+    return page
+  
 @app.route('/convert_page')
 def convert_page():
     return render_template("convert_page.html")

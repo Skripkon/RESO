@@ -1,0 +1,37 @@
+{% extends 'header.html' %}
+
+{% block title %}
+MuseGen
+{% endblock %}
+
+{% block body %}
+<br/><br/><br/><br/><br/><br/>
+<audio controls>
+    <source src="{{ url_for('static', filename='test_audio_1.mp3') }}" type="audio/mpeg">
+    Your browser does not support the audio tag.
+  </audio>
+  
+<button id="executeButton">Execute Function</button>
+
+<div id="resultContainer"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#executeButton").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/execute_function",
+                success: function (response) {
+                    $("#resultContainer").text(response.result);
+                },
+                error: function (error) {
+                    console.log(error);
+                    alert("Error occurred");
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}
