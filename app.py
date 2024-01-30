@@ -8,6 +8,10 @@ def main_page():
     page = render_template("main_page.html")
     return page
 
+@app.route('/editing_page.html')
+def editing_page():
+    page = render_template("editing_page.html")
+    return page
 
 @app.route('/execute_function', methods=['POST'])
 def execute_function():
