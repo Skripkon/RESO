@@ -11,8 +11,8 @@
 
 body {
     height: 100v;
-    background: black;
-    margin-top: 100px;
+    background: rgb(0, 10, 28);
+    margin-top: 150px;
 }
 
 /* Header */
@@ -23,12 +23,12 @@ header {
     position: fixed;
     top: 0;
     left: 0;
-    background: rgb(6, 0, 56);
+    background: rgb(17, 8, 99);
     display: flex;
     justify-content:space-around;
     align-items: center;
     padding: 0 8%;
-    box-shadow: 0 5px 10px rgb(255, 0, 0);
+    box-shadow: 0 5px 10px rgb(130, 225, 124);
     width: 90%;
     margin-left: 5%;
     height: 80px;
@@ -44,7 +44,7 @@ header {
 
 .logo:hover {
    transform: scale(1.5);
-   color: rgb(255, 0, 0);
+   color: rgb(130, 225, 124);
 }
 
 .navbar-item {
@@ -62,8 +62,8 @@ header {
 }
 
 .navbar-link:hover {
-    background-color: rgb(48, 3, 3);
-    color: rgb(255, 0, 0);
+    background-color: rgb(64, 61, 233);
+    color: rgb(130, 225, 124);
 }
 
 
@@ -71,7 +71,7 @@ header {
 
 /* ======================================== */
 
-.main-button, #executeButton {
+.main-button {
     display: block;
     margin: 0 auto;
     padding: 15px;
@@ -85,20 +85,9 @@ header {
     width: 300px;
 }
 
-.main-button:hover, #executeButton:hover {
-    background-color: rgb(255, 0, 0);
+.main-button:hover {
+    background-color: rgb(130, 225, 124);
     color: black;
-    border: black solid;
+    border: white solid;
     cursor: pointer;
-}
-
-#resultContainer {
-    color: white;
-    background: rgb(39, 25, 164);
-    font-size: 60px;
-    text-align: center;
-    margin-top: 10px;
-    width: 60%;
-    margin-left: 20%;
-    border-radius: 30px;
 }
