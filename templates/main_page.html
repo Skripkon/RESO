@@ -5,42 +5,7 @@ MuseGen
 {% endblock %}
 
 {% block body %}
-<br /> <br /> <br /> <br />
-<a class="main-button" > Сергей? </a>
 
-<br />
-
-<a class="main-button"> Надежда? </a>
-
-<br />
-
-
-<button id="executeButton">Execute Function</button>
-
-<div id="resultContainer"></div>
-
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $("#executeButton").click(function () {
-            $.ajax({
-                type: "POST",
-                url: "/execute_function",
-                success: function (response) {
-                    $("#resultContainer").text(response.result);
-                },
-                error: function (error) {
-                    console.log(error);
-                    alert("Error occurred");
-                }
-            });
-        });
-    });
-</script>
-
-<br />
-<a href="{{ url_for('convert_page') }}">Convert from MIDI to MP3</a>
-<br />
+<a class="main-button" > Generate </a>
 
 {% endblock %}

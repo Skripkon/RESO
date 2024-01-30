@@ -12,6 +12,7 @@
 body {
     height: 100v;
     background: black;
+    margin-top: 100px;
 }
 
 /* Header */
