@@ -2,4 +2,4 @@ venv
 **/__pycache__
 **/.DS_Store
 __pycache__
-generated_data
+generated_data/*
