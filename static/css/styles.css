@@ -10,9 +10,13 @@
 }
 
 body {
-    height: 100v;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
     background: rgb(0, 10, 28);
-    margin-top: 150px;
 }
 
 /* Header */
@@ -90,4 +94,83 @@ header {
     color: black;
     border: white solid;
     cursor: pointer;
+}
+
+/* ComboBox */
+
+/* ======================================== */
+
+.gen_form {
+    width: 300px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgb(6, 0, 56);
+    padding: 15px;
+    border: white solid;
+    border-radius: 25px;
+    transition: background-color 0.3s ease;
+}
+
+.gen_form select,
+.gen_form button {
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    border-radius: 10px;
+    border: none;
+    background-color: rgb(64, 61, 233);
+    color: black;
+}
+
+.gen_form select {
+    width: 100%;
+}
+
+.gen_form button {
+    width: 100%;
+    background-color: rgb(6, 0, 56);
+    color: white;
+    cursor: pointer;
+}
+
+.gen_form button:hover {
+    background-color: rgb(130, 225, 124);
+    color: black;
+}
+
+
+/* Сontainers */
+
+/* ======================================== */
+
+.container {
+    width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgb(64, 61, 233);
+    padding: 15px;
+    border: white solid;
+    border-radius: 25px;
+    transition: background-color 0.3s ease;
+}
+
+/* Audio-Player */
+
+/* ======================================== */
+
+.audio-player {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.audio-player audio {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    display: block;
+    outline: none;
 }
