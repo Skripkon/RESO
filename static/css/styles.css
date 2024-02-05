@@ -10,13 +10,9 @@
 }
 
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100vh;
-    margin: 0;
-    padding: 0;
     background: rgb(0, 10, 28);
+    margin-top: 150px;
 }
 
 /* Header */
@@ -167,10 +163,3 @@ header {
     margin-top: 50px;
 }
 
-.audio-player audio {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-    display: block;
-    outline: none;
-}
