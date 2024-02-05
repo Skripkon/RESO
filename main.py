@@ -18,7 +18,9 @@ templates = Jinja2Templates(directory="templates")
 # Mount the static directory to serve static files (like CSS, JS, images, etc.)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-app.mount("/generated_data", StaticFiles(directory="generated_data"), name="generated_data")
+app.mount("/generated_data", StaticFiles(directory="generated_data"),
+          name="generated_data")
+
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
@@ -50,17 +52,21 @@ async def convert_midi2mp3(midi_file: UploadFile = File(...)):
     mp3_file_path = midi2mp3(filename)
     return FileResponse(mp3_file_path, media_type='audio/mpeg', filename='converted.mp3')
 
+
 @app.get("/generate", response_class=HTMLResponse)
 async def read_root(request: Request):
     return templates.TemplateResponse("generate.html", {"request": request})
+
 
 @app.get("/generate/algorithmic", response_class=HTMLResponse)
 async def algorithmic_page(request: Request):
     return templates.TemplateResponse("algorithmic.html", {"request": request})
 
+
 @app.get("/generate/neural", response_class=HTMLResponse)
 async def neural_page(request: Request):
     return templates.TemplateResponse("neural.html", {"request": request})
+
 
 @app.post("/generate/process_algorithmic")
 async def process_algorithmic(generator: str = Form(...)):
@@ -70,10 +76,10 @@ async def process_algorithmic(generator: str = Form(...)):
         mp3_file_path = midi2mp3(file_path)
     return RedirectResponse(url="/generate/generated_track")
 
+
 @app.post("/generate/generated_track", response_class=HTMLResponse)
 async def generated_track(request: Request):
     return templates.TemplateResponse("generated_track.html", {"request": request})
-
 
 
 if __name__ == "__main__":

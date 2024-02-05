@@ -2,7 +2,7 @@
 
 * {
     margin: 0;
-    padding:0;
+    padding: 0;
     box-sizing: border-box;
     font-family: sans-serif;
     list-style: none;
@@ -22,15 +22,14 @@ header {
     z-index: 3;
     position: fixed;
     top: 0;
-    left: 0;
+    left: 5%;
+    width: 90%;
     background: rgb(17, 8, 99);
     display: flex;
-    justify-content:space-around;
+    justify-content: space-around;
     align-items: center;
     padding: 0 8%;
     box-shadow: 0 5px 10px rgb(130, 225, 124);
-    width: 90%;
-    margin-left: 5%;
     height: 80px;
 }
 
@@ -38,13 +37,13 @@ header {
     font-size: 40px;
     font-weight: 900;
     color: rgb(255, 255, 255);
-    transition: .5s;
+    transition: 0.5s;
     letter-spacing: -1px;
 }
 
 .logo:hover {
-   transform: scale(1.5);
-   color: rgb(130, 225, 124);
+    transform: scale(1.5);
+    color: rgb(130, 225, 124);
 }
 
 .navbar-item {
@@ -57,8 +56,8 @@ header {
     color: rgb(255, 255, 255);
     font-size: 25px;
     display: block;
-    transition: background-color 0.3s ease;
     border-radius: 30px;
+    transition: background-color 0.3s ease;
 }
 
 .navbar-link:hover {
@@ -66,15 +65,14 @@ header {
     color: rgb(130, 225, 124);
 }
 
-
 /* Buttons */
-
 /* ======================================== */
 
 .main-button {
     display: block;
     margin: 0 auto;
     padding: 15px;
+    width: 300px;
     background: rgb(6, 0, 56);
     color: white;
     border: white solid;
@@ -82,7 +80,6 @@ header {
     font-size: 25px;
     text-align: center;
     transition: background-color 0.3s ease;
-    width: 300px;
 }
 
 .main-button:hover {
@@ -93,17 +90,17 @@ header {
 }
 
 /* ComboBox */
-
 /* ======================================== */
 
 .gen_form {
-    width: 300px;
+    width: 400px;
+    height: 150px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: rgb(6, 0, 56);
     padding: 15px;
+    background: rgb(6, 0, 56);
     border: white solid;
     border-radius: 25px;
     transition: background-color 0.3s ease;
@@ -117,18 +114,23 @@ header {
     border-radius: 10px;
     border: none;
     background-color: rgb(64, 61, 233);
-    color: black;
+    color: white;
+    text-align: center;
 }
 
 .gen_form select {
     width: 100%;
+    background-color: rgb(64, 61, 233);
 }
 
 .gen_form button {
     width: 100%;
     background-color: rgb(6, 0, 56);
     color: white;
+    border-color: white;
+    border: 1px solid;
     cursor: pointer;
+    margin-top: 5px;
 }
 
 .gen_form button:hover {
@@ -137,29 +139,50 @@ header {
 }
 
 
-/* Сontainers */
-
-/* ======================================== */
-
+/* Containers */
 .container {
-    width: 800px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    width: 80%;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 10px;
     background: rgb(64, 61, 233);
-    padding: 15px;
-    border: white solid;
-    border-radius: 25px;
-    transition: background-color 0.3s ease;
+    border: 2px solid #ddd;
+    box-shadow: 0px 10px 20px rgba(255, 255, 255, 0.5);
 }
 
-/* Audio-Player */
-
-/* ======================================== */
-
+/* Audio Player */
 .audio-player {
     text-align: center;
-    margin-top: 50px;
 }
 
+audio {
+    width: 100%;
+    margin-top: 10px;
+    border: 3px solid white;
+    border-radius: 40px;
+}
+
+audio:focus {
+    outline: none;
+}
+
+/* Stylish play/pause button */
+audio::-webkit-media-controls-play-button,
+audio::-webkit-media-controls-pause-button,
+audio::-webkit-media-controls-play-button-container,
+audio::-webkit-media-controls-pause-button-container {
+    width: 40px;
+    height: 30px;
+    margin-top: -6px;
+}
+
+audio::-webkit-media-controls-play-button,
+audio::-webkit-media-controls-pause-button {
+    background-color: rgb(130, 225, 124);
+    border-radius: 40%;
+}
+
+audio::-webkit-media-controls-play-button-container,
+audio::-webkit-media-controls-pause-button-container {
+    background-color: transparent;
+}
