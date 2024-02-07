@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <style>
+        html {
+          scroll-behavior: smooth;
+        }
+      </style>
+      
+    <meta charset="UTF-8">
+    <meta author="Igolkina, N, Skripko, N, Fedchin, S" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    <link href="{{ url_for('static', path='css/styles.css') }}" rel="stylesheet">
+</head>
+<body>
+<!-- Header -->
+    <header>
+
+        <a class="logo" href="/">MuseGen</a>
+
+        <nav>
+            <ul>
+                <li class="navbar-item"><a class="navbar-link" href="/about">About us</a></li>
+                <li class="navbar-item"><a class="navbar-link" href="/contacts">Contacts</a></li>
+            </ul>
+        </nav>
+</header>
+{% block body %}{% endblock body %}
+<br></br>

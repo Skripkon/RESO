@@ -1,0 +1,20 @@
+{% extends 'header.html' %}
+
+{% block title %}
+MuseGen
+{% endblock %}
+
+{% block body %}
+
+<form class="gen_form" method="post" action="/generate/process_algorithmic">
+    <select id="generator" name="generator" style="margin-bottom: 10px;">
+        <option value="AlgoGen01" selected>Calm Melody</option>
+        <option value="AlgoGen02">Error 404</option>
+    </select>
+    <button class="main-button" id="submitButton" type="submit">Generate a song!</button>
+</form>
+
+
+
+
+{% endblock %}
