@@ -138,16 +138,11 @@ header {
     color: black;
 }
 
-
 /* Containers */
 .container {
-    width: 80%;
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 10px;
-    background: rgb(64, 61, 233);
-    border: 2px solid #ddd;
-    box-shadow: 0px 10px 20px rgba(255, 255, 255, 0.5);
+    margin-left: 35%;
+    width: 30%;
+    padding: 20px;
 }
 
 /* Audio Player */
@@ -156,8 +151,6 @@ header {
 }
 
 audio {
-    width: 100%;
-    margin-top: 10px;
     border: 3px solid white;
     border-radius: 40px;
 }
@@ -178,7 +171,7 @@ audio::-webkit-media-controls-pause-button-container {
 
 audio::-webkit-media-controls-play-button,
 audio::-webkit-media-controls-pause-button {
-    background-color: rgb(130, 225, 124);
+    background-color: white;
     border-radius: 40%;
 }
 
