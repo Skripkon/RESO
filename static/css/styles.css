@@ -1,17 +1,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@1&display=swap');
 
+@font-face {
+    font-family: 'Eina01';
+    src: url('../fonts/Eina01/Eina01-Light.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Eina01';
+    src: url('../fonts/Eina01/Eina01-Regular.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Eina01';
+    src: url('../fonts/Eina01/Eina01-SemiBold.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Eina01';
+    src: url('../fonts/Eina01/Eina01-Bold.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: sans-serif;
+    font-family: 'Eina01';
     list-style: none;
     text-decoration: none;
 }
 
 body {
     height: 100vh;
-    background: rgb(0, 10, 28);
+    background-image: url("../images/main_bg.png");
+    background-size: cover;
     margin-top: 150px;
 }
 
@@ -19,50 +48,76 @@ body {
 /* ======================================== */
 
 header {
+    font-weight: 100;
     z-index: 3;
     position: fixed;
     top: 0;
-    left: 5%;
-    width: 90%;
-    background: rgb(17, 8, 99);
+    width: 100%;
+    background: rgba(2, 8, 18, 0.8);
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     padding: 0 8%;
-    box-shadow: 0 5px 10px rgb(130, 225, 124);
-    height: 80px;
+    height: 73px;
+    padding-left: 100px;
+    padding-right: 60px;
 }
 
 .logo {
-    font-size: 40px;
-    font-weight: 900;
-    color: rgb(255, 255, 255);
-    transition: 0.5s;
-    letter-spacing: -1px;
+    position: static;
+	margin-left: 1px;
+    transition: transform 0.3s ease-in-out;
 }
 
 .logo:hover {
-    transform: scale(1.5);
-    color: rgb(130, 225, 124);
+    transform: scale(1.05);
+    cursor: pointer;
 }
 
 .navbar-item {
     position: relative;
-    float: left;
+    float: right;
+
 }
 
 .navbar-link {
     padding: 15px;
     color: rgb(255, 255, 255);
+    font-weight: 100;
+    font-style: normal;
     font-size: 25px;
     display: block;
     border-radius: 30px;
-    transition: background-color 0.3s ease;
+    transition: transform 0.3s ease-in-out;
+    padding: 50px;
 }
 
 .navbar-link:hover {
-    background-color: rgb(64, 61, 233);
-    color: rgb(130, 225, 124);
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+/* Main page */
+/* ======================================== */
+
+.website-description {
+    font-family: "Eina01";
+    font-weight: 200;
+    font-style: normal;
+    font-size: 23px;
+    color: #012a4a;
+    text-align: center;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 0.9%;
+}
+
+.main-logo {
+    width: 320px;
+    position: absolute;
+    top: 22%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 /* Buttons */
@@ -71,21 +126,23 @@ header {
 .main-button {
     display: block;
     margin: 0 auto;
+    margin-top: 5.5%;
     padding: 15px;
-    width: 300px;
-    background: rgb(6, 0, 56);
-    color: white;
-    border: white solid;
-    border-radius: 25px;
-    font-size: 25px;
+    width: 700px;
+    height: 70px;
+    background: #013a6300;
+    border: #013a63 solid 5px;
+    border-radius: 31px;
+    color: #013a63;
+    font-size: 35px;
+    line-height: 0.8;
     text-align: center;
-    transition: background-color 0.3s ease;
+    transition: 0.1s ease;
 }
 
 .main-button:hover {
-    background-color: rgb(130, 225, 124);
-    color: black;
-    border: white solid;
+    background-color: #013a63;
+    color: #e9f4f7;
     cursor: pointer;
 }
 
