@@ -126,16 +126,16 @@ header {
 .main-button {
     display: block;
     margin: 0 auto;
-    margin-top: 5.5%;
+    margin-top: 4.5%;
     padding: 15px;
-    width: 700px;
-    height: 70px;
+    width: 600px;
+    height: 60px;
     background: #013a6300;
     border: #013a63 solid 5px;
     border-radius: 31px;
     color: #013a63;
-    font-size: 35px;
-    line-height: 0.8;
+    font-size: 28px;
+    line-height: 0.6;
     text-align: center;
     transition: 0.1s ease;
 }
