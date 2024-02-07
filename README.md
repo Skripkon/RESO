@@ -1,2 +1,2 @@
-# MuseGen - a modern tool to generate piano music
+# RESO - a modern tool to generate piano music
 
