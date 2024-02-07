@@ -72,7 +72,7 @@ async def neural_page(request: Request):
 async def process_algorithmic(generator: str = Form(...)):
     file_path = os.path.join("generated_data", "generated_track.mid")
     if generator == "AlgoGen01":
-        generate_music01(65, file_path)
+        generate_music01(59, file_path)
         mp3_file_path = midi2mp3(file_path)
     return RedirectResponse(url="/generate/generated_track")
 

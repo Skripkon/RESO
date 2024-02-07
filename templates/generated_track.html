@@ -5,8 +5,14 @@ MuseGen
 {% endblock %}
 
 {% block body %}
+
 <div class="container">
+    
     <div class="audio-player">
+        <div class="navbar-link ">MIDI FORMAT</div> 
+        <midi-player src="{{ url_for('generated_data', path='generated_track.mid') }}" sound-font> </midi-player>
+        
+        <div class="navbar-link ">MP3 FORMAT</div> 
         <audio controls>
             <source src="{{ url_for('generated_data', path='generated_track.mp3') }}" type="audio/mpeg">
             Your browser does not support the audio tag.
@@ -14,4 +20,5 @@ MuseGen
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/combine/npm/tone@14.7.58,npm/@magenta/music@1.22.1/es6/core.js,npm/focus-visible@5,npm/html-midi-player@1.4.0"></script>
 {% endblock %}
