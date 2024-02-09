@@ -1,9 +1,12 @@
-import json
+from collections import Counter, defaultdict
+import matplotlib.pyplot as plt
 from datetime import datetime
+import json
+
 
 def log_data(log_path: str,
-             generator_type: str, 
-             generator_subtype: str, 
+             generator_type: str,
+             generator_subtype: str,
              time=datetime.now().strftime("%Y-%m-%d %H:%M:%S")):
     """
     Makes a new recording in 'log.json' file. Recieves path to 'log.json',
@@ -12,8 +15,8 @@ def log_data(log_path: str,
     """
     with open(log_path, 'r') as file:
         log_data = json.load(file)
-    new_recording = {"generator_type" : generator_type, 
-                     "generator_subtype" : generator_subtype, 
+    new_recording = {"generator_type": generator_type,
+                     "generator_subtype": generator_subtype,
                      "time": time}
     log_data.get('generation_data').append(new_recording)
     with open(log_path, 'w') as file:
@@ -27,13 +30,13 @@ def clear_data(log_path):
     """
     with open(log_path, 'r') as file:
         log_data = json.load(file)
-    log_data = {"generation_data" : []}
+    log_data = {"generation_data": []}
     with open(log_path, 'w') as file:
         json.dump(log_data, file, indent=4)
 
-import matplotlib.pyplot as plt
-from collections import Counter, defaultdict 
+
 import datetime
+
 
 def count_queries_per_generator(log_path):
     """
@@ -43,8 +46,9 @@ def count_queries_per_generator(log_path):
     """
     with open(log_path, 'r') as file:
         log_data = json.load(file)
-    generator_counts = Counter(record['generator_type'] for record in log_data['generation_data'])
-    
+    generator_counts = Counter(record['generator_type']
+                               for record in log_data['generation_data'])
+
     return generator_counts
 
 
@@ -62,11 +66,13 @@ def count_queries_per_day(log_path):
     start_date = end_date - datetime.timedelta(days=30)
 
     for record in log_data['generation_data']:
-        query_time = datetime.datetime.strptime(record['time'], '%Y-%m-%d %H:%M:%S').date()
+        query_time = datetime.datetime.strptime(
+            record['time'], '%Y-%m-%d %H:%M:%S').date()
         if start_date <= query_time <= end_date:
             query_counts[query_time] += 1
 
     return query_counts
+
 
 def show_data(log_path):
     """
@@ -103,8 +109,8 @@ if __name__ == "__main__":
     # Test logging
     log_data(log_path, "algo01", "calm")
 
-    # won't be shown in second graph because it is older than 30 days
-    log_data(log_path, "algo02", "fast", "2023-12-15 15:03:03") 
+    # Won't be shown in second graph because it is older than 30 days
+    log_data(log_path, "algo02", "fast", "2023-12-15 15:03:03")
 
     log_data(log_path, "algo03", "calm")
     log_data(log_path, "algo02", "fast", "2024-01-15 15:03:03")
