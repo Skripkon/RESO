@@ -8,7 +8,7 @@ RESO
 <div class="main-logo">
     <img src="{{ url_for('static', path='images/logo_full_white.png') }}" class="main-logo">
 </div>
-<br> 
+<br>
 <br>
 <br>
 <form class="gen_form" id="generateForm" method="post" action="/generate/process_algorithmic">
@@ -43,7 +43,7 @@ RESO
 
             // Show loading spinner
             $('#loadingContainer').show();
-            
+
             $.ajax({
                 type: 'POST',
                 url: '/generate/process_algorithmic',
@@ -57,9 +57,9 @@ RESO
 
                     // Display download MID button
                     $('#downloadMIDButtonContainer').html('<a class="main-button" id="DownloadGeneratedMIDFile" href="/downloadMID/' + encodeURIComponent(filenameMID) + '" download>Download MIDI</a>');
-                    
-                     // Display download MP3 button
-                     $('#downloadMP3ButtonContainer').html('<a class="main-button" id="DownloadGeneratedMP3File" href="/downloadMP3/' + encodeURIComponent(filenameMP3) + '" download>Download MP3</a>');
+
+                    // Display download MP3 button
+                    $('#downloadMP3ButtonContainer').html('<a class="main-button" id="DownloadGeneratedMP3File" href="/downloadMP3/' + encodeURIComponent(filenameMP3) + '" download>Download MP3</a>');
 
                     // Hide loading spinner
                     $('#loadingContainer').hide();

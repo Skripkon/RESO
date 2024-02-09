@@ -32,11 +32,6 @@ async def read_root(request: Request):
     return templates.TemplateResponse("editing.html", {"request": request})
 
 
-@app.get("/convert", response_class=HTMLResponse)
-async def read_root(request: Request):
-    return templates.TemplateResponse("convert.html", {"request": request})
-
-
 @app.post('/convert_midi2mp3')
 async def convert_midi2mp3(midi_file: UploadFile = File(...)):
     if not midi_file:
@@ -76,7 +71,6 @@ async def process_algorithmic(generator: str = Form(...)):
         generate_music01(59, file_path)
         midi2mp3(file_path)
         return JSONResponse(content={"filename": name_of_the_file})
-
 
 
 @app.get("/downloadMID/{filename}")
