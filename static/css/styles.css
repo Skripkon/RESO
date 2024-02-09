@@ -197,7 +197,8 @@ audio::-webkit-media-controls-pause-button-container {
 #mp3PlayerContainerForAlgorithmicMusic {
     margin: 0 auto;
     text-align: center;
-    margin-top: 30px;
+    margin-top: 40px;
+    margin-bottom: 40px;
 }
 
 #loadingContainer {
