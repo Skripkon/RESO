@@ -1,9 +1,9 @@
 from werkzeug.utils import secure_filename
 from utils.midi2mp3 import midi2mp3
 from generators.algorithmic.Generator01 import generate_music01
-
+import random
 from fastapi import FastAPI, Request, File, UploadFile
-from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.exceptions import HTTPException
@@ -70,16 +70,25 @@ async def neural_page(request: Request):
 
 @app.post("/generate/process_algorithmic")
 async def process_algorithmic(generator: str = Form(...)):
-    file_path = os.path.join("generated_data", "generated_track.mid")
+    name_of_the_file: int = random.randint(1, 100_000_000)
+    file_path = os.path.join("generated_data", f"{name_of_the_file}.mid")
     if generator == "AlgoGen01":
         generate_music01(59, file_path)
-        mp3_file_path = midi2mp3(file_path)
-        return FileResponse(mp3_file_path, media_type='audio/mpeg', filename='generated_track.mp3')
+        midi2mp3(file_path)
+        return JSONResponse(content={"filename": name_of_the_file})
 
 
-@app.post("/generate/generated_track", response_class=HTMLResponse)
-async def generated_track(request: Request):
-    return templates.TemplateResponse("generated_track.html", {"request": request})
+
+@app.get("/downloadMID/{filename}")
+async def download_generated_file(filename: str):
+    file_path = os.path.join("generated_data", filename)
+    return FileResponse(file_path, media_type='audio/midi', filename=filename)
+
+
+@app.get("/downloadMP3/{filename}")
+async def download_generated_file(filename: str):
+    file_path = os.path.join("generated_data", filename)
+    return FileResponse(file_path, media_type='audio/midi', filename=filename)
 
 
 if __name__ == "__main__":

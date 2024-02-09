@@ -12,17 +12,23 @@ RESO
 <br>
 <br>
 <form class="gen_form" id="generateForm" method="post" action="/generate/process_algorithmic">
-    <select id="generator" name="generator">
+    <select id="AlgoGenerator" name="AlgoGenerator">
         <option value="AlgoGen01" selected>Calm Melody</option>
         <option value="AlgoGen02">Error 1</option>
-        <option value="AlgoGen02">Error 2</option>
-        <option value="AlgoGen02">Error 3</option>
-        <option value="AlgoGen02">Error 4</option>
+        <option value="AlgoGen03">Error 2</option>
+        <option value="AlgoGen04">Error 3</option>
+        <option value="AlgoGen05">Error 4</option>
     </select>
     <button class="main-button" id="GenerateAlgorithmicMusic" type="button">Generate a song!</button>
 </form>
 
-<div id="mp3PlayerContainerForAlgorithmicMusic""></div>
+<div id="mp3PlayerContainerForAlgorithmicMusic"></div>
+
+<!-- Add download MID button -->
+<div id="downloadMIDButtonContainer"></div>
+
+<!-- Add download MP3 button -->
+<div id="downloadMP3ButtonContainer"></div>
 
 <div id="loadingContainer">
     <img src="{{ url_for('static', path='images/loading.gif') }}" alt="Loading...">
@@ -33,20 +39,28 @@ RESO
 <script>
     $(document).ready(function () {
         $('#GenerateAlgorithmicMusic').click(function () {
-            var generator = $('#generator').val();
+            var AlgoGenerator = $('#AlgoGenerator').val();
 
             // Show loading spinner
             $('#loadingContainer').show();
-            // $('#mp3PlayerContainerForAlgorithmicMusic').hide();
+            
             $.ajax({
                 type: 'POST',
                 url: '/generate/process_algorithmic',
-                data: { 'generator': generator },
-                success: function () {
-                    // Update the MP3 player content
-                    $('#mp3PlayerContainerForAlgorithmicMusic').html('<audio style="width:400px" controls><source src="{{ url_for('generated_data', path='generated_track.mp3') }}" type="audio/mpeg">Your browser does not support the audio tag.</audio>');
+                data: { 'generator': AlgoGenerator },
+                success: function (data) {
+                    // Update the MP3 player content with the returned filename
+                    var filenameMP3 = data.filename + '.mp3';
+                    var filenameMID = data.filename + '.mid';
+                    var mp3Url = '/generated_data/' + encodeURIComponent(filenameMP3);
+                    $('#mp3PlayerContainerForAlgorithmicMusic').html('<audio style="width: 500px;" controls><source src="' + mp3Url + '" type="audio/mpeg"></audio>');
+
+                    // Display download MID button
+                    $('#downloadMIDButtonContainer').html('<a class="main-button" id="DownloadGeneratedMIDFile" href="/downloadMID/' + encodeURIComponent(filenameMID) + '" download>Download MIDI</a>');
                     
-                    // $('#mp3PlayerContainerForAlgorithmicMusic').show();
+                     // Display download MP3 button
+                     $('#downloadMP3ButtonContainer').html('<a class="main-button" id="DownloadGeneratedMP3File" href="/downloadMP3/' + encodeURIComponent(filenameMP3) + '" download>Download MP3</a>');
+
                     // Hide loading spinner
                     $('#loadingContainer').hide();
                 }
