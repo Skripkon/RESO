@@ -2,10 +2,9 @@
 
 {% block body %}
 <br /> <br /> <br /> <br /> <br />
-    <h1>Upload MIDI File</h1>
-    <form action="/convert_midi2mp3" method="post" enctype="multipart/form-data">
-        <input type="file" name="midi_file" accept=".mid, .midi">
-        <button type="submit">Convert to MP3</button>
-    </form>
+<h1>Upload MIDI File</h1>
+<form action="/convert_midi2mp3" method="post" enctype="multipart/form-data">
+    <input type="file" name="midi_file" accept=".mid, .midi">
+    <button type="submit">Convert to MP3</button>
+</form>
 {% endblock %}
-

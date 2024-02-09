@@ -5,16 +5,54 @@ RESO
 {% endblock %}
 
 {% block body %}
-
-<form class="gen_form" method="post" action="/generate/process_algorithmic">
-    <select id="generator" name="generator" style="margin-bottom: 10px;">
+<div class="main-logo">
+    <img src="{{ url_for('static', path='images/logo_full_white.png') }}" class="main-logo">
+</div>
+<br> 
+<br>
+<br>
+<form class="gen_form" id="generateForm" method="post" action="/generate/process_algorithmic">
+    <select id="generator" name="generator">
         <option value="AlgoGen01" selected>Calm Melody</option>
-        <option value="AlgoGen02">Error 404</option>
+        <option value="AlgoGen02">Error 1</option>
+        <option value="AlgoGen02">Error 2</option>
+        <option value="AlgoGen02">Error 3</option>
+        <option value="AlgoGen02">Error 4</option>
     </select>
-    <button class="main-button" id="submitButton" type="submit">Generate a song!</button>
+    <button class="main-button" id="GenerateAlgorithmicMusic" type="button">Generate a song!</button>
 </form>
 
+<div id="mp3PlayerContainerForAlgorithmicMusic""></div>
 
+<div id="loadingContainer">
+    <img src="{{ url_for('static', path='images/loading.gif') }}" alt="Loading...">
+</div>
 
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#GenerateAlgorithmicMusic').click(function () {
+            var generator = $('#generator').val();
+
+            // Show loading spinner
+            $('#loadingContainer').show();
+            // $('#mp3PlayerContainerForAlgorithmicMusic').hide();
+            $.ajax({
+                type: 'POST',
+                url: '/generate/process_algorithmic',
+                data: { 'generator': generator },
+                success: function () {
+                    // Update the MP3 player content
+                    $('#mp3PlayerContainerForAlgorithmicMusic').html('<audio style="width:400px" controls><source src="{{ url_for('generated_data', path='generated_track.mp3') }}" type="audio/mpeg">Your browser does not support the audio tag.</audio>');
+                    
+                    // $('#mp3PlayerContainerForAlgorithmicMusic').show();
+                    // Hide loading spinner
+                    $('#loadingContainer').hide();
+                }
+            });
+        });
+    });
+</script>
 
 {% endblock %}

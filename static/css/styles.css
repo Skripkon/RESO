@@ -126,9 +126,9 @@ header {
 .main-button {
     display: block;
     margin: 0 auto;
-    margin-top: 4.5%;
+    margin-top: 20px;
     padding: 15px;
-    width: 600px;
+    width:500px;
     height: 60px;
     background: #013a6300;
     border: #013a63 solid 5px;
@@ -150,70 +150,27 @@ header {
 /* ======================================== */
 
 .gen_form {
-    width: 400px;
-    height: 150px;
+    width: 650px;
+    height: 200;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 15px;
-    background: rgb(6, 0, 56);
-    border: white solid;
-    border-radius: 25px;
+    padding: 20px;
+    background: #012a4a;
+    border-radius: 60px;
     transition: background-color 0.3s ease;
-}
-
-.gen_form select,
-.gen_form button {
-    padding: 10px;
-    margin-bottom: 10px;
-    font-size: 20px;
-    border-radius: 10px;
-    border: none;
-    background-color: rgb(64, 61, 233);
-    color: white;
-    text-align: center;
+    background-image: url("../images/main_bg.png");
 }
 
 .gen_form select {
-    width: 100%;
-    background-color: rgb(64, 61, 233);
-}
-
-.gen_form button {
-    width: 100%;
-    background-color: rgb(6, 0, 56);
+    width: 500px;
+    background-color:  #013a63;
     color: white;
-    border-color: white;
-    border: 1px solid;
-    cursor: pointer;
-    margin-top: 5px;
-}
-
-.gen_form button:hover {
-    background-color: rgb(130, 225, 124);
-    color: black;
-}
-
-/* Containers */
-.container {
-    margin-left: 35%;
-    width: 30%;
-    padding: 20px;
-}
-
-/* Audio Player */
-.audio-player {
+    height: 60px;
+    border-radius: 25px;
     text-align: center;
-}
-
-audio {
-    border: 3px solid white;
-    border-radius: 40px;
-}
-
-audio:focus {
-    outline: none;
+    font-size: 28px;
 }
 
 /* Stylish play/pause button */
@@ -235,4 +192,18 @@ audio::-webkit-media-controls-pause-button {
 audio::-webkit-media-controls-play-button-container,
 audio::-webkit-media-controls-pause-button-container {
     background-color: transparent;
+}
+
+#mp3PlayerContainerForAlgorithmicMusic {
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 30px;
+}
+
+#loadingContainer {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

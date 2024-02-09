@@ -74,7 +74,7 @@ async def process_algorithmic(generator: str = Form(...)):
     if generator == "AlgoGen01":
         generate_music01(59, file_path)
         mp3_file_path = midi2mp3(file_path)
-    return RedirectResponse(url="/generate/generated_track")
+        return FileResponse(mp3_file_path, media_type='audio/mpeg', filename='generated_track.mp3')
 
 
 @app.post("/generate/generated_track", response_class=HTMLResponse)
