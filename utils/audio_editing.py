@@ -8,7 +8,7 @@ def edit_mp3(relative_file_path: str, start_time: int, end_time: int, fade_in_le
         Cuts an mp3 file according to given time and applies fade-in and fade-out. 
         Receieves a path to original mp3, start and end times in seconds, fade-in 
         and fade-out length in seconds. Resulting file is saved to the same folder 
-        with prefix 'editted_' in mp3 format. If you do not need fade-in or fade-out, 
+        with prefix 'edited_' in mp3 format. If you do not need fade-in or fade-out, 
         do not specify fade_in_len or fade_out_len.
     """
     file_path = os.path.abspath(relative_file_path)
@@ -24,7 +24,7 @@ def edit_mp3(relative_file_path: str, start_time: int, end_time: int, fade_in_le
         cut_audio = cut_audio.fade_out(fade_out_len * 1000)
 
     export_path = os.path.join(os.path.dirname(
-        file_path), "editted_" + os.path.basename(file_path))
+        file_path), "edited_" + os.path.basename(file_path))
     cut_audio.export(export_path, format="mp3")
 
 

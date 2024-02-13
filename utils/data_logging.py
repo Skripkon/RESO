@@ -1,13 +1,13 @@
 from collections import Counter, defaultdict
 import matplotlib.pyplot as plt
-from datetime import datetime
+import datetime
 import json
 
 
 def log_data(log_path: str,
              generator_type: str,
              generator_subtype: str,
-             time=datetime.now().strftime("%Y-%m-%d %H:%M:%S")):
+             time=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")):
     """
     Makes a new recording in 'log.json' file. Recieves path to 'log.json',
     generator type, generator subtype and time of the query (by default
@@ -33,9 +33,6 @@ def clear_data(log_path):
     log_data = {"generation_data": []}
     with open(log_path, 'w') as file:
         json.dump(log_data, file, indent=4)
-
-
-import datetime
 
 
 def count_queries_per_generator(log_path):
@@ -95,13 +92,14 @@ def show_data(log_path):
     axes[1].bar(args, vals)
     axes[1].set_title("Activity for the last month")
     axes[1].set_xlabel("Date")
+    axes[1].set_xticklabels(data, rotation=90)
     axes[1].set_ylabel("Usages")
 
     plt.show()
 
 
 if __name__ == "__main__":
-    log_path = 'log.json'
+    log_path = 'utils/log.json'
 
     # WARNING: CLEARS PREVIOUS DATA IN log.json
     clear_data(log_path)
@@ -112,7 +110,7 @@ if __name__ == "__main__":
     # Won't be shown in second graph because it is older than 30 days
     log_data(log_path, "algo02", "fast", "2023-12-15 15:03:03")
 
-    log_data(log_path, "algo03", "calm")
+    log_data(log_path, "algo03", "calm", "2024-01-24 17:03:03")
     log_data(log_path, "algo02", "fast", "2024-01-15 15:03:03")
     log_data(log_path, "algo01", "calm")
 
