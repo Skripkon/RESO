@@ -11,8 +11,28 @@ RESO
 <br>
 <br>
 <br>
-<form class="gen_form" id="generateForm" method="post" action="/generate/process_algorithmic">
-    <select id="AlgoGenerator" name="AlgoGenerator">
+
+<div id="HorizontalBarContainter">
+    <form class="ComboBoxToChooseParameter">
+        <select id="DurationOfTheTrack">
+            <option value="00:30" selected>00:30</option>
+            <option value="01:00">01:00</option>
+            <option value="01:30">01:30</option>
+            <option value="02:00">02:00</option>
+        </select>
+    </form>
+
+    <form class="ComboBoxToChooseParameter">
+        <select id="TempoOfTheTrack">
+            <option value="Normal" selected>Normal</option>
+            <option value="Slow">Slow</option>
+            <option value="Fast">Fast</option>
+        </select>
+    </form>
+</div>
+
+<form class="gen_form" method="post" action="/generate/process_algorithmic">
+    <select id="AlgoGenerator">
         <option value="AlgoGen01" selected>Calm Melody</option>
         <option value="AlgoGen02">Error 1</option>
         <option value="AlgoGen03">Error 2</option>
@@ -24,11 +44,12 @@ RESO
 
 <div id="mp3PlayerContainerForAlgorithmicMusic"></div>
 
-<!-- Add download MID button -->
-<div id="downloadMIDButtonContainer"></div>
-
-<!-- Add download MP3 button -->
-<div id="downloadMP3ButtonContainer"></div>
+<div id="ContainerWithTwoDownloadButtons">
+    <!-- Add download MID button -->
+    <div id="downloadMIDButtonContainer"></div>
+    <!-- Add download MP3 button -->
+    <div id="downloadMP3ButtonContainer"></div>
+</div>
 
 <div id="loadingContainer">
     <img src="{{ url_for('static', path='images/loading.gif') }}" alt="Loading...">
@@ -56,10 +77,10 @@ RESO
                     $('#mp3PlayerContainerForAlgorithmicMusic').html('<audio style="width: 500px;" controls><source src="' + mp3Url + '" type="audio/mpeg"></audio>');
 
                     // Display download MID button
-                    $('#downloadMIDButtonContainer').html('<a class="main-button" id="DownloadGeneratedMIDFile" href="/downloadMID/' + encodeURIComponent(filenameMID) + '" download>Download MIDI</a>');
+                    $('#downloadMIDButtonContainer').html('<a class="hyperlink-text" id="DownloadGeneratedMIDFile" href="/downloadMID/' + encodeURIComponent(filenameMID) + '" download>Download MIDI</a>');
 
                     // Display download MP3 button
-                    $('#downloadMP3ButtonContainer').html('<a class="main-button" id="DownloadGeneratedMP3File" href="/downloadMP3/' + encodeURIComponent(filenameMP3) + '" download>Download MP3</a>');
+                    $('#downloadMP3ButtonContainer').html('<a class="hyperlink-text" id="DownloadGeneratedMP3File" href="/downloadMP3/' + encodeURIComponent(filenameMP3) + '" download>Download MP3</a>');
 
                     // Hide loading spinner
                     $('#loadingContainer').hide();

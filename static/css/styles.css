@@ -65,7 +65,7 @@ header {
 
 .logo {
     position: static;
-	margin-left: 1px;
+    margin-left: 1px;
     transition: transform 0.3s ease-in-out;
 }
 
@@ -128,7 +128,7 @@ header {
     margin: 0 auto;
     margin-top: 20px;
     padding: 15px;
-    width:500px;
+    width: 500px;
     height: 60px;
     background: #013a6300;
     border: #013a63 solid 5px;
@@ -150,25 +150,22 @@ header {
 /* ======================================== */
 
 .gen_form {
-    width: 650px;
+    width: 550px;
     height: 200;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background: #012a4a;
-    border-radius: 60px;
     transition: background-color 0.3s ease;
-    background-image: url("../images/main_bg.png");
 }
 
 .gen_form select {
     width: 500px;
-    background-color:  #013a63;
+    background-color: #013a63;
     color: white;
     height: 60px;
-    border-radius: 25px;
+    border-radius: 30px;
     text-align: center;
     font-size: 28px;
 }
@@ -197,8 +194,8 @@ audio::-webkit-media-controls-pause-button-container {
 #mp3PlayerContainerForAlgorithmicMusic {
     margin: 0 auto;
     text-align: center;
-    margin-top: 40px;
-    margin-bottom: 40px;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 #loadingContainer {
@@ -207,4 +204,57 @@ audio::-webkit-media-controls-pause-button-container {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+
+/* ======================================== */
+/* Styles for two buttons which allow you to download a track (midi / mp3) */
+
+.hyperlink-text {
+    padding: 15px;
+    background: #013a6300;
+    color: #013a63;
+    font-size: 20px;
+    line-height: 0.6;
+    transition: 0.1s ease;
+}
+
+.hyperlink-text:hover {
+    color: #e9f4f7;
+    cursor: pointer;
+}
+
+/* Containter for these two buttons */
+
+#ContainerWithTwoDownloadButtons {
+    display: flex;
+    justify-content: center;
+}
+
+/* ======================================== */
+/* Choose a parameters of the track */
+
+#HorizontalBarContainter {
+    height: 65px;
+    background-image: url("../images/main_bg.png");
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    border-radius: 1px;
+    border: solid;
+}
+
+.ComboBoxToChooseParameter {
+    margin-right: 20px;
+}
+
+.ComboBoxToChooseParameter select {
+    border-radius: 10px;
+    width: 180px;
+    height: 45px;
+    font-size: 20px;
+    background-color: #013a63;
+    color: white;
+    text-align: center;
 }
