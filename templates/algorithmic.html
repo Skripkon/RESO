@@ -5,30 +5,35 @@ RESO
 {% endblock %}
 
 {% block body %}
-<div class="main-logo">
-    <img src="{{ url_for('static', path='images/logo_full_white.png') }}" class="main-logo">
+<div>
+    <img src="{{ url_for('static', path='images/logo_full_white.png') }}" class="small-logo">
 </div>
 <br>
 <br>
 <br>
 
 <div id="HorizontalBarContainter">
-    <form class="ComboBoxToChooseParameter">
-        <select id="DurationOfTheTrack">
-            <option value="00:30" selected>00:30</option>
-            <option value="01:00">01:00</option>
-            <option value="01:30">01:30</option>
-            <option value="02:00">02:00</option>
-        </select>
-    </form>
-
-    <form class="ComboBoxToChooseParameter">
-        <select id="TempoOfTheTrack">
-            <option value="Normal" selected>Normal</option>
-            <option value="Slow">Slow</option>
-            <option value="Fast">Fast</option>
-        </select>
-    </form>
+    <div class="AlgoGenSetting">
+        <p class="AlgoGenSettingTitle">Duration</p>
+        <form class="ComboBoxToChooseParameter">
+            <select id="DurationOfTheTrack">
+                <option value="00:30" selected>00:30</option>
+                <option value="01:00">01:00</option>
+                <option value="01:30">01:30</option>
+                <option value="02:00">02:00</option>
+            </select>
+        </form>
+    </div>
+    <div class="AlgoGenSetting">
+        <p class="AlgoGenSettingTitle">Tempo</p>
+        <form class="ComboBoxToChooseParameter">
+            <select id="TempoOfTheTrack">
+                <option value="Normal" selected>Normal</option>
+                <option value="Slow">Slow</option>
+                <option value="Fast">Fast</option>
+            </select>
+        </form>
+    </div>
 </div>
 
 <form class="gen_form" method="post" action="/generate/process_algorithmic">
@@ -51,12 +56,52 @@ RESO
     <div id="downloadMP3ButtonContainer"></div>
 </div>
 
+<div id="EditAlgoTrackButtonContainer">
+    <button class="main-button" id="EditAlgoTrackButton">Edit track</button>
+</div>
+
+
+<div id="EditAlgoTrackContainer">
+    <div class="EditAlgoSetting">
+        <label for="AlgoStartTime" class="AlgoSettingLabel">Start time:</label>
+        <input type="text" id="AlgoStartTime" class="InputField" name="AlgoStartTime">
+    </div>
+
+    <div class="EditAlgoSetting">
+        <label for="AlgoEndTime" class="AlgoSettingLabel">End time:</label>
+    <input type="text" id="AlgoEndTime" class="InputField" name="AlgoEndTime">
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- Script for showing editing settings -->
+<script>
+    $(document).ready(function () {
+        $('#EditAlgoTrackButton').click(function () {
+            var editButton = document.getElementById('EditAlgoTrackButton');
+            var editContainer = document.getElementById('EditAlgoTrackContainer');
+
+            if (editButton.innerText === "Edit track") {
+                // editContainer.style.display = 'flex';
+                $('#EditAlgoTrackContainer').show();
+                editButton.innerText  = "Hide editing settings";
+            } else {
+                // editContainer.style.display = 'none';
+                $('#EditAlgoTrackContainer').hide();
+                editButton.innerText  = "Edit track";
+            }
+        });
+    });
+</script>
+
+
 <div id="loadingContainer">
     <img src="{{ url_for('static', path='images/loading.gif') }}" alt="Loading...">
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
+<!-- Script to show buttons after track has generated -->
 <script>
     $(document).ready(function () {
         $('#GenerateAlgorithmicMusic').click(function () {
@@ -84,6 +129,7 @@ RESO
 
                     // Hide loading spinner
                     $('#loadingContainer').hide();
+                    $('#EditAlgoTrackButtonContainer').show();
                 }
             });
         });
