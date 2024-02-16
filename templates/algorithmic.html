@@ -69,8 +69,32 @@ RESO
 
     <div class="EditAlgoSetting">
         <label for="AlgoEndTime" class="AlgoSettingLabel">End time:</label>
-    <input type="text" id="AlgoEndTime" class="InputField" name="AlgoEndTime">
+        <input type="text" id="AlgoEndTime" class="InputField" name="AlgoEndTime">
     </div>
+
+    <div class="EditAlgoSetting">
+        <label for="AlgoAddFades" class="AlgoSettingLabel">Add fade-in and fade-out?</label>
+        <input type="checkbox" id="EditAlgoAddFades" class="InputCheckBox" name="AlgoAddFades">
+    </div>
+
+    <!-- Hideable fade-in and fade-out settings -->
+    <div id="EditAlgoTrackFadesContainer">
+        <div class="EditAlgoSetting">
+            <label for="AlgoFadeInTime" class="AlgoSettingLabel">Fade-in length:</label>
+            <input type="text" id="AlgoFadeInTime" class="InputField" name="AlgoFadeInTime">
+        </div>
+    
+        <div class="EditAlgoSetting">
+            <label for="AlgoFadeOutTime" class="AlgoSettingLabel">Fade-out length:</label>
+            <input type="text" id="AlgoFadeOutTime" class="InputField" name="AlgoFadeOutTime">
+        </div>
+    </div>
+
+    <button class="render-button" id="EditAlgoRenderButton">Render</button>
+
+    <div id="mp3PlayerContainerForAlgorithmicMusicEdited"></div>
+
+    <div id="downloadEditedMP3ButtonContainer"></div>
 
 </div>
 
@@ -81,7 +105,6 @@ RESO
         $('#EditAlgoTrackButton').click(function () {
             var editButton = document.getElementById('EditAlgoTrackButton');
             var editContainer = document.getElementById('EditAlgoTrackContainer');
-
             if (editButton.innerText === "Edit track") {
                 // editContainer.style.display = 'flex';
                 $('#EditAlgoTrackContainer').show();
@@ -91,6 +114,61 @@ RESO
                 $('#EditAlgoTrackContainer').hide();
                 editButton.innerText  = "Edit track";
             }
+        });
+    });
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- Add fades checkbox interraction -->
+<script>
+    $(document).ready(function () {
+        $('#EditAlgoAddFades').change(function () {
+            var addFades = document.getElementById('EditAlgoAddFades');
+            var fadesContainer = document.getElementById('EditAlgoTrackFadesContainer');
+            if (addFades.checked) {
+                $('#EditAlgoTrackFadesContainer').show();
+            } else {
+                $('#EditAlgoTrackFadesContainer').hide();
+            }
+        });
+    });
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- Render button -->
+<script>
+    $(document).ready(function () {
+        $('#EditAlgoRenderButton').click(function () {
+            var renderButton = document.getElementById('EditAlgoRenderButton');
+            renderButton.innerText = "Rerender"
+            // TODO
+            // P.S.: now it is just copied code from "Generate!" button
+
+            // $.ajax({
+            //     type: 'POST',
+            //     url: '/generate/process_algorithmic',
+            //     data: { 'generator': AlgoGenerator },
+            //     success: function (data) {
+            //         // Update the MP3 player content with the returned filename
+            //         var filenameMP3 = data.filename + '.mp3';
+            //         var filenameMID = data.filename + '.mid';
+            //         var mp3Url = '/generated_data/' + encodeURIComponent(filenameMP3);
+            //         $('#mp3PlayerContainerForAlgorithmicMusic').html('<audio style="width: 500px;" controls><source src="' + mp3Url + '" type="audio/mpeg"></audio>');
+
+            //         // Display download MID button
+            //         $('#downloadMIDButtonContainer').html('<a class="hyperlink-text" id="DownloadGeneratedMIDFile" href="/downloadMID/' + encodeURIComponent(filenameMID) + '" download>Download MIDI</a>');
+
+            //         // Display download MP3 button
+            //         $('#downloadMP3ButtonContainer').html('<a class="hyperlink-text" id="DownloadGeneratedMP3File" href="/downloadMP3/' + encodeURIComponent(filenameMP3) + '" download>Download MP3</a>');
+
+            //         // Hide loading spinner
+            //         $('#loadingContainer').hide();
+            //         $('#EditAlgoTrackButtonContainer').show();
+            //     }
+            // });
+            
         });
     });
 </script>
