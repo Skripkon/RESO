@@ -3,7 +3,7 @@ from music21 import stream, note, chord, tempo, meter
 import random
 
 tempo_map = {'Normal': 100, 'Slow': 60, 'Fast': 120}
-velocity = 70
+velocity = 100
 
 def generate_music02(scale: int, filepath: str, pulse: str = 'Normal', duration_sec: int = 60):
     # Initialize music generator

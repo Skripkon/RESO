@@ -69,13 +69,8 @@ async def process_algorithmic(generator: str = Form(...), duration: str = Form(.
     name_of_the_file: int = random.randint(1, 100_000_000)
     file_path = os.path.join("generated_data", f"{name_of_the_file}.mid")
 
-    duration_sec = 30
-    if duration == "01:00":
-        duration_sec = 60
-    elif duration == "01:30":
-        duration_sec = 90
-    elif duration == "02:00":
-        duration_sec = 120
+    minutes, seconds = map(int, duration.split(':'))
+    duration_sec = minutes * 60  + seconds
 
     if generator == "AlgoGen01":
         generate_music01(59, file_path)
