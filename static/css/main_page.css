@@ -1,0 +1,58 @@
+#main-page-use-cases-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 30px; /* space between .use-case-example */
+}
+
+.use-case-example {
+    position: relative;
+    text-align: left;
+    width: 330px;
+    height: 450px;
+    border: #013a63 solid 5px;
+    border-radius: 30px;
+    padding-top: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 20px;
+    transition: 0.2s ease-out;
+}
+
+.use-case-example:hover {
+    background-color: #013a63;
+    color: #e9f4f7;
+    .enumeration-of-options {
+        color: #e9f4f7;
+    }
+    .use-case-example-title {
+        color: #e9f4f7;
+    }
+}
+
+.enumeration-of-options {
+    font-family: "Eina01";
+    font-weight: 200;
+    font-style: normal;
+    font-size: 23px;
+    color: #012a4a;
+    text-align: left;
+    margin-top: 30px;
+}
+
+.use-case-example-title {
+    color: #013a63;
+    font-size: 30px;
+    line-height: 0.6;
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+#use-cases-title {
+    margin-top: 100px;
+    text-align: center;
+    font-size: 45px;
+    color: #013a63;
+    text-decoration: underline;
+}
