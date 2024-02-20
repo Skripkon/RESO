@@ -100,7 +100,7 @@ header {
 /* Main page */
 /* ======================================== */
 
-.website-description {
+.website-description, .li {
     font-family: "Eina01";
     font-weight: 200;
     font-style: normal;
@@ -123,7 +123,7 @@ header {
 .small-logo {
     width: 200px;
     position: absolute;
-    top: 130px; 
+    top: 130px;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -310,7 +310,7 @@ audio::-webkit-media-controls-pause-button-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height:  54px;
+    height: 54px;
     /* margin:  0 auto; */
     /* background-color: #012a4a44; */
 }
@@ -330,34 +330,34 @@ audio::-webkit-media-controls-pause-button-container {
 }
 
 .InputField:focus {
-    box-shadow:  0px  0px  10px  0px #013a6388;
-    outline: none; 
+    box-shadow: 0px 0px 10px 0px #013a6388;
+    outline: none;
 }
 
 .InputCheckBox {
     width: 20px;
     height: 20px;
     -webkit-appearance: none;
-	background-color: transparent;
-	border: 4px solid #013a63;
-	padding: 9px;
-	border-radius: 5px;
-	display: inline-block;
-	position: relative;
+    background-color: transparent;
+    border: 4px solid #013a63;
+    padding: 9px;
+    border-radius: 5px;
+    display: inline-block;
+    position: relative;
 }
 
 .InputCheckBox:checked:after {
-	content: '\2714';
-	font-size: 14px;
-	position: absolute;
-	top: 0px;
-	left: 3px;
-	color: #013a63;
+    content: '\2714';
+    font-size: 14px;
+    position: absolute;
+    top: 0px;
+    left: 3px;
+    color: #013a63;
 }
 
 .InputCheckBox:focus {
-    box-shadow:  0px  0px  10px  0px #013a6388;
-    outline: none; 
+    box-shadow: 0px 0px 10px 0px #013a6388;
+    outline: none;
 }
 
 .InputCheckBox:hover {
@@ -365,7 +365,7 @@ audio::-webkit-media-controls-pause-button-container {
 }
 
 .AlgoSettingLabel {
-    margin-right:  10px; 
+    margin-right: 10px;
     color: #012a4a;
     font-weight: 300;
 }
