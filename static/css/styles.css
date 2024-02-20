@@ -120,6 +120,14 @@ header {
     transform: translate(-50%, -50%);
 }
 
+.small-logo {
+    width: 200px;
+    position: absolute;
+    top: 130px; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 /* Buttons */
 /* ======================================== */
 
@@ -215,6 +223,7 @@ audio::-webkit-media-controls-pause-button-container {
     background: #013a6300;
     color: #013a63;
     font-size: 20px;
+    font-weight: 300;
     line-height: 0.6;
     transition: 0.1s ease;
 }
@@ -229,32 +238,165 @@ audio::-webkit-media-controls-pause-button-container {
 #ContainerWithTwoDownloadButtons {
     display: flex;
     justify-content: center;
+    margin-top: 20px;
 }
 
 /* ======================================== */
-/* Choose a parameters of the track */
+/* Choose a parameters of the track 
+   (c) Skripko Nikolay
+*/
 
 #HorizontalBarContainter {
-    height: 65px;
+    height: 85px;
     background-image: url("../images/main_bg.png");
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0 auto;
+    position: relative;
     border-radius: 1px;
-    border: solid;
+    /* border: #01497c solid; */
+}
+
+.AlgoGenSetting {
+    color: #013a63;
+    text-align: center;
+    justify-content: center;
+}
+
+.AlgoGenSettingTitle {
+    font-weight: 300;
+    margin-bottom: 3px;
 }
 
 .ComboBoxToChooseParameter {
-    margin-right: 20px;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-bottom: 5px;
 }
 
 .ComboBoxToChooseParameter select {
-    border-radius: 10px;
+    border-radius: 25px;
     width: 180px;
-    height: 45px;
+    height: 40px;
     font-size: 20px;
+    font-weight: 300;
     background-color: #013a63;
     color: white;
     text-align: center;
+}
+
+/* Editing settings */
+
+#EditAlgoTrackButtonContainer {
+    /* display: flex; */
+    display: none;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+
+
+#EditAlgoTrackContainer {
+    display: none;
+    /* background-image: url(../images/sub_bg.png); */
+    background-color: white 50%;
+    /* height: 600px; */
+    padding-top: 5px;
+    padding-bottom: 22px;
+}
+
+.EditAlgoSetting {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:  54px;
+    /* margin:  0 auto; */
+    /* background-color: #012a4a44; */
+}
+
+.InputField {
+    width: 100px;
+    height: 35px;
+    background: #013a6300;
+    border: #013a63 solid 5px;
+    border-radius: 31px;
+    color: #013a63;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 0.6;
+    text-align: center;
+    transition: 0.1s ease;
+}
+
+.InputField:focus {
+    box-shadow:  0px  0px  10px  0px #013a6388;
+    outline: none; 
+}
+
+.InputCheckBox {
+    width: 20px;
+    height: 20px;
+    -webkit-appearance: none;
+	background-color: transparent;
+	border: 4px solid #013a63;
+	padding: 9px;
+	border-radius: 5px;
+	display: inline-block;
+	position: relative;
+}
+
+.InputCheckBox:checked:after {
+	content: '\2714';
+	font-size: 14px;
+	position: absolute;
+	top: 0px;
+	left: 3px;
+	color: #013a63;
+}
+
+.InputCheckBox:focus {
+    box-shadow:  0px  0px  10px  0px #013a6388;
+    outline: none; 
+}
+
+.InputCheckBox:hover {
+    cursor: pointer;
+}
+
+.AlgoSettingLabel {
+    margin-right:  10px; 
+    color: #012a4a;
+    font-weight: 300;
+}
+
+#EditAlgoTrackFadesContainer {
+    display: none;
+    /* background-color: rgba(0, 100, 100, 0.5); */
+    /* height: 120px; */
+    /* padding-top: 15px; */
+}
+
+.render-button {
+    display: block;
+    margin: 0 auto;
+    margin-top: 15px;
+    padding: 15px;
+    width: 200px;
+    height: 40px;
+    background: #013a63;
+    border: #013a63 solid 4px;
+    border-radius: 31px;
+    color: #e9f4f7;
+    font-size: 23px;
+    line-height: 0.0;
+    text-align: center;
+    transition: 0.1s ease;
+    font-weight: 300;
+}
+
+.render-button:hover {
+    background-color: #013a6300;
+    color: #013a63;
+    cursor: pointer;
 }

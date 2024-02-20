@@ -5,30 +5,35 @@ RESO
 {% endblock %}
 
 {% block body %}
-<div class="main-logo">
-    <img src="{{ url_for('static', path='images/logo_full_white.png') }}" class="main-logo">
+<div>
+    <img src="{{ url_for('static', path='images/logo_full_white.png') }}" class="small-logo">
 </div>
 <br>
 <br>
 <br>
 
 <div id="HorizontalBarContainter">
-    <form class="ComboBoxToChooseParameter">
-        <select id="DurationOfTheTrack">
-            <option value="00:30" selected>00:30</option>
-            <option value="01:00">01:00</option>
-            <option value="01:30">01:30</option>
-            <option value="02:00">02:00</option>
-        </select>
-    </form>
-
-    <form class="ComboBoxToChooseParameter">
-        <select id="TempoOfTheTrack">
-            <option value="Normal" selected>Normal</option>
-            <option value="Slow">Slow</option>
-            <option value="Fast">Fast</option>
-        </select>
-    </form>
+    <div class="AlgoGenSetting">
+        <p class="AlgoGenSettingTitle">Duration</p>
+        <form class="ComboBoxToChooseParameter">
+            <select id="DurationOfTheTrack">
+                <option value="00:30" selected>00:30</option>
+                <option value="01:00">01:00</option>
+                <option value="01:30">01:30</option>
+                <option value="02:00">02:00</option>
+            </select>
+        </form>
+    </div>
+    <div class="AlgoGenSetting">
+        <p class="AlgoGenSettingTitle">Tempo</p>
+        <form class="ComboBoxToChooseParameter">
+            <select id="TempoOfTheTrack">
+                <option value="Normal" selected>Normal</option>
+                <option value="Slow">Slow</option>
+                <option value="Fast">Fast</option>
+            </select>
+        </form>
+    </div>
 </div>
 
 <form class="gen_form" method="post" action="/generate/process_algorithmic">
@@ -51,12 +56,130 @@ RESO
     <div id="downloadMP3ButtonContainer"></div>
 </div>
 
+<div id="EditAlgoTrackButtonContainer">
+    <button class="main-button" id="EditAlgoTrackButton">Edit track</button>
+</div>
+
+
+<div id="EditAlgoTrackContainer">
+    <div class="EditAlgoSetting">
+        <label for="AlgoStartTime" class="AlgoSettingLabel">Start time:</label>
+        <input type="text" id="AlgoStartTime" class="InputField" name="AlgoStartTime">
+    </div>
+
+    <div class="EditAlgoSetting">
+        <label for="AlgoEndTime" class="AlgoSettingLabel">End time:</label>
+        <input type="text" id="AlgoEndTime" class="InputField" name="AlgoEndTime">
+    </div>
+
+    <div class="EditAlgoSetting">
+        <label for="AlgoAddFades" class="AlgoSettingLabel">Add fade-in and fade-out?</label>
+        <input type="checkbox" id="EditAlgoAddFades" class="InputCheckBox" name="AlgoAddFades">
+    </div>
+
+    <!-- Hideable fade-in and fade-out settings -->
+    <div id="EditAlgoTrackFadesContainer">
+        <div class="EditAlgoSetting">
+            <label for="AlgoFadeInTime" class="AlgoSettingLabel">Fade-in length:</label>
+            <input type="text" id="AlgoFadeInTime" class="InputField" name="AlgoFadeInTime">
+        </div>
+    
+        <div class="EditAlgoSetting">
+            <label for="AlgoFadeOutTime" class="AlgoSettingLabel">Fade-out length:</label>
+            <input type="text" id="AlgoFadeOutTime" class="InputField" name="AlgoFadeOutTime">
+        </div>
+    </div>
+
+    <button class="render-button" id="EditAlgoRenderButton">Render</button>
+
+    <div id="mp3PlayerContainerForAlgorithmicMusicEdited"></div>
+
+    <div id="downloadEditedMP3ButtonContainer"></div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- Script for showing editing settings -->
+<script>
+    $(document).ready(function () {
+        $('#EditAlgoTrackButton').click(function () {
+            var editButton = document.getElementById('EditAlgoTrackButton');
+            var editContainer = document.getElementById('EditAlgoTrackContainer');
+            if (editButton.innerText === "Edit track") {
+                // editContainer.style.display = 'flex';
+                $('#EditAlgoTrackContainer').show();
+                editButton.innerText  = "Hide editing settings";
+            } else {
+                // editContainer.style.display = 'none';
+                $('#EditAlgoTrackContainer').hide();
+                editButton.innerText  = "Edit track";
+            }
+        });
+    });
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- Add fades checkbox interraction -->
+<script>
+    $(document).ready(function () {
+        $('#EditAlgoAddFades').change(function () {
+            var addFades = document.getElementById('EditAlgoAddFades');
+            var fadesContainer = document.getElementById('EditAlgoTrackFadesContainer');
+            if (addFades.checked) {
+                $('#EditAlgoTrackFadesContainer').show();
+            } else {
+                $('#EditAlgoTrackFadesContainer').hide();
+            }
+        });
+    });
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- Render button -->
+<script>
+    $(document).ready(function () {
+        $('#EditAlgoRenderButton').click(function () {
+            var renderButton = document.getElementById('EditAlgoRenderButton');
+            renderButton.innerText = "Rerender"
+            // TODO
+            // P.S.: now it is just copied code from "Generate!" button
+
+            // $.ajax({
+            //     type: 'POST',
+            //     url: '/generate/process_algorithmic',
+            //     data: { 'generator': AlgoGenerator },
+            //     success: function (data) {
+            //         // Update the MP3 player content with the returned filename
+            //         var filenameMP3 = data.filename + '.mp3';
+            //         var filenameMID = data.filename + '.mid';
+            //         var mp3Url = '/generated_data/' + encodeURIComponent(filenameMP3);
+            //         $('#mp3PlayerContainerForAlgorithmicMusic').html('<audio style="width: 500px;" controls><source src="' + mp3Url + '" type="audio/mpeg"></audio>');
+
+            //         // Display download MID button
+            //         $('#downloadMIDButtonContainer').html('<a class="hyperlink-text" id="DownloadGeneratedMIDFile" href="/downloadMID/' + encodeURIComponent(filenameMID) + '" download>Download MIDI</a>');
+
+            //         // Display download MP3 button
+            //         $('#downloadMP3ButtonContainer').html('<a class="hyperlink-text" id="DownloadGeneratedMP3File" href="/downloadMP3/' + encodeURIComponent(filenameMP3) + '" download>Download MP3</a>');
+
+            //         // Hide loading spinner
+            //         $('#loadingContainer').hide();
+            //         $('#EditAlgoTrackButtonContainer').show();
+            //     }
+            // });
+            
+        });
+    });
+</script>
+
+
 <div id="loadingContainer">
     <img src="{{ url_for('static', path='images/loading.gif') }}" alt="Loading...">
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
+<!-- Script to show buttons after track has generated -->
 <script>
     $(document).ready(function () {
         $('#GenerateAlgorithmicMusic').click(function () {
@@ -84,6 +207,7 @@ RESO
 
                     // Hide loading spinner
                     $('#loadingContainer').hide();
+                    $('#EditAlgoTrackButtonContainer').show();
                 }
             });
         });
