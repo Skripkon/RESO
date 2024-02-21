@@ -47,7 +47,9 @@ RESO
     <button class="main-button" id="GenerateAlgorithmicMusic" type="button">Generate a song!</button>
 </form>
 
-<div id="mp3PlayerContainerForAlgorithmicMusic"></div>
+<div id="mp3PlayerContainerForAlgorithmicMusic"> </div>
+
+<script src="{{ url_for('static', path='js/custom_mp3_player.js') }}"></script>
 
 <div id="ContainerWithTwoDownloadButtons">
     <!-- Add download MID button -->
@@ -83,7 +85,7 @@ RESO
             <label for="AlgoFadeInTime" class="AlgoSettingLabel">Fade-in length:</label>
             <input type="text" id="AlgoFadeInTime" class="InputField" name="AlgoFadeInTime">
         </div>
-    
+
         <div class="EditAlgoSetting">
             <label for="AlgoFadeOutTime" class="AlgoSettingLabel">Fade-out length:</label>
             <input type="text" id="AlgoFadeOutTime" class="InputField" name="AlgoFadeOutTime">
@@ -108,18 +110,16 @@ RESO
             if (editButton.innerText === "Edit track") {
                 // editContainer.style.display = 'flex';
                 $('#EditAlgoTrackContainer').show();
-                editButton.innerText  = "Hide editing settings";
+                editButton.innerText = "Hide editing settings";
             } else {
                 // editContainer.style.display = 'none';
                 $('#EditAlgoTrackContainer').hide();
-                editButton.innerText  = "Edit track";
+                editButton.innerText = "Edit track";
             }
         });
     });
 </script>
 
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <!-- Add fades checkbox interraction -->
 <script>
     $(document).ready(function () {
@@ -135,8 +135,6 @@ RESO
     });
 </script>
 
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <!-- Render button -->
 <script>
     $(document).ready(function () {
@@ -168,17 +166,15 @@ RESO
             //         $('#EditAlgoTrackButtonContainer').show();
             //     }
             // });
-            
+
         });
     });
 </script>
-
 
 <div id="loadingContainer">
     <img src="{{ url_for('static', path='images/loading.gif') }}" alt="Loading...">
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <!-- Script to show buttons after track has generated -->
 <script>
     $(document).ready(function () {
@@ -197,8 +193,7 @@ RESO
                     var filenameMP3 = data.filename + '.mp3';
                     var filenameMID = data.filename + '.mid';
                     var mp3Url = '/generated_data/' + encodeURIComponent(filenameMP3);
-                    $('#mp3PlayerContainerForAlgorithmicMusic').html('<audio style="width: 500px;" controls><source src="' + mp3Url + '" type="audio/mpeg"></audio>');
-
+                    $('#mp3PlayerContainerForAlgorithmicMusic').html('<audio-player src="' + mp3Url + '" bar-width="5" bar-gap="2" preload> </audio-player>')
                     // Display download MID button
                     $('#downloadMIDButtonContainer').html('<a class="hyperlink-text" id="DownloadGeneratedMIDFile" href="/downloadMID/' + encodeURIComponent(filenameMID) + '" download>Download MIDI</a>');
 
