@@ -199,11 +199,12 @@
     }
 
     changeVolume() {
-      this.volume = Number(this.volumeBar.value);
+      this.volume = 2 - Number(this.volumeBar.value);
+      console.log(this.volume);
 
-      if (Number(this.volume) > 1) {
+      if (Number(this.volume) > 0) {
         this.volumeBar.parentNode.className = 'volume-bar over';
-      } else if (Number(this.volume) > 0) {
+      } else if (Number(this.volume) > 0.5) {
         this.volumeBar.parentNode.className = 'volume-bar half';
       } else {
         this.volumeBar.parentNode.className = 'volume-bar';
@@ -215,9 +216,15 @@
     }
 
     toggleMute(muted = null) {
-      this.volumeBar.value = muted || this.volume === 0 ? this.prevVolume : 0;
+      this.volume = 2 - Number(this.volumeBar.value);
+      // Check if the volume is already muted
+      const isMuted = this.volume === 0 || (muted !== null && muted);
+    
+      // Toggle the volume between 0 and the previous volume
+      this.volumeBar.value = isMuted ? this.prevVolume : 2;
       this.changeVolume();
     }
+    
 
     seekTo(value) {
       this.audio.currentTime = value;
@@ -298,21 +305,21 @@
             appearance: none;
             height: 20px;
             width: 10px;
-            background: #6d78ff;
+            background: black;
         }
         
         .volume-field::-moz-range-thumb {
             appearance: none;
             height: 20px;
             width: 10px;
-            background: #6d78ff
+            background: black;
         }
         
         .volume-field::-ms-thumb  {
             appearance: none;
             height: 20px;
             width: 10px;
-            background: #6d78ff
+            background: black;
         }
         
         .volume-bar:hover .volume-field {
@@ -341,6 +348,12 @@
             margin: 0;
             overflow: hidden;
             background: none;
+            border: solid 2px white;
+            padding-rigth: 15px;
+            padding-left: 15px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            border-radius: 10px;
         }
         
         .progress-bar::-webkit-slider-thumb {
