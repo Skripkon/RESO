@@ -1,8 +1,8 @@
 {
   class AudioPlayer extends HTMLElement {
     playing = false;
-    volume = 0.4;
-    prevVolume = 0.4;
+    volume = 3;
+    prevVolume = 3;
     initialized = false;
     barWidth = 3;
     barGap = 1;
@@ -199,12 +199,12 @@
     }
 
     changeVolume() {
-      this.volume = 2 - Number(this.volumeBar.value);
+      this.volume = 8 - Number(this.volumeBar.value);
       console.log(this.volume);
 
       if (Number(this.volume) > 0) {
         this.volumeBar.parentNode.className = 'volume-bar over';
-      } else if (Number(this.volume) > 0.5) {
+      } else if (Number(this.volume) > 5) {
         this.volumeBar.parentNode.className = 'volume-bar half';
       } else {
         this.volumeBar.parentNode.className = 'volume-bar';
@@ -216,12 +216,12 @@
     }
 
     toggleMute(muted = null) {
-      this.volume = 2 - Number(this.volumeBar.value);
+      this.volume = 8 - Number(this.volumeBar.value);
       // Check if the volume is already muted
       const isMuted = this.volume === 0 || (muted !== null && muted);
     
       // Toggle the volume between 0 and the previous volume
-      this.volumeBar.value = isMuted ? this.prevVolume : 2;
+      this.volumeBar.value = isMuted ? this.prevVolume : 8;
       this.changeVolume();
     }
     
@@ -419,7 +419,7 @@
               <canvas class="visualizer" style="width: 100%; height: 20px"></canvas>
           </div>
           <div class="volume-bar">
-              <input type="range" min="0" max="2" step="0.01" value="${this.volume}" class="volume-field">
+              <input type="range" min="0" max="8" step="0.01" value="${this.volume}" class="volume-field">
           </div>
         </figure>
       `;
