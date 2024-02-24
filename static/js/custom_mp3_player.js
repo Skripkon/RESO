@@ -1,7 +1,8 @@
 {
   class AudioPlayer extends HTMLElement {
+    MAX_VOLUME = 6
     playing = false;
-    volume = 3;
+    volume = 2;
     prevVolume = 3;
     initialized = false;
     barWidth = 3;
@@ -199,13 +200,11 @@
     }
 
     changeVolume() {
-      this.volume = 8 - Number(this.volumeBar.value);
-      console.log(this.volume);
+      this.volume = this.MAX_VOLUME - Number(this.volumeBar.value);
+      console.log(this.volume)
 
       if (Number(this.volume) > 0) {
         this.volumeBar.parentNode.className = 'volume-bar over';
-      } else if (Number(this.volume) > 5) {
-        this.volumeBar.parentNode.className = 'volume-bar half';
       } else {
         this.volumeBar.parentNode.className = 'volume-bar';
       }
@@ -216,15 +215,17 @@
     }
 
     toggleMute(muted = null) {
-      this.volume = 8 - Number(this.volumeBar.value);
+      this.volume = this.MAX_VOLUME - Number(this.volumeBar.value);
       // Check if the volume is already muted
       const isMuted = this.volume === 0 || (muted !== null && muted);
-    
-      // Toggle the volume between 0 and the previous volume
-      this.volumeBar.value = isMuted ? this.prevVolume : 8;
+      if (!isMuted) {
+        this.prevVolume = this.volumeBar.value;
+        this.volumeBar.value = this.MAX_VOLUME;
+      } else {
+        this.volumeBar.value = this.prevVolume;
+      }
       this.changeVolume();
     }
-    
 
     seekTo(value) {
       this.audio.currentTime = value;
@@ -295,7 +296,7 @@
             right: 100%;
             top: 50%;
             transform: translateY(-50%) rotate(180deg);
-            z-index: 5;
+            z-index: 4;
             margin: 0;
             border-radius: 2px;
             background: #ffffff;
@@ -304,21 +305,21 @@
         .volume-field::-webkit-slider-thumb {
             appearance: none;
             height: 20px;
-            width: 10px;
+            width: 20px;
             background: black;
         }
         
         .volume-field::-moz-range-thumb {
             appearance: none;
             height: 20px;
-            width: 10px;
+            width: 20px;
             background: black;
         }
         
         .volume-field::-ms-thumb  {
             appearance: none;
             height: 20px;
-            width: 10px;
+            width: 20px;
             background: black;
         }
         
@@ -419,7 +420,7 @@
               <canvas class="visualizer" style="width: 100%; height: 20px"></canvas>
           </div>
           <div class="volume-bar">
-              <input type="range" min="0" max="8" step="0.01" value="${this.volume}" class="volume-field">
+              <input type="range" min="0" max="${this.MAX_VOLUME}" step="0.01" value="${this.volume}" class="volume-field">
           </div>
         </figure>
       `;

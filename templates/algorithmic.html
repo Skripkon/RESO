@@ -9,16 +9,14 @@ RESO
     <img src="{{ url_for('static', path='images/logo_full_white.png') }}" class="small-logo">
 </div>
 <br>
-<br>
-<br>
 
 <div id="HorizontalBarContainter">
     <div class="AlgoGenSetting">
         <p class="AlgoGenSettingTitle">Duration</p>
         <form class="ComboBoxToChooseParameter">
             <select id="DurationOfTheTrack">
-                <option value="00:30" selected>00:30</option>
-                <option value="01:00">01:00</option>
+                <option value="00:30">00:30</option>
+                <option value="01:00" selected>01:00</option>
                 <option value="01:30">01:30</option>
                 <option value="02:00">02:00</option>
             </select>
@@ -28,8 +26,8 @@ RESO
         <p class="AlgoGenSettingTitle">Tempo</p>
         <form class="ComboBoxToChooseParameter">
             <select id="TempoOfTheTrack">
-                <option value="Normal" selected>Normal</option>
-                <option value="Slow">Slow</option>
+                <option value="Normal">Slow</option>
+                <option value="Slow" selected>Normal</option>
                 <option value="Fast">Fast</option>
             </select>
         </form>
@@ -39,7 +37,7 @@ RESO
 <form class="gen_form" method="post" action="/generate/process_algorithmic">
     <select id="AlgoGenerator">
         <option value="AlgoGen01" selected>Calm Melody</option>
-        <option value="AlgoGen02">Random 3/4, aka Waltz</option>
+        <option value="AlgoGen02">Waltz</option>
         <option value="AlgoGen03">Error 2</option>
         <option value="AlgoGen04">Error 3</option>
         <option value="AlgoGen05">Error 4</option>
@@ -189,13 +187,13 @@ RESO
             $.ajax({
                 type: 'POST',
                 url: '/generate/process_algorithmic',
-                data: { 'generator': AlgoGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack},
+                data: { 'generator': AlgoGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack },
                 success: function (data) {
                     // Update the MP3 player content with the returned filename
                     var filenameMP3 = data.filename + '.mp3';
                     var filenameMID = data.filename + '.mid';
                     var mp3Url = '/generated_data/' + encodeURIComponent(filenameMP3);
-                    $('#mp3PlayerContainerForAlgorithmicMusic').html('<audio-player src="' + mp3Url + '" bar-width="5" bar-gap="2" preload> </audio-player>')
+                    $('#mp3PlayerContainerForAlgorithmicMusic').html('<audio-player src="' + mp3Url + '" bar-width="5" bar-gap="2" preload loop> </audio-player>')
                     // Display download MID button
                     $('#downloadMIDButtonContainer').html('<a class="hyperlink-text" id="DownloadGeneratedMIDFile" href="/downloadMID/' + encodeURIComponent(filenameMID) + '" download>Download MIDI</a>');
 
