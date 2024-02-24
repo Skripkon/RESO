@@ -1,4 +1,4 @@
-from MinorMusicGenerator import MinorMusicGenerator
+from .MinorMusicGenerator import MinorMusicGenerator
 from music21 import stream, note, chord, tempo, meter
 import random
 
