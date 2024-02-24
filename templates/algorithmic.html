@@ -39,7 +39,7 @@ RESO
 <form class="gen_form" method="post" action="/generate/process_algorithmic">
     <select id="AlgoGenerator">
         <option value="AlgoGen01" selected>Calm Melody</option>
-        <option value="AlgoGen02">Error 1</option>
+        <option value="AlgoGen02">Random 3/4, aka Waltz</option>
         <option value="AlgoGen03">Error 2</option>
         <option value="AlgoGen04">Error 3</option>
         <option value="AlgoGen05">Error 4</option>
@@ -180,6 +180,8 @@ RESO
     $(document).ready(function () {
         $('#GenerateAlgorithmicMusic').click(function () {
             var AlgoGenerator = $('#AlgoGenerator').val();
+            var DurationOfTheTrack = $('#DurationOfTheTrack').val();
+            var TempoOfTheTrack = $('#TempoOfTheTrack').val();
 
             // Show loading spinner
             $('#loadingContainer').show();
@@ -187,7 +189,7 @@ RESO
             $.ajax({
                 type: 'POST',
                 url: '/generate/process_algorithmic',
-                data: { 'generator': AlgoGenerator },
+                data: { 'generator': AlgoGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack},
                 success: function (data) {
                     // Update the MP3 player content with the returned filename
                     var filenameMP3 = data.filename + '.mp3';

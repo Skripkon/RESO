@@ -1,6 +1,7 @@
 from werkzeug.utils import secure_filename
 from utils.midi2mp3 import midi2mp3
 from generators.algorithmic.Generator01 import generate_music01
+from generators.algorithmic.Generator02 import generate_music02
 import random
 from fastapi import FastAPI, Request, File, UploadFile
 from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse, JSONResponse
@@ -64,11 +65,20 @@ async def neural_page(request: Request):
 
 
 @app.post("/generate/process_algorithmic")
-async def process_algorithmic(generator: str = Form(...)):
+async def process_algorithmic(generator: str = Form(...), duration: str = Form(...), tempo: str = Form(...)):
     name_of_the_file: int = random.randint(1, 100_000_000)
     file_path = os.path.join("generated_data", f"{name_of_the_file}.mid")
+
+    minutes, seconds = map(int, duration.split(':'))
+    duration_sec = minutes * 60 + seconds
+
     if generator == "AlgoGen01":
         generate_music01(59, file_path)
+        midi2mp3(file_path)
+        return JSONResponse(content={"filename": name_of_the_file})
+    elif generator == "AlgoGen02":
+        generate_music02(scale=63, filepath=file_path,
+                         pulse=tempo, duration_sec=duration_sec)
         midi2mp3(file_path)
         return JSONResponse(content={"filename": name_of_the_file})
 
