@@ -70,14 +70,15 @@ async def process_algorithmic(generator: str = Form(...), duration: str = Form(.
     file_path = os.path.join("generated_data", f"{name_of_the_file}.mid")
 
     minutes, seconds = map(int, duration.split(':'))
-    duration_sec = minutes * 60  + seconds
+    duration_sec = minutes * 60 + seconds
 
     if generator == "AlgoGen01":
         generate_music01(59, file_path)
         midi2mp3(file_path)
         return JSONResponse(content={"filename": name_of_the_file})
     elif generator == "AlgoGen02":
-        generate_music02(65, file_path, pulse=tempo, duration_sec=duration_sec)
+        generate_music02(scale=63, filepath=file_path,
+                         pulse=tempo, duration_sec=duration_sec)
         midi2mp3(file_path)
         return JSONResponse(content={"filename": name_of_the_file})
 

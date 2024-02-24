@@ -25,6 +25,10 @@ class MinorMusicGenerator:
     def calculate_correct_notes(self):
         shifts = [0, 2, 3, 5, 7, 8, 10]
         notes = [(self.scale + shift) for shift in shifts]
+        # all notes from this list shold be in a range from 58 to 69 (which is a 4th octave)
+        for i in range(len(notes)):
+            if notes[i] >= 70:
+                notes[i] -= 12
         self.correct_notes = notes
 
     # creates a minor chord based on a given note
@@ -45,8 +49,10 @@ class MinorMusicGenerator:
     # The resulting chords are stored in the additional_chords attribute.
     def add_additional_chords(self):
         chord1 = [self.scale, self.scale + 3, self.scale + 7, self.scale + 8]
-        chord2 = [self.scale - 2, self.scale + 2, self.scale + 5, self.scale + 8]
-        chord3 = [self.scale + 2, self.scale + 5, self.scale + 8, self.scale + 12]
+        chord2 = [self.scale - 2, self.scale +
+                  2, self.scale + 5, self.scale + 8]
+        chord3 = [self.scale + 2, self.scale +
+                  5, self.scale + 8, self.scale + 12]
         chord4 = [self.scale + 2, self.scale + 5, self.scale + 7]
         chord5 = [self.scale, self.scale + 3, self.scale + 5]
         self.additional_chords = [chord1, chord2, chord3, chord4, chord5]
