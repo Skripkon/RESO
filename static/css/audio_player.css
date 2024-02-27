@@ -29,3 +29,10 @@ audio::-webkit-media-controls-pause-button-container {
     align-items: center;
     text-align: center;
 }
+
+#PDFContainerForAlgorithmicMusic {
+    width: 100%;
+    height: 50%;
+    align-items: center;
+    text-align: center;
+}

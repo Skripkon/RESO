@@ -20,7 +20,11 @@ $(document).ready(function () {
                 var filenamePDF = data.filename + '.pdf';
 
                 var mp3Url = '/generated_data/' + encodeURIComponent(filenameMP3);
-                $('#mp3PlayerContainerForAlgorithmicMusic').html('<audio-player src="' + mp3Url + '" bar-width="5" bar-gap="2" preload loop> </audio-player>')
+                $('#mp3PlayerContainerForAlgorithmicMusic').html('<audio-player src="' + mp3Url + '" bar-width="5" bar-gap="2" preload loop> </audio-player>');
+
+                var pdfUrl = '/generated_data/' + encodeURIComponent(filenamePDF);
+                $('#PDFContainerForAlgorithmicMusic').html('<embed src="' + pdfUrl + '" type="application/pdf" width="50%" height="100%">');
+
                 // Display download MID button
                 $('#downloadMIDButtonContainer').html('<a class="hyperlink-text" id="DownloadGeneratedMIDFile" href="/downloadMID/' + encodeURIComponent(filenameMID) + '" download>Download MIDI</a>');
 
