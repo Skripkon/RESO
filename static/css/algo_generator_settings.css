@@ -1,0 +1,65 @@
+/* ======================================== */
+/* Choose a parameters of the track 
+   (c) Skripko Nikolay
+*/
+
+.gen_form {
+    width: 550px;
+    height: 200;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.gen_form select {
+    width: 500px;
+    background-color: #013a63;
+    color: white;
+    height: 60px;
+    border-radius: 30px;
+    text-align: center;
+    font-size: 28px;
+}
+
+#HorizontalBarContainter {
+    height: 85px;
+    background-image: url("../images/main_bg.png");
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 1px;
+    /* border: #01497c solid; */
+}
+
+.AlgoGenSetting {
+    color: #013a63;
+    text-align: center;
+    justify-content: center;
+}
+
+.AlgoGenSettingTitle {
+    font-weight: 300;
+    margin-bottom: 3px;
+}
+
+.ComboBoxToChooseParameter {
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
+.ComboBoxToChooseParameter select {
+    border-radius: 25px;
+    width: 180px;
+    height: 40px;
+    font-size: 20px;
+    font-weight: 300;
+    background-color: #013a63;
+    color: white;
+    text-align: center;
+}

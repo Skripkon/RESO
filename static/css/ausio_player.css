@@ -1,0 +1,39 @@
+/* Stylish play/pause button */
+
+/* Is it redundant? */
+
+audio::-webkit-media-controls-play-button,
+audio::-webkit-media-controls-pause-button,
+audio::-webkit-media-controls-play-button-container,
+audio::-webkit-media-controls-pause-button-container {
+    width: 40px;
+    height: 30px;
+    margin-top: -6px;
+}
+
+audio::-webkit-media-controls-play-button,
+audio::-webkit-media-controls-pause-button {
+    background-color: white;
+    border-radius: 40%;
+}
+
+audio::-webkit-media-controls-play-button-container,
+audio::-webkit-media-controls-pause-button-container {
+    background-color: transparent;
+}
+
+#mp3PlayerContainerForAlgorithmicMusic {
+    width: 40%;
+    left: 50%;
+    margin-top: 20px;
+    align-items: center;
+    text-align: center;
+}
+
+#mp3PlayerContainerForAlgorithmicMusicEdited {
+    width: 40%;
+    left: 50%;
+    margin-top: 20px;
+    align-items: center;
+    text-align: center;
+}

@@ -1,0 +1,49 @@
+header {
+    font-weight: 100;
+    z-index: 3;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(2, 8, 18, 0.8);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8%;
+    height: 73px;
+    padding-left: 100px;
+    padding-right: 60px;
+}
+
+.logo {
+    position: static;
+    margin-left: 1px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.navbar-item {
+    position: relative;
+    float: right;
+
+}
+
+.navbar-link {
+    padding: 15px;
+    color: rgb(255, 255, 255);
+    font-weight: 100;
+    font-style: normal;
+    font-size: 25px;
+    display: block;
+    border-radius: 30px;
+    transition: transform 0.3s ease-in-out;
+    padding: 50px;
+}
+
+.navbar-link:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}

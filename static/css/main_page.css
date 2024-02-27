@@ -1,3 +1,24 @@
+.website-description, .li {
+    font-family: "Eina01";
+    font-weight: 200;
+    font-style: normal;
+    font-size: 23px;
+    color: #012a4a;
+    text-align: center;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 0.9%;
+}
+
+.main-logo {
+    width: 320px;
+    position: absolute;
+    top: 22%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
 #main-page-use-cases-container {
     display: flex;
     justify-content: center;

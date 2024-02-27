@@ -1,33 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@1&display=swap');
 
-@font-face {
-    font-family: 'Eina01';
-    src: url('../fonts/Eina01/Eina01-Light.ttf') format('truetype');
-    font-weight: 100;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Eina01';
-    src: url('../fonts/Eina01/Eina01-Regular.ttf') format('truetype');
-    font-weight: 200;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Eina01';
-    src: url('../fonts/Eina01/Eina01-SemiBold.ttf') format('truetype');
-    font-weight: 300;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Eina01';
-    src: url('../fonts/Eina01/Eina01-Bold.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-}
-
 * {
     margin: 0;
     padding: 0;
@@ -44,82 +16,7 @@ body {
     margin-top: 150px;
 }
 
-/* Header */
-/* ======================================== */
-
-header {
-    font-weight: 100;
-    z-index: 3;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: rgba(2, 8, 18, 0.8);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 8%;
-    height: 73px;
-    padding-left: 100px;
-    padding-right: 60px;
-}
-
-.logo {
-    position: static;
-    margin-left: 1px;
-    transition: transform 0.3s ease-in-out;
-}
-
-.logo:hover {
-    transform: scale(1.05);
-    cursor: pointer;
-}
-
-.navbar-item {
-    position: relative;
-    float: right;
-
-}
-
-.navbar-link {
-    padding: 15px;
-    color: rgb(255, 255, 255);
-    font-weight: 100;
-    font-style: normal;
-    font-size: 25px;
-    display: block;
-    border-radius: 30px;
-    transition: transform 0.3s ease-in-out;
-    padding: 50px;
-}
-
-.navbar-link:hover {
-    transform: scale(1.05);
-    cursor: pointer;
-}
-
-/* Main page */
-/* ======================================== */
-
-.website-description, .li {
-    font-family: "Eina01";
-    font-weight: 200;
-    font-style: normal;
-    font-size: 23px;
-    color: #012a4a;
-    text-align: center;
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-top: 0.9%;
-}
-
-.main-logo {
-    width: 320px;
-    position: absolute;
-    top: 22%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
+/* Logo to be displayed on all pages except home page */
 .small-logo {
     width: 200px;
     position: absolute;
@@ -128,9 +25,7 @@ header {
     transform: translate(-50%, -50%);
 }
 
-/* Buttons */
-/* ======================================== */
-
+/* Main button */
 .main-button {
     display: block;
     margin: 0 auto;
@@ -154,67 +49,7 @@ header {
     cursor: pointer;
 }
 
-/* ComboBox */
-/* ======================================== */
-
-.gen_form {
-    width: 550px;
-    height: 200;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    transition: background-color 0.3s ease;
-}
-
-.gen_form select {
-    width: 500px;
-    background-color: #013a63;
-    color: white;
-    height: 60px;
-    border-radius: 30px;
-    text-align: center;
-    font-size: 28px;
-}
-
-/* Stylish play/pause button */
-audio::-webkit-media-controls-play-button,
-audio::-webkit-media-controls-pause-button,
-audio::-webkit-media-controls-play-button-container,
-audio::-webkit-media-controls-pause-button-container {
-    width: 40px;
-    height: 30px;
-    margin-top: -6px;
-}
-
-audio::-webkit-media-controls-play-button,
-audio::-webkit-media-controls-pause-button {
-    background-color: white;
-    border-radius: 40%;
-}
-
-audio::-webkit-media-controls-play-button-container,
-audio::-webkit-media-controls-pause-button-container {
-    background-color: transparent;
-}
-
-#mp3PlayerContainerForAlgorithmicMusic {
-    width: 40%;
-    left: 50%;
-    margin-top: 20px;
-    align-items: center;
-    text-align: center;
-}
-
-#mp3PlayerContainerForAlgorithmicMusicEdited {
-    width: 40%;
-    left: 50%;
-    margin-top: 20px;
-    align-items: center;
-    text-align: center;
-}
-
+/* TODO: normal loading bar */
 #loadingContainer {
     display: none;
     position: fixed;
@@ -223,10 +58,7 @@ audio::-webkit-media-controls-pause-button-container {
     transform: translate(-50%, -50%);
 }
 
-
-/* ======================================== */
-/* Styles for two buttons which allow you to download a track (midi / mp3) */
-
+/* Style for text based buttons like download button */
 .hyperlink-text {
     padding: 15px;
     background: #013a6300;
@@ -242,170 +74,8 @@ audio::-webkit-media-controls-pause-button-container {
     cursor: pointer;
 }
 
-/* Containter for these two buttons */
-
 #ContainerWithTwoDownloadButtons {
     display: flex;
     justify-content: center;
     margin-top: 20px;
-}
-
-/* ======================================== */
-/* Choose a parameters of the track 
-   (c) Skripko Nikolay
-*/
-
-#HorizontalBarContainter {
-    height: 85px;
-    background-image: url("../images/main_bg.png");
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-    position: relative;
-    border-radius: 1px;
-    /* border: #01497c solid; */
-}
-
-.AlgoGenSetting {
-    color: #013a63;
-    text-align: center;
-    justify-content: center;
-}
-
-.AlgoGenSettingTitle {
-    font-weight: 300;
-    margin-bottom: 3px;
-}
-
-.ComboBoxToChooseParameter {
-    margin-right: 10px;
-    margin-left: 10px;
-    margin-bottom: 5px;
-}
-
-.ComboBoxToChooseParameter select {
-    border-radius: 25px;
-    width: 180px;
-    height: 40px;
-    font-size: 20px;
-    font-weight: 300;
-    background-color: #013a63;
-    color: white;
-    text-align: center;
-}
-
-/* Editing settings */
-
-#EditAlgoTrackButtonContainer {
-    /* display: flex; */
-    display: none;
-    position: relative;
-    margin-bottom: 20px;
-}
-
-
-
-#EditAlgoTrackContainer {
-    display: none;
-    /* background-image: url(../images/sub_bg.png); */
-    background-color: white 50%;
-    /* height: 600px; */
-    padding-top: 5px;
-    padding-bottom: 22px;
-}
-
-.EditAlgoSetting {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 54px;
-    /* margin:  0 auto; */
-    /* background-color: #012a4a44; */
-}
-
-.InputField {
-    width: 100px;
-    height: 35px;
-    background: #013a6300;
-    border: #013a63 solid 5px;
-    border-radius: 31px;
-    color: #013a63;
-    font-size: 18px;
-    font-weight: 300;
-    line-height: 0.6;
-    text-align: center;
-    transition: 0.1s ease;
-}
-
-.InputField:focus {
-    box-shadow: 0px 0px 10px 0px #013a6388;
-    outline: none;
-}
-
-.InputCheckBox {
-    width: 20px;
-    height: 20px;
-    -webkit-appearance: none;
-    background-color: transparent;
-    border: 4px solid #013a63;
-    padding: 9px;
-    border-radius: 5px;
-    display: inline-block;
-    position: relative;
-}
-
-.InputCheckBox:checked:after {
-    content: '\2714';
-    font-size: 14px;
-    position: absolute;
-    top: 0px;
-    left: 3px;
-    color: #013a63;
-}
-
-.InputCheckBox:focus {
-    box-shadow: 0px 0px 10px 0px #013a6388;
-    outline: none;
-}
-
-.InputCheckBox:hover {
-    cursor: pointer;
-}
-
-.AlgoSettingLabel {
-    margin-right: 10px;
-    color: #012a4a;
-    font-weight: 300;
-}
-
-#EditAlgoTrackFadesContainer {
-    display: none;
-    /* background-color: rgba(0, 100, 100, 0.5); */
-    /* height: 120px; */
-    /* padding-top: 15px; */
-}
-
-.render-button {
-    display: block;
-    margin: 0 auto;
-    margin-top: 15px;
-    padding: 15px;
-    width: 200px;
-    height: 40px;
-    background: #013a63;
-    border: #013a63 solid 4px;
-    border-radius: 31px;
-    color: #e9f4f7;
-    font-size: 23px;
-    line-height: 0.0;
-    text-align: center;
-    transition: 0.1s ease;
-    font-weight: 300;
-}
-
-.render-button:hover {
-    background-color: #013a6300;
-    color: #013a63;
-    cursor: pointer;
 }
