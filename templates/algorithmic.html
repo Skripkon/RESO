@@ -46,6 +46,8 @@ RESO
 </form>
 
 <div id="mp3PlayerContainerForAlgorithmicMusic"> </div>
+<!-- Hidden element to store track name for editing purposes -->
+<div id="currentTrackName" style="display: none;"></div>
 
 <script src="{{ url_for('static', path='js/custom_mp3_player.js') }}"></script>
 
@@ -64,36 +66,36 @@ RESO
 <div id="EditAlgoTrackContainer">
     <div class="EditAlgoSetting">
         <label for="AlgoStartTime" class="AlgoSettingLabel">Start time:</label>
-        <input type="text" id="AlgoStartTime" class="InputField" name="AlgoStartTime">
+        <input type="text" id="AlgoStartTime" class="InputField" name="AlgoStartTime" pattern="[0-5]?[0-9]:[0-5][0-9]" placeholder="0:00" value="0:00">
     </div>
 
     <div class="EditAlgoSetting">
         <label for="AlgoEndTime" class="AlgoSettingLabel">End time:</label>
-        <input type="text" id="AlgoEndTime" class="InputField" name="AlgoEndTime">
+        <input type="text" id="AlgoEndTime" class="InputField" name="AlgoEndTime" pattern="[0-5]?[0-9]:[0-5][0-9]" placeholder="0:00" value="0:30">
     </div>
 
     <div class="EditAlgoSetting">
         <label for="AlgoAddFades" class="AlgoSettingLabel">Add fade-in and fade-out?</label>
-        <input type="checkbox" id="EditAlgoAddFades" class="InputCheckBox" name="AlgoAddFades">
+        <input type="checkbox" id="AlgoAddFades" class="InputCheckBox" name="AlgoAddFades">
     </div>
 
     <!-- Hideable fade-in and fade-out settings -->
     <div id="EditAlgoTrackFadesContainer">
         <div class="EditAlgoSetting">
             <label for="AlgoFadeInTime" class="AlgoSettingLabel">Fade-in length:</label>
-            <input type="text" id="AlgoFadeInTime" class="InputField" name="AlgoFadeInTime">
+            <input type="text" id="AlgoFadeInTime" class="InputField" name="AlgoFadeInTime" pattern="[0-5]?[0-9]" placeholder="0" value="0">
         </div>
 
         <div class="EditAlgoSetting">
             <label for="AlgoFadeOutTime" class="AlgoSettingLabel">Fade-out length:</label>
-            <input type="text" id="AlgoFadeOutTime" class="InputField" name="AlgoFadeOutTime">
+            <input type="text" id="AlgoFadeOutTime" class="InputField" name="AlgoFadeOutTime" pattern="[0-5]?[0-9]" placeholder="0" value="0">
         </div>
     </div>
 
     <button class="render-button" id="EditAlgoRenderButton">Render</button>
 
+    <!-- TODO: fix styles -->
     <div id="mp3PlayerContainerForAlgorithmicMusicEdited"></div>
-
     <div id="downloadEditedMP3ButtonContainer"></div>
 
 </div>
@@ -121,8 +123,8 @@ RESO
 <!-- Add fades checkbox interraction -->
 <script>
     $(document).ready(function () {
-        $('#EditAlgoAddFades').change(function () {
-            var addFades = document.getElementById('EditAlgoAddFades');
+        $('#AlgoAddFades').change(function () {
+            var addFades = document.getElementById('AlgoAddFades');
             var fadesContainer = document.getElementById('EditAlgoTrackFadesContainer');
             if (addFades.checked) {
                 $('#EditAlgoTrackFadesContainer').show();
@@ -137,35 +139,93 @@ RESO
 <script>
     $(document).ready(function () {
         $('#EditAlgoRenderButton').click(function () {
-            var renderButton = document.getElementById('EditAlgoRenderButton');
-            renderButton.innerText = "Rerender"
-            // TODO
-            // P.S.: now it is just copied code from "Generate!" button
+            var file = document.getElementById('currentTrackName').textContent;
+            var start = document.getElementById('AlgoStartTime').value;
+            var end = document.getElementById('AlgoEndTime').value;
+            var add_fades = document.getElementById('AlgoAddFades').checked;
+            var fade_in = 0, fade_out = 0;
+            if (add_fades) {
+                fade_in = document.getElementById('AlgoFadeInTime').value;
+                fade_out = document.getElementById('AlgoFadeOutTime').value;
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/generate/edit_algorithmic',
+                data: {'file': file, 'start': start, 'end': end, 'fade_in': fade_in, 'fade_out': fade_out},
+                success: function (data) {
+                    var renderButton = document.getElementById('EditAlgoRenderButton');
+                    renderButton.innerText = "Rerender";
 
-            // $.ajax({
-            //     type: 'POST',
-            //     url: '/generate/process_algorithmic',
-            //     data: { 'generator': AlgoGenerator },
-            //     success: function (data) {
-            //         // Update the MP3 player content with the returned filename
-            //         var filenameMP3 = data.filename + '.mp3';
-            //         var filenameMID = data.filename + '.mid';
-            //         var mp3Url = '/generated_data/' + encodeURIComponent(filenameMP3);
-            //         $('#mp3PlayerContainerForAlgorithmicMusic').html('<audio style="width: 500px;" controls><source src="' + mp3Url + '" type="audio/mpeg"></audio>');
-
-            //         // Display download MID button
-            //         $('#downloadMIDButtonContainer').html('<a class="hyperlink-text" id="DownloadGeneratedMIDFile" href="/downloadMID/' + encodeURIComponent(filenameMID) + '" download>Download MIDI</a>');
-
-            //         // Display download MP3 button
-            //         $('#downloadMP3ButtonContainer').html('<a class="hyperlink-text" id="DownloadGeneratedMP3File" href="/downloadMP3/' + encodeURIComponent(filenameMP3) + '" download>Download MP3</a>');
-
-            //         // Hide loading spinner
-            //         $('#loadingContainer').hide();
-            //         $('#EditAlgoTrackButtonContainer').show();
-            //     }
-            // });
-
+                    var mp3Url = '/generated_data/' + data.file;
+                    // TODO: after rerendering the edits track is not updated in the music player while in the download button it is
+                    // P.S.: I don't know why =(
+                    $('#mp3PlayerContainerForAlgorithmicMusicEdited').html('<audio-player src="' + mp3Url + '" bar-width="5" bar-gap="2" preload loop> </audio-player>')
+                    $('#downloadEditedMP3ButtonContainer').html('<a class="hyperlink-text" id="DownloadEditedMP3File" href="/downloadEditedMP3/' + data.file + '" download>Download MP3</a>');
+                }
+            });
         });
+    });
+</script>
+
+<!-- Enforce correct trimming time format -->
+<script>
+    function convertToSeconds(time) {
+        const parts = time.split(':');
+        return parseInt(parts[0],  10) * 60 + parseInt(parts[1],  10);
+    }
+
+    var startOldValue = "0:00";
+    document.getElementById('AlgoStartTime').addEventListener('change', function(e) {
+        var value = e.target.value;
+        var pattern = new RegExp('^[0-9]:[0-5][0-9]$');
+        if (!pattern.test(value)) {
+            alert('Invalid time format. Please enter time in the format of m:ss.');
+            e.target.value = startOldValue;
+        } else {
+            startOldValue = value;
+        }
+    });
+
+    var endOldValue = "0:30";
+    document.getElementById('AlgoEndTime').addEventListener('change', function(e) {
+        var value = e.target.value;
+        var pattern = new RegExp('^[0-9]:[0-5][0-9]$');
+        if (!pattern.test(value)) {
+            alert('Invalid time format. Please enter time in the format of m:ss.');
+            e.target.value = endOldValue;
+        } else {
+            endOldValue = value;
+            // TODO: protection from incorrect inputs (i.e. start time > end time)
+
+            // var startInput = document.getElementById('AlgoStartTime');
+            // var numStartValue = convertToSeconds(startInput.value);
+            // var numEndValue = convertToSeconds(value);
+            // if (numEndValue < numStartValue) {
+            //     e.target.value = startInput.value; 
+            //     alert('End time should be greater than start time.')
+            // }
+        }
+    });
+    
+    // TODO: protection from incorrect inputs (i.e. '01' -> '1')
+    document.getElementById('AlgoFadeInTime').addEventListener('change', function(e) {
+      var value = e.target.value;
+      var pattern = new RegExp('^[0-5]?[0-9]$');
+      if (!pattern.test(value)) {
+        alert('Invalid time format. Please enter time in the format of ss.');
+        e.target.value = '0';
+      }
+    });
+
+    document.getElementById('AlgoFadeOutTime').addEventListener('change', function(e) {
+      var value = e.target.value;
+      var pattern = new RegExp('^[0-5]?[0-9]$');
+      if (!pattern.test(value)) {
+        alert('Invalid time format. Please enter time in the format of ss.');
+        e.target.value = '0';
+      } else {
+
+      }
     });
 </script>
 
@@ -173,7 +233,8 @@ RESO
     <img src="{{ url_for('static', path='images/loading.gif') }}" alt="Loading...">
 </div>
 
-<!-- Script to show buttons after track has generated -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- Process generated track -->
 <script>
     $(document).ready(function () {
         $('#GenerateAlgorithmicMusic').click(function () {
@@ -203,6 +264,10 @@ RESO
                     // Hide loading spinner
                     $('#loadingContainer').hide();
                     $('#EditAlgoTrackButtonContainer').show();
+
+                    // Store track's name in an invisible <div> for easier access later for editing 
+                    var currentTrackName = document.getElementById('currentTrackName');
+                    currentTrackName.textContent = 'generated_data/' + encodeURIComponent(filenameMP3);;
                 }
             });
         });

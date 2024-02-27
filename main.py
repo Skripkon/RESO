@@ -9,6 +9,8 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.exceptions import HTTPException
 from fastapi import Form
+from pydantic import BaseModel
+from utils.audio_editing import edit_mp3, str_to_secs
 import os
 
 app = FastAPI()
@@ -83,6 +85,18 @@ async def process_algorithmic(generator: str = Form(...), duration: str = Form(.
         return JSONResponse(content={"filename": name_of_the_file})
 
 
+@app.post("/generate/edit_algorithmic")
+async def edit_algorithmic(file: str = Form(...), 
+                           start: str = Form(...),
+                           end: str = Form(...),
+                           fade_in: str = Form(...),
+                           fade_out: str = Form(...)):
+    print('=' * 20, '\n', file, start, end, fade_in, fade_out)
+    
+    edited_file = edit_mp3(file, str_to_secs(start), str_to_secs(end), int(fade_in), int(fade_out))
+    return JSONResponse(content={"file": edited_file})
+
+
 @app.get("/downloadMID/{filename}")
 async def download_generated_file(filename: str):
     file_path = os.path.join("generated_data", filename)
@@ -91,6 +105,12 @@ async def download_generated_file(filename: str):
 
 @app.get("/downloadMP3/{filename}")
 async def download_generated_file(filename: str):
+    file_path = os.path.join("generated_data", filename)
+    return FileResponse(file_path, media_type='audio/midi', filename=filename)
+
+
+@app.get("/downloadEditedMP3/{filename}")
+async def download_edited_file(filename: str):
     file_path = os.path.join("generated_data", filename)
     return FileResponse(file_path, media_type='audio/midi', filename=filename)
 
