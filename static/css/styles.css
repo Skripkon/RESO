@@ -11,7 +11,7 @@
 
 body {
     height: 100vh;
-    background-image: url("../images/main_bg.png");
+    background-image: url("../images/main_bg_seamless.png");
     background-size: cover;
     margin-top: 150px;
 }
