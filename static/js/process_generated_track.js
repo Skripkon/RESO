@@ -29,7 +29,13 @@ $(document).ready(function () {
 
                 // Store track's name in an invisible <div> for easier access later for editing 
                 var currentTrackName = document.getElementById('currentTrackName');
-                currentTrackName.textContent = 'generated_data/' + encodeURIComponent(filenameMP3);;
+                currentTrackName.textContent = 'generated_data/' + encodeURIComponent(filenameMP3);
+
+                // Reset editing player in case we are regenereating track
+                $('#mp3PlayerContainerForAlgorithmicMusicEdited').html('');
+                $('#downloadEditedMP3ButtonContainer').html('');
+                var renderButton = document.getElementById('EditAlgoRenderButton');
+                renderButton.innerText = "Render";
             }
         });
     });

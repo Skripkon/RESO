@@ -18,9 +18,7 @@ $(document).ready(function () {
                 renderButton.innerText = "Rerender";
 
                 var mp3Url = '/generated_data/' + data.file;
-                // TODO: after rerendering the edits track is not updated in the music player while in the download button it is
-                // P.S.: I don't know why =(
-                $('#mp3PlayerContainerForAlgorithmicMusicEdited').html('<audio-player src="' + mp3Url + '" bar-width="5" bar-gap="2" preload loop> </audio-player>')
+                $('#mp3PlayerContainerForAlgorithmicMusicEdited').html('<audio-player src="/generated_data/' + data.file + '" bar-width="5" bar-gap="2" preload loop> </audio-player>')
                 $('#downloadEditedMP3ButtonContainer').html('<a class="hyperlink-text" id="DownloadEditedMP3File" href="/downloadEditedMP3/' + data.file + '" download>Download MP3</a>');
             }
         });
