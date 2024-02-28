@@ -86,18 +86,18 @@ async def process_algorithmic(generator: str = Form(...), duration: str = Form(.
 
 
 @app.post("/generate/edit_algorithmic")
-async def edit_algorithmic(file: str = Form(...), 
+async def edit_algorithmic(file: str = Form(...),
                            start: str = Form(...),
                            end: str = Form(...),
                            fade_in: str = Form(...),
                            fade_out: str = Form(...)):
     print('=' * 20, '\n', file, start, end, fade_in, fade_out)
     edit_id: int = random.randint(1, 100_000_000)
-    edited_file = edit_mp3(file, 
-                           str_to_secs(start), 
-                           str_to_secs(end), 
+    edited_file = edit_mp3(file,
+                           str_to_secs(start),
+                           str_to_secs(end),
                            edit_id,
-                           int(fade_in), 
+                           int(fade_in),
                            int(fade_out))
     return JSONResponse(content={"file": edited_file})
 

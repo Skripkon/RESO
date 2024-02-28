@@ -5,14 +5,14 @@ import os
 
 def str_to_secs(time_str):
     minutes, seconds = time_str.split(':')
-    return int(minutes) *  60 + int(seconds)
+    return int(minutes) * 60 + int(seconds)
 
 
-def edit_mp3(relative_file_path: str, 
-             start_time: int, 
-             end_time: int, 
+def edit_mp3(relative_file_path: str,
+             start_time: int,
+             end_time: int,
              edit_id: int,
-             fade_in_len=0, 
+             fade_in_len=0,
              fade_out_len=0
              ):
     """
