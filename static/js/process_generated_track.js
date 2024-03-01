@@ -3,6 +3,7 @@ $(document).ready(function () {
         var AlgoGenerator = $('#AlgoGenerator').val();
         var DurationOfTheTrack = $('#DurationOfTheTrack').val();
         var TempoOfTheTrack = $('#TempoOfTheTrack').val();
+        var ScaleOfTheTrack = $('#ScaleOfTheTrack').val();
 
         // Show loading spinner
         $('#loadingContainer').show();
@@ -10,7 +11,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: '/generate/process_algorithmic',
-            data: { 'generator': AlgoGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack },
+            data: { 'generator': AlgoGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack, 'scale': ScaleOfTheTrack },
             success: function (data) {
                 // Update the MP3 player content with the returned filename
                 var filenameMP3 = data.filename + '.mp3';

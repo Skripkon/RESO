@@ -67,7 +67,7 @@ async def neural_page(request: Request):
 
 
 @app.post("/generate/process_algorithmic")
-async def process_algorithmic(generator: str = Form(...), duration: str = Form(...), tempo: str = Form(...)):
+async def process_algorithmic(generator: str = Form(...), duration: str = Form(...), tempo: str = Form(...), scale: int = Form(...)):
     name_of_the_file: int = random.randint(1, 100_000_000)
     file_path = os.path.join("generated_data", f"{name_of_the_file}.mid")
 
@@ -75,11 +75,11 @@ async def process_algorithmic(generator: str = Form(...), duration: str = Form(.
     duration_sec = minutes * 60 + seconds
 
     if generator == "AlgoGen01":
-        generate_music01(59, file_path)
+        generate_music01(scale=scale, filepath=file_path)
         midi2mp3(file_path)
         return JSONResponse(content={"filename": name_of_the_file})
     elif generator == "AlgoGen02":
-        generate_music02(scale=63, filepath=file_path,
+        generate_music02(scale=scale, filepath=file_path,
                          pulse=tempo, duration_sec=duration_sec)
         midi2mp3(file_path)
         return JSONResponse(content={"filename": name_of_the_file})
