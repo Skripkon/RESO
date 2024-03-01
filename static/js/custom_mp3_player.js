@@ -248,7 +248,7 @@
         }
         
         .audio-player {
-          width: 500px;
+          /* width: 500px; */
           height: 55px;
           background: #013a63;
           border-radius: 20px;

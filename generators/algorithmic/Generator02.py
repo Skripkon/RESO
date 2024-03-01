@@ -9,7 +9,7 @@ left_hand_last_chord_index = 0
 right_hand_last_note_index = 0
 
 
-def generate_music02(scale: int, filepath: str, tempo: str = 'Normal', duration_sec: int = 60):
+def generate_music02(scale: int, filepath: str, pulse: str = 'Normal', duration_sec: int = 60):
     INTERVAL_LENGTH = 3
     OCTAVE_SHIFT = 12
     # Initialize music generator
@@ -27,7 +27,7 @@ def generate_music02(scale: int, filepath: str, tempo: str = 'Normal', duration_
     CORRECT_NOTES_COUNT = len(right_hand_notes)
 
     # Get BPM
-    bpm = tempo_map.get(tempo, tempo_map['Normal'])
+    bpm = tempo_map.get(pulse, tempo_map['Normal'])
 
     # Initialize parts
     right_hand = stream.Part()
