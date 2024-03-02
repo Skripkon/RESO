@@ -27,7 +27,7 @@ def generate_music02(scale: int, filepath: str, pulse: str = 'Normal', duration_
     CORRECT_NOTES_COUNT = len(right_hand_notes)
 
     # Get BPM
-    bpm = tempo_map.get(pulse, 'Normal')
+    bpm = tempo_map.get(pulse, tempo_map['Normal'])
 
     # Initialize parts
     right_hand = stream.Part()
