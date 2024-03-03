@@ -102,3 +102,9 @@
     color: #013a63;
     cursor: pointer;
 }
+
+.ContainerWithDownloadButton {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
