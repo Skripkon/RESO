@@ -1,6 +1,7 @@
 from .MinorMusicGenerator import MinorMusicGenerator
 from music21 import stream, note, chord, tempo, meter, metadata
 import random
+import os
 
 tempo_map = {'Normal': 100, 'Slow': 60, 'Fast': 120}
 
@@ -9,7 +10,7 @@ left_hand_last_chord_index = 0
 right_hand_last_note_index = 0
 
 
-def generate_music02(scale: int, filepath_midi: str, filepath_pdf: str, pulse: str = 'Normal', duration_sec: int = 60):
+def generate_music02(scale: int, name_of_the_file: int, pulse: str = 'Normal', duration_sec: int = 60):
     INTERVAL_LENGTH = 3
     OCTAVE_SHIFT = 12
     # Initialize music generator
@@ -118,6 +119,8 @@ def generate_music02(scale: int, filepath_midi: str, filepath_pdf: str, pulse: s
     myStream.metadata.title = "Waltz"
     myStream.metadata.composer = "RESO"
     # Write to MIDI and PDF file
+    filepath_midi = os.path.join("generated_data", f"{name_of_the_file}.mid")
+    filepath_pdf = os.path.join("generated_data", f"{name_of_the_file}.pdf")
     myStream.write('midi', fp=filepath_midi)
     myStream.write('musicxml.pdf', fp=filepath_pdf)
 
