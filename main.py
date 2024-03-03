@@ -11,7 +11,9 @@ from fastapi.exceptions import HTTPException
 from fastapi import Form
 from pydantic import BaseModel
 from utils.audio_editing import edit_mp3, str_to_secs
+from utils.data_logging import log_data
 import os
+import datetime
 
 app = FastAPI()
 
@@ -74,6 +76,8 @@ async def process_algorithmic(generator: str = Form(...), duration: str = Form(.
     minutes, seconds = map(int, duration.split(':'))
     duration_sec = minutes * 60 + seconds
 
+    log_data('utils/log.json', "Algo", generator, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
     if generator == "AlgoGen01":
         generate_music01(scale=scale, filepath=file_path)
         midi2mp3(file_path)
@@ -83,6 +87,7 @@ async def process_algorithmic(generator: str = Form(...), duration: str = Form(.
                          pulse=tempo, duration_sec=duration_sec)
         midi2mp3(file_path)
         return JSONResponse(content={"filename": name_of_the_file})
+    
 
 
 @app.post("/generate/edit_algorithmic")
@@ -91,7 +96,6 @@ async def edit_algorithmic(file: str = Form(...),
                            end: str = Form(...),
                            fade_in: str = Form(...),
                            fade_out: str = Form(...)):
-    print('=' * 20, '\n', file, start, end, fade_in, fade_out)
     edit_id: int = random.randint(1, 100_000_000)
     edited_file = edit_mp3(file,
                            str_to_secs(start),

@@ -37,7 +37,6 @@ def edit_mp3(relative_file_path: str,
 
     export_path = os.path.join(os.path.dirname(
         file_path), "edited_" + os.path.basename(file_path).split('.')[0] + f'_{edit_id}.mp3')
-    print(export_path)
     cut_audio.export(export_path, format="mp3")
     return "edited_" + os.path.basename(file_path).split('.')[0] + f'_{edit_id}.mp3'
 
