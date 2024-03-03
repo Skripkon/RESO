@@ -2,6 +2,10 @@ from .MinorMusicGenerator import MinorMusicGenerator
 from music21 import stream, note, chord, tempo, meter, metadata
 import random
 import os
+# from music21 import environment
+#   type "which mscore" in console and insert your path here
+# env = environment.Environment()
+# env['musicxmlPath'] =  '/usr/local/bin/mscore'
 
 tempo_map = {'Normal': 100, 'Slow': 60, 'Fast': 120}
 

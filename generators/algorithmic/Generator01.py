@@ -2,7 +2,10 @@ from .MinorMusicGenerator import MinorMusicGenerator
 from music21 import note, chord, stream, metadata
 import random
 import os
-
+# from music21 import environment
+#   type "which mscore" in console and insert your path here
+# env = environment.Environment()
+# env['musicxmlPath'] =  '/usr/local/bin/mscore'
 
 def generate_music01(scale: int, name_of_the_file: int):
     new_song_generator = MinorMusicGenerator(scale)
