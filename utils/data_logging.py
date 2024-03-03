@@ -13,12 +13,17 @@ def log_data(log_path: str,
     generator type, generator subtype and time of the query (by default
     sets the time of the function call). 
     """
-    with open(log_path, 'r') as file:
-        log_data = json.load(file)
     new_recording = {"generator_type": generator_type,
                      "generator_subtype": generator_subtype,
                      "time": time}
-    log_data.get('generation_data').append(new_recording)
+
+    try:
+        with open(log_path, 'r') as file:
+            log_data = json.load(file)
+        log_data.get('generation_data').append(new_recording)
+    except FileNotFoundError:
+        log_data = {'generation_data': [new_recording]}
+
     with open(log_path, 'w') as file:
         json.dump(log_data, file, indent=4)
 
