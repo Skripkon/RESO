@@ -2,20 +2,20 @@ from pydub import AudioSegment
 import os
 
 
-def midi2mp3(file_name):
+def midi2mp3(name_of_the_file: int):
     """
     Converts a specified .mid file into an .mp3 file and puts it into the same directory
     """
     try:
-        wav_file = os.path.abspath(file_name.replace('.mid', '.wav'))
-        file_path = os.path.abspath(file_name)
+        filepath = os.path.join("generated_data", f"{name_of_the_file}.mid")
+        wav_file = os.path.join("generated_data", f"{name_of_the_file}.wav")
         soundfont = os.path.abspath('utils/piano_soundfont.sf2')
         # Run the conversion from .mid to .wav
         os.system(
-            f'fluidsynth -ni "{soundfont}" "{file_path}" -F "{wav_file}" -r 44100')
+            f'fluidsynth -ni "{soundfont}" "{filepath}" -F "{wav_file}" -r 44100')
         # Convert to .mp3 from .wav
         audio = AudioSegment.from_wav(wav_file)
-        mp3_file = os.path.abspath(file_name.replace('.mid', '.mp3'))
+        mp3_file = os.path.join("generated_data", f"{name_of_the_file}.mp3")
         audio.export(mp3_file, format='mp3')
         os.remove(wav_file)
 

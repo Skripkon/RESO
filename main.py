@@ -71,7 +71,6 @@ async def neural_page(request: Request):
 @app.post("/generate/process_algorithmic")
 async def process_algorithmic(generator: str = Form(...), duration: str = Form(...), tempo: str = Form(...), scale: int = Form(...)):
     name_of_the_file: int = random.randint(1, 100_000_000)
-    file_path = os.path.join("generated_data", f"{name_of_the_file}.mid")
 
     minutes, seconds = map(int, duration.split(':'))
     duration_sec = minutes * 60 + seconds
@@ -80,13 +79,12 @@ async def process_algorithmic(generator: str = Form(...), duration: str = Form(.
              datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     if generator == "AlgoGen01":
-        generate_music01(scale=scale, filepath=file_path)
-        midi2mp3(file_path)
+        generate_music01(scale=scale, name_of_the_file=name_of_the_file)
+        midi2mp3(name_of_the_file=name_of_the_file)
         return JSONResponse(content={"filename": name_of_the_file})
     elif generator == "AlgoGen02":
-        generate_music02(scale=scale, filepath=file_path,
-                         pulse=tempo, duration_sec=duration_sec)
-        midi2mp3(file_path)
+        generate_music02(scale=scale,  name_of_the_file=name_of_the_file, pulse=tempo, duration_sec=duration_sec)
+        midi2mp3(name_of_the_file=name_of_the_file)
         return JSONResponse(content={"filename": name_of_the_file})
 
 
@@ -115,7 +113,17 @@ async def download_generated_file(filename: str):
 @app.get("/downloadMP3/{filename}")
 async def download_generated_file(filename: str):
     file_path = os.path.join("generated_data", filename)
-    return FileResponse(file_path, media_type='audio/midi', filename=filename)
+    return FileResponse(file_path, media_type='audio/mpeg', filename=filename)
+
+@app.get("/downloadMusicXML/{filename}")
+async def download_generated_file(filename: str):
+    file_path = os.path.join("generated_data", filename)
+    return FileResponse(file_path, media_type='application/vnd.recordare.musicxml+xml', filename=filename)
+
+@app.get("/downloadPDF/{filename}")
+async def download_generated_file(filename: str):
+    file_path = os.path.join("generated_data", filename)
+    return FileResponse(file_path, media_type='application/pdf', filename=filename)
 
 
 @app.get("/downloadEditedMP3/{filename}")

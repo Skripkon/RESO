@@ -1,6 +1,11 @@
 from .MinorMusicGenerator import MinorMusicGenerator
-from music21 import stream, note, chord, tempo, meter
+from music21 import stream, note, chord, tempo, meter, metadata
 import random
+import os
+# from music21 import environment
+#   type "which mscore" in console and insert your path here
+# env = environment.Environment()
+# env['musicxmlPath'] =  '/usr/local/bin/mscore'
 
 tempo_map = {'Normal': 100, 'Slow': 60, 'Fast': 120}
 
@@ -9,7 +14,7 @@ left_hand_last_chord_index = 0
 right_hand_last_note_index = 0
 
 
-def generate_music02(scale: int, filepath: str, pulse: str = 'Normal', duration_sec: int = 60):
+def generate_music02(scale: int, name_of_the_file: int, pulse: str = 'Normal', duration_sec: int = 60):
     INTERVAL_LENGTH = 3
     OCTAVE_SHIFT = 12
     # Initialize music generator
@@ -114,8 +119,14 @@ def generate_music02(scale: int, filepath: str, pulse: str = 'Normal', duration_
 
     # Combine hands into stream
     myStream = stream.Stream([right_hand, left_hand])
-    # Write to MIDI file
-    myStream.write('midi', fp=filepath)
+    myStream.metadata = metadata.Metadata()
+    myStream.metadata.title = "Waltz"
+    myStream.metadata.composer = "RESO"
+    # Write to MIDI and PDF file
+    filepath_midi = os.path.join("generated_data", f"{name_of_the_file}.mid")
+    filepath_pdf = os.path.join("generated_data", f"{name_of_the_file}.pdf")
+    myStream.write('midi', fp=filepath_midi)
+    myStream.write('musicxml.pdf', fp=filepath_pdf)
 
     # For this download MuseScore 3
     # myStream.show()
