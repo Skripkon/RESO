@@ -124,6 +124,11 @@ async def download_edited_file(filename: str):
     return FileResponse(file_path, media_type='audio/midi', filename=filename)
 
 
+@app.get("/help/generators_type", response_class=HTMLResponse)
+async def neural_page(request: Request):
+    return templates.TemplateResponse("help_generators_type.html", {"request": request})
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=5000)

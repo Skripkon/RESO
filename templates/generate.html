@@ -6,7 +6,14 @@ RESO
 
 {% block body %}
 
-<a href="/generate/algorithmic" class="main-button">Algorithmic</a> <br>
+<div>
+    <img src="{{ url_for('static', path='images/logo_full_white.png') }}" class="small-logo">
+</div>
+
+<p class="big-heading">Select generator type</p>
+
+<a href="/generate/algorithmic" class="main-button">Algorithmic</a> 
 <a href="/generate/neural" class="main-button">Neural</a>
+<a href="/help/generators_type" class="help-text">What does this mean?</a>
 
 {% endblock %}

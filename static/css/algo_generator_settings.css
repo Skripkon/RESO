@@ -1,4 +1,3 @@
-/* ======================================== */
 /* Choose a parameters of the track 
    (c) Skripko Nikolay
 */
@@ -24,6 +23,10 @@
     font-size: 28px;
 }
 
+.gen_form select:hover {
+    cursor: pointer;
+}
+
 #HorizontalBarContainter {
     height: 85px;
     background-image: url("../images/main_bg.png");
@@ -33,7 +36,6 @@
     margin: 0 auto;
     position: relative;
     border-radius: 1px;
-    /* border: #01497c solid; */
 }
 
 .AlgoGenSetting {
@@ -63,3 +65,7 @@
     color: white;
     text-align: center;
 }
+
+.ComboBoxToChooseParameter select:hover {
+    cursor: pointer;
+} 

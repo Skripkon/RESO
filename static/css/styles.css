@@ -20,7 +20,7 @@ body {
 .small-logo {
     width: 200px;
     position: absolute;
-    top: 130px;
+    top: 133px;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -79,4 +79,3 @@ body {
     justify-content: center;
     margin-top: 20px;
 }
-

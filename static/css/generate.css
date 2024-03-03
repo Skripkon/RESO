@@ -1,0 +1,31 @@
+.big-heading {
+    font-size: 63px;
+    font-weight: 300;
+    color: #013a63;
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.big-heading::selection { 
+    background: transparent; 
+}
+
+.big-heading:hover {
+    cursor: default;
+}
+
+.help-text {
+    display: block;
+    margin: 0 auto;
+    padding-top: 25px;
+    padding-bottom: 7px;
+    width: 500px;
+    height: 20px;
+    color: #013a63;
+    line-height: 0.6;
+    text-align: center;
+}
+
+.help-text:hover {
+    cursor: pointer;
+}
