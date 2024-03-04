@@ -65,37 +65,43 @@ RESO
 </form>
 
 <div id="mp3PlayerContainerForAlgorithmicMusic" class="main-audio-player"> </div>
-<div id="PDFContainerForAlgorithmicMusic"> </div>
 <!-- Hidden element to store track name for editing purposes -->
 <div id="currentTrackName" style="display: none;"></div>
 
 <script src="{{ url_for('static', path='js/custom_mp3_player.js') }}"></script>
 
-<div id="ContainerWithTwoDownloadButtons">
+<div id="ContainerWithDownloadButtons">
     <!-- Add download MID button -->
-    <div id="downloadMIDButtonContainer"></div>
+    <div id="downloadMIDButton"></div>
     <!-- Add download MP3 button -->
-    <div id="downloadMP3ButtonContainer"></div>
+    <div id="downloadMP3Button"></div>
     <!-- Add download MusicXML button -->
-    <div id="downloadMusicXMLButtonContainer"></div>
+    <div id="downloadMusicXMLButton"></div>
     <!-- Add download PDF button -->
-    <div id="downloadPDFButtonContainer"></div>
+    <div id="downloadPDFButton"></div>
+</div>
+
+<div id="PDFContainerForAlgorithmicMusic"> </div>
+
+<div id="ViewSheetMusicButtonContainer">
+    <button class="main-button" id="ViewSheetMusicButton">View Sheet Music</button>
 </div>
 
 <div id="EditAlgoTrackButtonContainer">
     <button class="main-button" id="EditAlgoTrackButton">Edit track</button>
 </div>
 
-
 <div id="EditAlgoTrackContainer">
     <div class="EditAlgoSetting">
         <label for="AlgoStartTime" class="AlgoSettingLabel">Start time:</label>
-        <input type="text" id="AlgoStartTime" class="InputField" name="AlgoStartTime" pattern="[0-5]?[0-9]:[0-5][0-9]" placeholder="0:00" value="0:00">
+        <input type="text" id="AlgoStartTime" class="InputField" name="AlgoStartTime" pattern="[0-5]?[0-9]:[0-5][0-9]"
+            placeholder="0:00" value="0:00">
     </div>
 
     <div class="EditAlgoSetting">
         <label for="AlgoEndTime" class="AlgoSettingLabel">End time:</label>
-        <input type="text" id="AlgoEndTime" class="InputField" name="AlgoEndTime" pattern="[0-5]?[0-9]:[0-5][0-9]" placeholder="0:00" value="0:30">
+        <input type="text" id="AlgoEndTime" class="InputField" name="AlgoEndTime" pattern="[0-5]?[0-9]:[0-5][0-9]"
+            placeholder="0:00" value="0:30">
     </div>
 
     <div class="EditAlgoSetting">
@@ -107,12 +113,14 @@ RESO
     <div id="EditAlgoTrackFadesContainer">
         <div class="EditAlgoSetting">
             <label for="AlgoFadeInTime" class="AlgoSettingLabel">Fade-in length:</label>
-            <input type="text" id="AlgoFadeInTime" class="InputField" name="AlgoFadeInTime" pattern="[0-5]?[0-9]" placeholder="0" value="0">
+            <input type="text" id="AlgoFadeInTime" class="InputField" name="AlgoFadeInTime" pattern="[0-5]?[0-9]"
+                placeholder="0" value="0">
         </div>
 
         <div class="EditAlgoSetting">
             <label for="AlgoFadeOutTime" class="AlgoSettingLabel">Fade-out length:</label>
-            <input type="text" id="AlgoFadeOutTime" class="InputField" name="AlgoFadeOutTime" pattern="[0-5]?[0-9]" placeholder="0" value="0">
+            <input type="text" id="AlgoFadeOutTime" class="InputField" name="AlgoFadeOutTime" pattern="[0-5]?[0-9]"
+                placeholder="0" value="0">
         </div>
     </div>
 

@@ -68,4 +68,10 @@
 
 .ComboBoxToChooseParameter select:hover {
     cursor: pointer;
-} 
+}
+
+#ViewSheetMusicButtonContainer {
+    display: none;
+    position: relative;
+    margin-bottom: 20px;
+}

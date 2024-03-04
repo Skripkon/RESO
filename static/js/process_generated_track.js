@@ -26,20 +26,21 @@ $(document).ready(function () {
                 $('#PDFContainerForAlgorithmicMusic').html('<embed src="' + pdfUrl + '" type="application/pdf" width="50%" height="100%">');
 
                 // Display download MID button
-                $('#downloadMIDButtonContainer').html('<a class="hyperlink-text" id="DownloadGeneratedMIDFile" href="/downloadMID/' + encodeURIComponent(filenameMID) + '" download>Download MIDI</a>');
+                $('#downloadMIDButton').html('<a class="hyperlink-text" id="DownloadGeneratedMIDFile" href="/downloadMID/' + encodeURIComponent(filenameMID) + '" download>Download MIDI</a>');
 
                 // Display download MP3 button
-                $('#downloadMP3ButtonContainer').html('<a class="hyperlink-text" id="DownloadGeneratedMP3File" href="/downloadMP3/' + encodeURIComponent(filenameMP3) + '" download>Download MP3</a>');
+                $('#downloadMP3Button').html('<a class="hyperlink-text" id="DownloadGeneratedMP3File" href="/downloadMP3/' + encodeURIComponent(filenameMP3) + '" download>Download MP3</a>');
 
                 // Display download MusicXML button
-                $('#downloadMusicXMLButtonContainer').html('<a class="hyperlink-text" id="DownloadGeneratedMusicXMLFile" href="/downloadMusicXML/' + encodeURIComponent(filenameMusicXML) + '" download>Download MusicXML</a>');
+                $('#downloadMusicXMLButton').html('<a class="hyperlink-text" id="DownloadGeneratedMusicXMLFile" href="/downloadMusicXML/' + encodeURIComponent(filenameMusicXML) + '" download>Download MusicXML</a>');
 
                 // Display download PDF button
-                $('#downloadPDFButtonContainer').html('<a class="hyperlink-text" id="DownloadGeneratedPDFFile" href="/downloadPDF/' + encodeURIComponent(filenamePDF) + '" download>Download PDF</a>');
+                $('#downloadPDFButton').html('<a class="hyperlink-text" id="DownloadGeneratedPDFFile" href="/downloadPDF/' + encodeURIComponent(filenamePDF) + '" download>Download PDF</a>');
 
                 // Hide loading spinner
                 $('#loadingContainer').hide();
                 $('#EditAlgoTrackButtonContainer').show();
+                $('#ViewSheetMusicButtonContainer').show();
 
                 // Store track's name in an invisible <div> for easier access later for editing 
                 var currentTrackName = document.getElementById('currentTrackName');
