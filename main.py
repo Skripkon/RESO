@@ -15,6 +15,8 @@ from utils.data_logging import log_data
 import os
 import datetime
 
+os.environ['QT_QPA_PLATFORM'] = 'offscreen'
+
 app = FastAPI()
 
 # Configure Jinja2 templates
