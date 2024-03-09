@@ -1,4 +1,6 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# This workflow will install Python dependencies, 
+# lint with a single version of Python, build and run docker.
+# In the future it could also test a functionality of the website.
 
 name: Tests
 
