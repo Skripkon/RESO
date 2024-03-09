@@ -16,9 +16,9 @@ RUN apt-get update \
 # Upgrade pip and install Python dependencies
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
-# Copy the application code into the container at /code/app
+# Copy the application code into the container
 
 COPY . .
 
-# Run application
+# Run the application
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
