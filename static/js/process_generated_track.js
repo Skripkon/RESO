@@ -23,7 +23,7 @@ $(document).ready(function () {
                 $('#mp3PlayerContainerForAlgorithmicMusic').html('<audio-player src="' + mp3Url + '" bar-width="5" bar-gap="2" preload loop> </audio-player>');
 
                 var pdfUrl = '/generated_data/' + encodeURIComponent(filenamePDF);
-                $('#PDFContainerForAlgorithmicMusic').html('<embed src="' + pdfUrl + '" type="application/pdf" width="50%" height="100%">');
+                $('#pdf-iframe').attr('src', pdfUrl);
 
                 // Display download MID button
                 $('#downloadMIDButton').html('<a class="hyperlink-text" id="DownloadGeneratedMIDFile" href="/downloadMID/' + encodeURIComponent(filenameMID) + '" download>Download MIDI</a>');
