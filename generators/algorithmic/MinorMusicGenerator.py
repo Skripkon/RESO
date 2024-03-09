@@ -13,7 +13,8 @@ class MinorMusicGenerator:
         elif scale < 59 or scale > 70:
             raise ValueError("scale must be in a range from 59 to 70")
         else:
-            # If the scale is valid, it sets the scale attribute, and then calls two methods:
+            # If the scale is valid, it sets the scale attribute,
+            # and then calls two methods:
             self.scale = scale
         self.correct_minor_chords()
         self.create_baselines()
@@ -25,7 +26,8 @@ class MinorMusicGenerator:
     def calculate_correct_notes(self):
         shifts = [0, 2, 3, 5, 7, 8, 10]
         notes = [(self.scale + shift) for shift in shifts]
-        # all notes from this list shold be in a range from 58 to 69 (which is a 4th octave)
+        # all notes from this list shold be in a range from 58 to 69
+        # (which is a 4th octave)
         for i in range(len(notes)):
             if notes[i] >= 70:
                 notes[i] -= 12

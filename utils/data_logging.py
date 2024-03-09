@@ -11,7 +11,7 @@ def log_data(log_path: str,
     """
     Makes a new recording in 'log.json' file. Recieves path to 'log.json',
     generator type, generator subtype and time of the query (by default
-    sets the time of the function call). 
+    sets the time of the function call).
     """
     new_recording = {"generator_type": generator_type,
                      "generator_subtype": generator_subtype,
@@ -44,7 +44,7 @@ def count_queries_per_generator(log_path):
     """
     Counts the number of queries per each generator type for the entire log.
     Recieves filepath to file 'log.json' and returns a dict in
-    format {generator_type : count} 
+    format {generator_type : count}
     """
     with open(log_path, 'r') as file:
         log_data = json.load(file)
@@ -58,7 +58,7 @@ def count_queries_per_day(log_path):
     """
     Counts the number of queries per each day for the last 30 days.
     Recieves filepath to file 'log.json' and returns a dict in
-    format {time : count} 
+    format {time : count}
     """
     with open(log_path, 'r') as file:
         log_data = json.load(file)
@@ -78,7 +78,7 @@ def count_queries_per_day(log_path):
 
 def show_data(log_path):
     """
-    Shows two graphs based on the 'log.json' file. Receives path 
+    Shows two graphs based on the 'log.json' file. Receives path
     to the 'log.json' file.
     """
     fig, axes = plt.subplots(1, 2)

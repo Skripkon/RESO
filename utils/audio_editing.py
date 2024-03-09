@@ -1,5 +1,4 @@
 from pydub import AudioSegment
-from pydub.generators import Sine
 import os
 
 
@@ -16,12 +15,14 @@ def edit_mp3(relative_file_path: str,
              fade_out_len=0
              ):
     """
-        Cuts an mp3 file according to given time and applies fade-in and fade-out. 
-        Receieves a path to original mp3, start and end times in seconds, fade-in 
-        and fade-out length in seconds. Resulting file is saved to the same folder 
-        with prefix 'edited_' and suffix '_{edits_count}' in mp3 format. If you do not need fade-in or fade-out, 
-        you do not have to specify fade_in_len or fade_out_len. Returns edited file 
-        name.
+        Cuts an mp3 file according to given time and applies
+        fade-in and fade-out.
+        Receieves a path to original mp3, start and end times in seconds,
+        fade-in and fade-out length in seconds.
+        Resulting file is saved to the same folder
+        with prefix 'edited_' and suffix '_{edits_count}' in mp3 format.
+        If you do not need fade-in or fade-out, you do not have to
+        specify fade_in_len or fade_out_len. Returns edited file name.
     """
     file_path = os.path.abspath(relative_file_path)
     full_audio = AudioSegment.from_mp3(file_path)
@@ -36,9 +37,11 @@ def edit_mp3(relative_file_path: str,
         cut_audio = cut_audio.fade_out(fade_out_len * 1000)
 
     export_path = os.path.join(os.path.dirname(
-        file_path), "edited_" + os.path.basename(file_path).split('.')[0] + f'_{edit_id}.mp3')
+        file_path), "edited_" + os.path.basename(file_path).
+            split('.')[0] + f'_{edit_id}.mp3')
     cut_audio.export(export_path, format="mp3")
-    return "edited_" + os.path.basename(file_path).split('.')[0] + f'_{edit_id}.mp3'
+    return ("edited_" + os.path.basename(file_path).
+            split('.')[0] + f'_{edit_id}.mp3')
 
 
 if __name__ == "__main__":

@@ -9,12 +9,13 @@ import os
 
 tempo_map = {'Normal': 100, 'Slow': 60, 'Fast': 120}
 
-# it indicates the last chord for the left hand, so we can make sequences unique
+# it indicates the last chord for the left hand to make sequences unique
 left_hand_last_chord_index = 0
 right_hand_last_note_index = 0
 
 
-def generate_music02(scale: int, name_of_the_file: int, pulse: str = 'Normal', duration_sec: int = 60):
+def generate_music02(scale: int, name_of_the_file: int, pulse: str = 'Normal',
+                     duration_sec: int = 60):
     INTERVAL_LENGTH = 3
     OCTAVE_SHIFT = 12
     # Initialize music generator
@@ -25,7 +26,7 @@ def generate_music02(scale: int, name_of_the_file: int, pulse: str = 'Normal', d
     right_hand_notes = new_song_generator.correct_notes.copy()
 
     # Add notes from the 5th octave
-    for i in range(7):  
+    for i in range(7):
         right_hand_notes.append(right_hand_notes[i] + OCTAVE_SHIFT)
 
     # List of possible notes for the right hand
@@ -48,7 +49,8 @@ def generate_music02(scale: int, name_of_the_file: int, pulse: str = 'Normal', d
 
     def add_one_interval():
         global right_hand_last_note_index
-        # Choose a duration of each note for the current interval (only for the right hand)
+        # Choose a duration of each note for the current interval
+        # (only for the right hand)
         random_duration_index = random.randint(0, len(durations) - 1)
         current_duration = durations[random_duration_index]
 
@@ -56,7 +58,7 @@ def generate_music02(scale: int, name_of_the_file: int, pulse: str = 'Normal', d
         # Generate notes for the right hand
         notes_count = int(INTERVAL_LENGTH / current_duration)
         for i in range(notes_count):
-            if (random.randint(1, 11) % 7 == 0):  # drop notes in a haphazard way
+            if (random.randint(1, 11) % 7 == 0):  # drop notes randomly
                 continue
 
             if (random.randint(1, 13) % 11 == 0):  # break the interval
@@ -66,8 +68,8 @@ def generate_music02(scale: int, name_of_the_file: int, pulse: str = 'Normal', d
                 pause_note.duration.quarterLength = pause_duration
                 right_hand.append(pause_note)
                 break
-
-            if (random.randint(1, 5) % 3 == 0):  # add a chord instead of a single note
+            # add a chord instead of a single note
+            if (random.randint(1, 5) % 3 == 0):
                 random_index = random.randint(0, len(chords) - 1)
                 random_chord = chords[random_index].copy()
                 newChord = chord.Chord(
@@ -78,7 +80,8 @@ def generate_music02(scale: int, name_of_the_file: int, pulse: str = 'Normal', d
 
             random_delta_index = random.randint(-1, 1)
             current_note_index = (
-                right_hand_last_note_index + random_delta_index) % CORRECT_NOTES_COUNT
+                right_hand_last_note_index + random_delta_index) % \
+                CORRECT_NOTES_COUNT
             right_hand_last_note_index = current_note_index
             random_note = right_hand_notes[current_note_index]
             my_note = note.Note(random_note, quarterLength=current_duration)
