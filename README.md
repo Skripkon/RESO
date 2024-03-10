@@ -30,6 +30,10 @@ All the information you need is on our website!
 
 ```apt-get install -y --fix-missing fluidsynth ffmpeg musescore3 libqt5core5a```
 
+3. Run a local server:
+
+```uvicorn main:app --host 0.0.0.0 --port 8000```
+
 ## Usage
 
 1. Click *Start generating for free*.
