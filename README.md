@@ -1,6 +1,9 @@
 # RESO: Algorithmic and Neural Piano Music Generator
 
 All the information you need is on our website!
+[80.78.243.117:8000/](http://80.78.243.117:8000/)
+
+Or here, but opening it may take a while due to inactivity.
 [reso.onrender.com/](https://reso.onrender.com/)
 
 ## Table of Contents

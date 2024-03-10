@@ -141,8 +141,3 @@ async def download_edited_file(filename: str):
 async def help_generators_type(request: Request):
     return templates.TemplateResponse("help_generators_type.html",
                                       {"request": request})
-
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=5000)
