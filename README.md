@@ -13,17 +13,21 @@ All the information you need is on our website!
 ### Via Docker:
 
 1. Build a Docker Image:
+
 ```sudo docker build -t deploy-reso .```
 
 2. Run a Docker container:
+
 ```sudo docker run -p 8000:8000 deploy-reso```
 
 ### Without Docker:
 
 1. Upgrade pip and install Python dependencies
+
 ```pip install --no-cache-dir --upgrade -r requirements.txt```
 
 2. Install system-wide packages:
+
 ```apt-get install -y --fix-missing fluidsynth ffmpeg musescore3 libqt5core5a```
 
 ## Usage
