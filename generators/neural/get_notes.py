@@ -7,6 +7,28 @@ def format_note(note) -> str:
     return str(note).replace('-', '')
 
 
+def remove_leading_rests(lst):
+    while lst and classify_element(lst[0]) in ['rest', 'useless']:
+        lst.pop(0)
+    return lst
+
+
+def classify_element(e) -> str:
+    if isinstance(e, note.Note):
+        return "note"
+    if isinstance(e, chord.Chord):
+        return "chord"
+    if isinstance(e, note.Rest):
+        return "rest"
+    if (isinstance(e, bar.Barline) or
+            isinstance(e, clef.TrebleClef) or
+            isinstance(e, meter.base.TimeSignature) or
+            isinstance(e, tempo.MetronomeMark) or
+            isinstance(e, clef.BassClef) or
+            isinstance(e, metadata.Metadata)):
+        return "useless"
+
+
 def get_notes_from_files(path: str) -> list:
     """
     Gets the sequence of all notes and chords from the MIDI files in the
@@ -20,17 +42,15 @@ def get_notes_from_files(path: str) -> list:
     for file in tqdm(files):
         midi = converter.parse(file)
         elements_to_parse = midi.flatten()
-        for e in elements_to_parse:
-            match type(e):
-                case note.Note:
+        for e in remove_leading_rests(elements_to_parse):
+            match classify_element(e):
+                case "note":
                     notes.append(format_note(e.pitch))
-                case chord.Chord:
+                case "chord":
                     notes.append('.'.join(format_note(n) for n in e.pitches))
-                case note.Rest:
+                case "rest":
                     notes.append("Rest")
-                case bar.Barline | clef.TrebleClef | meter.base.TimeSignature:
-                    continue
-                case tempo.MetronomeMark | clef.BassClef | metadata.Metadata:
+                case "useless":
                     continue
                 case _:
                     print(f"Unhandled type {type(e)}")
@@ -38,4 +58,5 @@ def get_notes_from_files(path: str) -> list:
 
 
 if __name__ == "__main__":
-    get_notes_from_files("data/Mozart")
+    notes = get_notes_from_files("data/Mozart")
+    print(notes[0:20])
