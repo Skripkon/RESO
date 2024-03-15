@@ -3,14 +3,6 @@ $(document).ready(function() {
         openPdf();
     });
 
-    $('#close-button').click(function() {
-        var overlay = $('#overlay');
-        var pdfContainer = $('#pdf-container');
-
-        overlay.css('display', 'none');
-        pdfContainer.css('display', 'none');
-    });
-
     function openPdf() {
         var overlay = $('#overlay');
         var pdfContainer = $('#pdf-container');
@@ -18,5 +10,14 @@ $(document).ready(function() {
         overlay.css('display', 'block');
         pdfContainer.css('display', 'block');
     }
-});
 
+    var overlay = $("#overlay");
+    var pdf_container = $("#pdf-container");
+
+    overlay.on("click", function(event) {
+      if (event.target === overlay[0]) {
+        overlay.css("display", "none");
+        pdf_container.css("display", "none");
+      }
+    });
+});

@@ -30,16 +30,3 @@
     border: none;
 }
 
-.close-button {
-    cursor: pointer;
-    text-align: center;
-    padding: 10px;
-    background-color: rgba(2, 8, 18, 0.8);
-    color: #fff;
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
-
-.close-button:hover {
-    background-color: #555;
-}
