@@ -8,7 +8,8 @@ import os
 # env['musicxmlPath'] =  '/usr/local/bin/mscore'
 
 tempo_map = {'Normal': 100, 'Slow': 60, 'Fast': 120}
-number_to_scale = {59: 'B', 60: 'C', 61: 'C', 62: 'D', 63: 'Eb', 64: 'E', 65: 'F', 66: 'F', 67: 'G', 68: 'G', 69: 'A', 70: 'Bb'}
+number_to_scale = {59: 'B', 60: 'C', 61: 'C', 62: 'D', 63: 'Eb', 64: 'E', 
+                   65: 'F', 66: 'F', 67: 'G', 68: 'G', 69: 'A', 70: 'Bb'}
 
 
 # it indicates the last chord for the left hand to make sequences unique
@@ -42,7 +43,7 @@ def generate_music02(scale: int, name_of_the_file: int, pulse: str = 'Normal',
     left_hand = stream.Part()
 
     tonality = number_to_scale[scale]
-    key_signature = key.Key(tonality + " m") # "m" means minor
+    key_signature = key.Key(tonality + " m")  # "m" means minor
 
     right_hand.append(key_signature)
     right_hand.append(meter.TimeSignature('3/4'))
@@ -106,7 +107,7 @@ def generate_music02(scale: int, name_of_the_file: int, pulse: str = 'Normal',
                 random_chord[i] -= OCTAVE_SHIFT * chord_shift
             newChord = chord.Chord(random_chord, quarterLength=1)
             for my_note in newChord:
-                    my_note.keySignature = key_signature
+                my_note.keySignature = key_signature
             newChord.volume.velocity = chord_velocity
             left_hand.append(newChord)
 
@@ -124,7 +125,7 @@ def generate_music02(scale: int, name_of_the_file: int, pulse: str = 'Normal',
                         OCTAVE_SHIFT, chords[random_index][0]]
         newChord = chord.Chord(random_chord, quarterLength=1)
         for my_note in newChord:
-                    my_note.keySignature = key_signature
+            my_note.keySignature = key_signature
         newChord.volume.velocity = 128
         left_hand.append(newChord)
         # Add two more chords for the left hand
