@@ -29,6 +29,30 @@ def classify_element(e) -> str:
         return "useless"
 
 
+def simplify_chord(chord):
+    new_chord = set()
+    chord_pitches = set()
+    for n in sorted(chord.pitches):
+        n = format_note(n)
+        note_octave = int(n[-1])
+        note_pitch = n[0:-1]
+        if note_pitch in chord_pitches:
+            continue
+        if note_octave < 3:
+            new_chord.add(note_pitch + '3')
+        elif note_octave > 5:
+            new_chord.add(note_pitch + '5')
+        else:
+            new_chord.add(note_pitch + str(note_octave))
+        chord_pitches.add(note_pitch)
+    result = sorted(list(new_chord))
+    # print(f"Formatted chord {'.'.join([str(n) for n in chord.pitches])} -> {'.'.join([str(n) for n in result])} ")
+    if len(new_chord) > 0:
+        return '.'.join([str(n) for n in result])
+    else:
+        raise Exception("EMPTY CHORD")
+
+
 def get_notes_from_files(path: str) -> list:
     """
     Gets the sequence of all notes and chords from the MIDI files in the
@@ -37,7 +61,7 @@ def get_notes_from_files(path: str) -> list:
     """
     files = [os.path.join(path, file)
              for file in os.listdir(path) if file.endswith('.mid')]
-    print(f"Parsing {len(files)} files from folder {path}")
+    print(f"Parsing {len(files)} files from folder '{os.path.abspath(path)}'")
     notes = []
     for file in tqdm(files):
         midi = converter.parse(file)
@@ -47,7 +71,7 @@ def get_notes_from_files(path: str) -> list:
                 case "note":
                     notes.append(format_note(e.pitch))
                 case "chord":
-                    notes.append('.'.join(format_note(n) for n in e.pitches))
+                    notes.append(simplify_chord(e))
                 case "rest":
                     notes.append("Rest")
                 case "useless":
