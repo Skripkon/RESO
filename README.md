@@ -13,6 +13,11 @@ Or here, but opening it may take a while due to inactivity.
 
 ## Setup
 
+![linux_icon](https://github.com/Skripkon/RESO/assets/78466953/94e0e98a-a706-4eea-b67c-75a913807d56)
+*Instructions below are for Linux only (it was tested on Ubuntu 20.04+)*
+
+*Instructions for MacOS will be added soon...*
+
 ### Via Docker:
 
 1. Build a Docker Image:
