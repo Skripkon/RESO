@@ -17,7 +17,7 @@ def generate(model, input_sequences, int_to_note,
         result = int_to_note[index]
 
         print(f"Iteration {i + 1}/{number_of_notes_to_generate}"
-              "| Generated Note: {result}")
+              f"| Generated Note: {result}")
 
         prediction_output.append(result)
         pattern.append(index)

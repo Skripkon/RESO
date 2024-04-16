@@ -2,6 +2,7 @@ from werkzeug.utils import secure_filename
 from utils.midi2mp3 import midi2mp3
 from generators.algorithmic.Generator01 import generate_music01
 from generators.algorithmic.Generator02 import generate_music02
+from generators.neural.Generator import generate_neural
 from fastapi import FastAPI, Request, File, UploadFile
 from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
@@ -86,6 +87,29 @@ async def process_algorithmic(generator: str = Form(...),
                          pulse=tempo, duration_sec=duration_sec)
         midi2mp3(name_of_the_file=name_of_the_file)
         return JSONResponse(content={"filename": name_of_the_file})
+
+
+@app.post("/generate/process_neural")
+async def process_neural(generator: str = Form(...),
+                              duration: str = Form(...),
+                              tempo: str = Form(...)):
+    name_of_the_file: int = random.randint(1, 100_000_000)
+    minutes, seconds = map(int, duration.split(':'))
+    duration_sec = minutes * 60 + seconds
+
+    log_data('utils/log.json', "Neural", generator,
+             datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+    models_folder = os.path.join('generators', 'neural', 'models', generator)
+    model_files = os.listdir(models_folder)
+    random_model_path = random.choice(model_files)
+    model_path = os.path.join(models_folder, random_model_path)
+
+    generate_neural(composer=generator, 
+                    model_path=model_path, name_of_the_file=name_of_the_file,
+                    tempo=tempo, duration=duration_sec)
+    midi2mp3(name_of_the_file=name_of_the_file)
+    return JSONResponse(content={"filename": name_of_the_file})
 
 
 @app.post("/generate/edit_algorithmic")

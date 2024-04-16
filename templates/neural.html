@@ -5,5 +5,124 @@ RESO
 {% endblock %}
 
 {% block body %}
-<!-- TODO -->
+<div>
+    <img src="{{ url_for('static', path='images/logo_full_white.png') }}" class="small-logo">
+</div>
+<br>
+
+<div id="HorizontalBarContainter">
+    <div class="GenSetting">
+        <p class="GenSettingTitle">Duration</p>
+        <form class="ComboBoxToChooseParameter">
+            <select id="DurationOfTheTrack">
+                <option value="00:30">00:30</option>
+                <option value="01:00" selected>01:00</option>
+                <option value="01:30">01:30</option>
+                <option value="02:00">02:00</option>
+            </select>
+        </form>
+    </div>
+    <div class="GenSetting">
+        <p class="GenSettingTitle">Tempo</p>
+        <form class="ComboBoxToChooseParameter">
+            <select id="TempoOfTheTrack">
+                <option value="Slow">Slow</option>
+                <option value="Normal" selected>Normal</option>
+                <option value="Fast">Fast</option>
+            </select>
+        </form>
+    </div>
+</div>
+
+<form class="gen_form" method="post" action="/generate/process_neural">
+    <select id="NeuralGenerator">
+        <option value="Mozart" selected>Mozart</option>
+        <option value="Bach">Bach</option>
+        <option value="Chopin">Chopin</option>
+    </select>
+    <button class="main-button" id="GenerateNeuralMusic" type="button">Generate a song!</button>
+</form>
+
+
+<div id="mp3PlayerContainerForNeuralMusic" class="main-audio-player"> </div>
+<!-- Hidden element to store track name for editing purposes -->
+<div id="currentTrackName" style="display: none;"></div>
+
+<script src="{{ url_for('static', path='js/custom_mp3_player.js') }}"></script>
+
+<div id="ContainerWithDownloadButtons">
+    <!-- Add download MID button -->
+    <div id="downloadMIDButton"></div>
+    <!-- Add download MP3 button -->
+    <div id="downloadMP3Button"></div>
+</div>
+
+<div id="EditAlgoTrackButtonContainer">
+    <button class="main-button" id="EditAlgoTrackButton">Edit track</button>
+</div>
+
+<div id="EditAlgoTrackContainer">
+    <div class="EditAlgoSetting">
+        <label for="AlgoStartTime" class="AlgoSettingLabel">Start time:</label>
+        <input type="text" id="AlgoStartTime" class="InputField" name="AlgoStartTime" pattern="[0-5]?[0-9]:[0-5][0-9]"
+            placeholder="0:00" value="0:00">
+    </div>
+
+    <div class="EditAlgoSetting">
+        <label for="AlgoEndTime" class="AlgoSettingLabel">End time:</label>
+        <input type="text" id="AlgoEndTime" class="InputField" name="AlgoEndTime" pattern="[0-5]?[0-9]:[0-5][0-9]"
+            placeholder="0:00" value="0:30">
+    </div>
+
+    <div class="EditAlgoSetting">
+        <label for="AlgoAddFades" class="AlgoSettingLabel">Add fade-in and fade-out?</label>
+        <input type="checkbox" id="AlgoAddFades" class="InputCheckBox" name="AlgoAddFades">
+    </div>
+
+    <!-- Hideable fade-in and fade-out settings -->
+    <div id="EditAlgoTrackFadesContainer">
+        <div class="EditAlgoSetting">
+            <label for="AlgoFadeInTime" class="AlgoSettingLabel">Fade-in length:</label>
+            <input type="text" id="AlgoFadeInTime" class="InputField" name="AlgoFadeInTime" pattern="[0-5]?[0-9]"
+                placeholder="0" value="0">
+        </div>
+
+        <div class="EditAlgoSetting">
+            <label for="AlgoFadeOutTime" class="AlgoSettingLabel">Fade-out length:</label>
+            <input type="text" id="AlgoFadeOutTime" class="InputField" name="AlgoFadeOutTime" pattern="[0-5]?[0-9]"
+                placeholder="0" value="0">
+        </div>
+    </div>
+
+    <button class="render-button" id="EditAlgoRenderButton">Render</button>
+
+    <!-- TODO: fix styles -->
+    <div id="mp3PlayerContainerForAlgorithmicMusicEdited" class="main-audio-player"></div>
+    <div class="ContainerWithDownloadButton">
+        <div id="downloadEditedMP3ButtonContainer"></div>
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- Script for showing editing settings -->
+<script src="{{ url_for('static', path='js/open_editing_settings.js') }}"></script>
+
+<!-- Add fades checkbox interraction -->
+<script src="{{ url_for('static', path='js/fades_checkbox.js') }}"></script>
+
+<!-- Render button -->
+<script src="{{ url_for('static', path='js/render_edits.js') }}"></script>
+
+<!-- Enforce correct edit inputs time format -->
+<script src="{{ url_for('static', path='js/algo_edit_input_pattern_enforcement.js') }}"></script>
+
+<div id="loadingContainer">
+    <img src="{{ url_for('static', path='images/loading.gif') }}" alt="Loading...">
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- Process generated track -->
+<script src="{{ url_for('static', path='js/process_generate_neural.js') }}"></script>
 {% endblock %}

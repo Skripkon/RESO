@@ -11,8 +11,8 @@ RESO
 <br>
 
 <div id="HorizontalBarContainter">
-    <div class="AlgoGenSetting">
-        <p class="AlgoGenSettingTitle">Duration</p>
+    <div class="GenSetting">
+        <p class="GenSettingTitle">Duration</p>
         <form class="ComboBoxToChooseParameter">
             <select id="DurationOfTheTrack">
                 <option value="00:30">00:30</option>
@@ -22,8 +22,8 @@ RESO
             </select>
         </form>
     </div>
-    <div class="AlgoGenSetting">
-        <p class="AlgoGenSettingTitle">Tempo</p>
+    <div class="GenSetting">
+        <p class="GenSettingTitle">Tempo</p>
         <form class="ComboBoxToChooseParameter">
             <select id="TempoOfTheTrack">
                 <option value="Slow">Slow</option>
@@ -32,8 +32,8 @@ RESO
             </select>
         </form>
     </div>
-    <div class="AlgoGenSetting">
-        <p class="AlgoGenSettingTitle">Scale</p>
+    <div class="GenSetting">
+        <p class="GenSettingTitle">Scale</p>
         <form class="ComboBoxToChooseParameter">
             <select id="ScaleOfTheTrack">
                 <option value=59>B</option>
@@ -157,6 +157,6 @@ RESO
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <!-- Process generated track -->
-<script src="{{ url_for('static', path='js/process_generated_track.js') }}""></script>
+<script src="{{ url_for('static', path='js/process_generated_track.js') }}"></script>
 
 {% endblock %}
