@@ -5,3 +5,9 @@ venv
 __pycache__
 generated_data/*
 utils/log.json
+data/Bach/*.mid
+data/Chopin/*.mid
+data/Mozart/*.mid
+data/Bach/notes
+data/Chopin/notes
+data/Mozart/notes
