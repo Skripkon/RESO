@@ -2,8 +2,13 @@ import numpy as np
 import music21
 
 
-def generate(model, input_sequences, int_to_note,
-             unique_notes, output_filename, number_of_notes_to_generate):
+def generate(model,
+             input_sequences,
+             int_to_note,
+             unique_notes,
+             output_filename,
+             number_of_notes_to_generate):
+
     start_index = np.random.randint(0, len(input_sequences) - 1)
     pattern = input_sequences[start_index]
     prediction_output = []
