@@ -4,7 +4,7 @@ import random
 import os
 
 
-def generate_music01(scale: int, name_of_the_file: int):
+def generate_music01(scale: int, filename: int):
     new_song_generator = MinorMusicGenerator(scale)
     new_song_generator.minor_chords += new_song_generator.additional_chords
     number_of_possible_chords = len(new_song_generator.minor_chords)
@@ -48,7 +48,7 @@ def generate_music01(scale: int, name_of_the_file: int):
     myStream.metadata.title = "Calm Melody"
     myStream.metadata.composer = "RESO"
     # Write to MIDI and PDF file
-    filepath_midi = os.path.join("generated_data", f"{name_of_the_file}.mid")
-    filepath_pdf = os.path.join("generated_data", f"{name_of_the_file}.pdf")
+    filepath_midi = os.path.join("generated_data", f"{filename}.mid")
+    filepath_pdf = os.path.join("generated_data", f"{filename}.pdf")
     myStream.write('midi', fp=filepath_midi)
     myStream.write('musicxml.pdf', fp=filepath_pdf)

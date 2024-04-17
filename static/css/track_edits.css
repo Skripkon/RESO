@@ -6,6 +6,12 @@
     margin-bottom: 20px;
 }
 
+#EditNeuroTrackButtonContainer {
+    display: none;
+    position: relative;
+    margin-bottom: 20px;
+}
+
 #EditAlgoTrackContainer {
     display: none;
     background-color: white 50%;
@@ -13,7 +19,14 @@
     padding-bottom: 22px;
 }
 
-.EditAlgoSetting {
+#EditNeuroTrackContainer {
+    display: none;
+    background-color: white 50%;
+    padding-top: 5px;
+    padding-bottom: 22px;
+}
+
+.EditSetting {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -69,13 +82,17 @@
     cursor: pointer;
 }
 
-.AlgoSettingLabel {
+.SettingLabel {
     margin-right: 10px;
     color: #012a4a;
     font-weight: 300;
 }
 
 #EditAlgoTrackFadesContainer {
+    display: none;
+}
+
+#EditNeuroTrackFadesContainer {
     display: none;
 }
 
