@@ -3,20 +3,32 @@ import music21
 import os
 from keras.models import load_model
 import pickle
+from utils.scale import fix_scale
 
-TEMPO_MAP = {'Normal': 100, 'Slow': 60, 'Fast': 120}
 
+def generate_neural(composer: str,
+                    model_path: str,
+                    duration: int,
+                    tempo: str,
+                    filename: str,
+                    correct_scale=True):
+    """
+    Generates and saves as 'filename' a midi file using given model, duration
+    and tempo. Composer argument instructs the function which folder to take
+    notes file from. The generated track is also corrected to fit the scale
+    better if the corresponding option is selected.
+    """
+    TEMPO_MAP = {'Normal': 100, 'Slow': 60, 'Fast': 120}
+    COMPOSERS = ['Mozart', 'Bach', 'Chopin']
+    SEQUENCE_LENGTH = 100
 
-def generate_neural(composer, model_path, duration, tempo, filename):
-
+    assert composer in COMPOSERS and duration in range(30, 160)
     bpm = TEMPO_MAP.get(tempo, TEMPO_MAP['Normal'])
     quarters = duration * (bpm / 60)
 
-    SEQUENCE_LENGTH = 100
-
-    DATA_PATH = os.path.join('data', composer)
+    composer_data_path = os.path.join('data', composer)
     notes = []
-    notes_file_path = os.path.join(DATA_PATH, 'notes')
+    notes_file_path = os.path.join(composer_data_path, 'notes')
     with open(notes_file_path, 'rb') as notes_file:
         notes = pickle.load(notes_file)
 
@@ -38,49 +50,76 @@ def generate_neural(composer, model_path, duration, tempo, filename):
 
     start_index = np.random.randint(0, len(input_sequences) - 1)
     pattern = input_sequences[start_index]
-    prev_result = "-"
-    result = "-"
+    prev_pred_element = "-"
+    pred_element = "-"
 
-    myStream = music21.stream.Stream()
-    myStream.insert(0, music21.tempo.MetronomeMark(number=bpm))
+    # is just used to count time to fill the required duration
+    count_stream = music21.stream.Stream()
+    count_stream.insert(0, music21.tempo.MetronomeMark(number=bpm))
     shift = 0
-    quarterLength = 0
+    quarter_length = 0
+    generated_notes = []
+    generated_notes_lengths = []
 
-    while myStream.quarterLength < quarters:
+    while count_stream.quarterLength < quarters:
+        print("Generating...",
+              str(round((count_stream.quarterLength / quarters) * 100)) + '%')
         input_sequence = np.reshape(pattern, (1, len(pattern), 1))
         input_sequence = input_sequence / float(len(unique_notes))
 
+        prev_pred_element = pred_element
         prediction = model.predict(input_sequence, verbose=0)
-        index = np.argmax(prediction)
-        prev_result = result
-        result = int_to_note[index]
+        pred_element_index = np.argmax(prediction)
+        pred_element = int_to_note[pred_element_index]
 
-        pattern.append(index)
+        pattern.append(pred_element_index)
         pattern = pattern[1:]
 
-        if prev_result == "-":
+        if prev_pred_element == "-":
             continue
-        if myStream.quarterLength >= quarters:
-            break
-        if result == prev_result:
-            quarterLength += 0.3
+        if pred_element == prev_pred_element:
+            quarter_length += 0.3
             continue
-        if '.' in prev_result:  # Сhord
-            notes_in_chord = prev_result.split('.')
-            chord_notes = [music21.note.Note(n) for n in notes_in_chord]
-            for i, note_in_chord in enumerate(notes_in_chord):
-                chord_notes[i].pitch = music21.pitch.Pitch(note_in_chord)
-            chord = music21.chord.Chord(chord_notes,
-                                        quarterLength=quarterLength)
-            chord.volume.velocity = np.random.randint(90, 100)
-            myStream.insert(shift, chord)
-            shift += 0.3
-            quarterLength = 0
-        else:  # Note
-            note = music21.note.Note(prev_result, quarterLength=quarterLength)
-            note.volume.velocity = np.random.randint(70, 80)
-            myStream.insert(shift, note)
-            shift += 0.3
-            quarterLength = 0
 
-    myStream.write('midi', fp=filepath_midi)
+        generated_notes.append(prev_pred_element)
+        generated_notes_lengths.append(quarter_length)
+
+        if '.' in prev_pred_element:  # Сhord
+            chord_notes_str = prev_pred_element.split('.')
+            chord_notes = [music21.note.Note(n) for n in chord_notes_str]
+            for i, chord_note in enumerate(chord_notes_str):
+                chord_notes[i].pitch = music21.pitch.Pitch(chord_note)
+            chord = music21.chord.Chord(chord_notes,
+                                        quarterLength=quarter_length)
+            count_stream.insert(shift, chord)
+        else:  # Note
+            note = music21.note.Note(prev_pred_element,
+                                     quarterLength=quarter_length)
+            count_stream.insert(shift, note)
+        shift += 0.3
+        quarter_length = 0
+
+    # Now we make the actual stream that will be rendered
+    final_stream = music21.stream.Stream()
+    final_stream.insert(0, music21.tempo.MetronomeMark(number=bpm))
+    fixed_generated_notes = (fix_scale(generated_notes) if correct_scale
+                             else generated_notes)
+    shift = 0
+
+    for ind, element in enumerate(fixed_generated_notes):
+        if '.' in element:  # chord
+            chord_notes_str = element.split('.')
+            chord_notes = [music21.note.Note(n) for n in chord_notes_str]
+            for i, chord_note in enumerate(chord_notes_str):
+                chord_notes[i].pitch = music21.pitch.Pitch(chord_note)
+            chord = music21.chord.Chord(
+                chord_notes, quarterLength=generated_notes_lengths[ind])
+            chord.volume.velocity = np.random.randint(80, 90)
+            final_stream.insert(shift, chord)
+        else:
+            note = music21.note.Note(element, quarterLength=quarter_length)
+            note.volume.velocity = np.random.randint(50, 70)
+            final_stream.insert(shift, note)
+        shift += 0.3
+
+    final_stream.write('midi', fp=filepath_midi)

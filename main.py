@@ -114,7 +114,9 @@ async def process_neural(generator: str = Form(...),
                     model_path=model_path,
                     filename=filename,
                     tempo=tempo,
-                    duration=duration_sec)
+                    duration=duration_sec,
+                    correct_scale=True
+                    )
     midi2mp3(filename=filename)
     return JSONResponse(content={"filename": filename})
 
