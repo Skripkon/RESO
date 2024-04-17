@@ -93,33 +93,33 @@ RESO
 </div>
 
 <div id="EditAlgoTrackContainer">
-    <div class="EditAlgoSetting">
-        <label for="AlgoStartTime" class="AlgoSettingLabel">Start time:</label>
+    <div class="EditSetting">
+        <label for="AlgoStartTime" class="SettingLabel">Start time:</label>
         <input type="text" id="AlgoStartTime" class="InputField" name="AlgoStartTime" pattern="[0-5]?[0-9]:[0-5][0-9]"
             placeholder="0:00" value="0:00">
     </div>
 
-    <div class="EditAlgoSetting">
-        <label for="AlgoEndTime" class="AlgoSettingLabel">End time:</label>
+    <div class="EditSetting">
+        <label for="AlgoEndTime" class="SettingLabel">End time:</label>
         <input type="text" id="AlgoEndTime" class="InputField" name="AlgoEndTime" pattern="[0-5]?[0-9]:[0-5][0-9]"
             placeholder="0:00" value="0:30">
     </div>
 
-    <div class="EditAlgoSetting">
-        <label for="AlgoAddFades" class="AlgoSettingLabel">Add fade-in and fade-out?</label>
+    <div class="EditSetting">
+        <label for="AlgoAddFades" class="SettingLabel">Add fade-in and fade-out?</label>
         <input type="checkbox" id="AlgoAddFades" class="InputCheckBox" name="AlgoAddFades">
     </div>
 
     <!-- Hideable fade-in and fade-out settings -->
     <div id="EditAlgoTrackFadesContainer">
-        <div class="EditAlgoSetting">
-            <label for="AlgoFadeInTime" class="AlgoSettingLabel">Fade-in length:</label>
+        <div class="EditSetting">
+            <label for="AlgoFadeInTime" class="SettingLabel">Fade-in length:</label>
             <input type="text" id="AlgoFadeInTime" class="InputField" name="AlgoFadeInTime" pattern="[0-5]?[0-9]"
                 placeholder="0" value="0">
         </div>
 
-        <div class="EditAlgoSetting">
-            <label for="AlgoFadeOutTime" class="AlgoSettingLabel">Fade-out length:</label>
+        <div class="EditSetting">
+            <label for="AlgoFadeOutTime" class="SettingLabel">Fade-out length:</label>
             <input type="text" id="AlgoFadeOutTime" class="InputField" name="AlgoFadeOutTime" pattern="[0-5]?[0-9]"
                 placeholder="0" value="0">
         </div>
@@ -149,7 +149,7 @@ RESO
 <script src="{{ url_for('static', path='js/render_edits.js') }}"></script>
 
 <!-- Enforce correct edit inputs time format -->
-<script src="{{ url_for('static', path='js/algo_edit_input_pattern_enforcement.js') }}"></script>
+<script src="{{ url_for('static', path='js/edit_input_pattern_enforcement.js') }}"></script>
 
 <div id="loadingContainer">
     <img src="{{ url_for('static', path='images/loading.gif') }}" alt="Loading...">

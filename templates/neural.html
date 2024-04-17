@@ -57,47 +57,47 @@ RESO
     <div id="downloadMP3Button"></div>
 </div>
 
-<div id="EditAlgoTrackButtonContainer">
-    <button class="main-button" id="EditAlgoTrackButton">Edit track</button>
+<div id="EditNeuroTrackButtonContainer">
+    <button class="main-button" id="EditNeuroTrackButton">Edit track</button>
 </div>
 
-<div id="EditAlgoTrackContainer">
-    <div class="EditAlgoSetting">
-        <label for="AlgoStartTime" class="AlgoSettingLabel">Start time:</label>
-        <input type="text" id="AlgoStartTime" class="InputField" name="AlgoStartTime" pattern="[0-5]?[0-9]:[0-5][0-9]"
+<div id="EditNeuroTrackContainer">
+    <div class="EditSetting">
+        <label for="NeuroStartTime" class="SettingLabel">Start time:</label>
+        <input type="text" id="NeuroStartTime" class="InputField" name="NeuroStartTime" pattern="[0-5]?[0-9]:[0-5][0-9]"
             placeholder="0:00" value="0:00">
     </div>
 
-    <div class="EditAlgoSetting">
-        <label for="AlgoEndTime" class="AlgoSettingLabel">End time:</label>
-        <input type="text" id="AlgoEndTime" class="InputField" name="AlgoEndTime" pattern="[0-5]?[0-9]:[0-5][0-9]"
+    <div class="EditSetting">
+        <label for="NeuroEndTime" class="SettingLabel">End time:</label>
+        <input type="text" id="NeuroEndTime" class="InputField" name="NeuroEndTime" pattern="[0-5]?[0-9]:[0-5][0-9]"
             placeholder="0:00" value="0:30">
     </div>
 
-    <div class="EditAlgoSetting">
-        <label for="AlgoAddFades" class="AlgoSettingLabel">Add fade-in and fade-out?</label>
-        <input type="checkbox" id="AlgoAddFades" class="InputCheckBox" name="AlgoAddFades">
+    <div class="EditSetting">
+        <label for="NeuroAddFades" class="SettingLabel">Add fade-in and fade-out?</label>
+        <input type="checkbox" id="NeuroAddFades" class="InputCheckBox" name="NeuroAddFades">
     </div>
 
     <!-- Hideable fade-in and fade-out settings -->
-    <div id="EditAlgoTrackFadesContainer">
-        <div class="EditAlgoSetting">
-            <label for="AlgoFadeInTime" class="AlgoSettingLabel">Fade-in length:</label>
-            <input type="text" id="AlgoFadeInTime" class="InputField" name="AlgoFadeInTime" pattern="[0-5]?[0-9]"
+    <div id="EditNeuroTrackFadesContainer">
+        <div class="EditSetting">
+            <label for="NeuroFadeInTime" class="SettingLabel">Fade-in length:</label>
+            <input type="text" id="NeuroFadeInTime" class="InputField" name="NeuroFadeInTime" pattern="[0-5]?[0-9]"
                 placeholder="0" value="0">
         </div>
 
-        <div class="EditAlgoSetting">
-            <label for="AlgoFadeOutTime" class="AlgoSettingLabel">Fade-out length:</label>
-            <input type="text" id="AlgoFadeOutTime" class="InputField" name="AlgoFadeOutTime" pattern="[0-5]?[0-9]"
+        <div class="EditSetting">
+            <label for="NeuroFadeOutTime" class="SettingLabel">Fade-out length:</label>
+            <input type="text" id="NeuroFadeOutTime" class="InputField" name="NeuroFadeOutTime" pattern="[0-5]?[0-9]"
                 placeholder="0" value="0">
         </div>
     </div>
 
-    <button class="render-button" id="EditAlgoRenderButton">Render</button>
+    <button class="render-button" id="EditNeuroRenderButton">Render</button>
 
     <!-- TODO: fix styles -->
-    <div id="mp3PlayerContainerForAlgorithmicMusicEdited" class="main-audio-player"></div>
+    <div id="mp3PlayerContainerForNeuralMusicEdited" class="main-audio-player"></div>
     <div class="ContainerWithDownloadButton">
         <div id="downloadEditedMP3ButtonContainer"></div>
     </div>
@@ -116,7 +116,7 @@ RESO
 <script src="{{ url_for('static', path='js/render_edits.js') }}"></script>
 
 <!-- Enforce correct edit inputs time format -->
-<script src="{{ url_for('static', path='js/algo_edit_input_pattern_enforcement.js') }}"></script>
+<script src="{{ url_for('static', path='js/edit_input_pattern_enforcement.js') }}"></script>
 
 <div id="loadingContainer">
     <img src="{{ url_for('static', path='images/loading.gif') }}" alt="Loading...">
@@ -124,5 +124,5 @@ RESO
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <!-- Process generated track -->
-<script src="{{ url_for('static', path='js/process_generate_neural.js') }}"></script>
+<script src="{{ url_for('static', path='js/process_generated_track.js') }}"></script>
 {% endblock %}

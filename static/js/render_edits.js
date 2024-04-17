@@ -11,7 +11,7 @@ $(document).ready(function () {
         }
         $.ajax({
             type: 'POST',
-            url: '/generate/edit_algorithmic',
+            url: '/generate/edit',
             data: {'file': file, 'start': start, 'end': end, 'fade_in': fade_in, 'fade_out': fade_out},
             success: function (data) {
                 var renderButton = document.getElementById('EditAlgoRenderButton');
@@ -19,6 +19,31 @@ $(document).ready(function () {
 
                 var mp3Url = '/generated_data/' + data.file;
                 $('#mp3PlayerContainerForAlgorithmicMusicEdited').html('<audio-player src="/generated_data/' + data.file + '" bar-width="5" bar-gap="2" preload loop> </audio-player>')
+                $('#downloadEditedMP3ButtonContainer').html('<a class="hyperlink-text" id="DownloadEditedMP3File" href="/downloadEditedMP3/' + data.file + '" download>Download MP3</a>');
+            }
+        });
+    });
+
+    $('#EditNeuroRenderButton').click(function () {
+        var file = document.getElementById('currentTrackName').textContent;
+        var start = document.getElementById('NeuroStartTime').value;
+        var end = document.getElementById('NeuroEndTime').value;
+        var add_fades = document.getElementById('NeuroAddFades').checked;
+        var fade_in = 0, fade_out = 0;
+        if (add_fades) {
+            fade_in = document.getElementById('NeuroFadeInTime').value;
+            fade_out = document.getElementById('NeuroFadeOutTime').value;
+        }
+        $.ajax({
+            type: 'POST',
+            url: '/generate/edit',
+            data: {'file': file, 'start': start, 'end': end, 'fade_in': fade_in, 'fade_out': fade_out},
+            success: function (data) {
+                var renderButton = document.getElementById('EditNeuroRenderButton');
+                renderButton.innerText = "Rerender";
+
+                var mp3Url = '/generated_data/' + data.file;
+                $('#mp3PlayerContainerForNeuralMusicEdited').html('<audio-player src="/generated_data/' + data.file + '" bar-width="5" bar-gap="2" preload loop> </audio-player>')
                 $('#downloadEditedMP3ButtonContainer').html('<a class="hyperlink-text" id="DownloadEditedMP3File" href="/downloadEditedMP3/' + data.file + '" download>Download MP3</a>');
             }
         });

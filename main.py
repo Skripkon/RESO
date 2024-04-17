@@ -121,8 +121,8 @@ async def process_neural(generator: str = Form(...),
     return JSONResponse(content={"filename": filename})
 
 
-@app.post("/generate/edit_algorithmic")
-async def edit_algorithmic(file: str = Form(...),
+@app.post("/generate/edit")
+async def edit(file: str = Form(...),
                            start: str = Form(...),
                            end: str = Form(...),
                            fade_in: str = Form(...),
