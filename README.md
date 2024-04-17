@@ -29,7 +29,7 @@ Or here, but opening it may take a while due to inactivity.
 
 ```sudo docker run -p 8000:8000 deploy-reso```
 
-### Without Docker:
+### Without Docker (also works for Windows):
 
 1. Upgrade pip and install Python dependencies
 
@@ -42,6 +42,10 @@ Or here, but opening it may take a while due to inactivity.
 3. Run a local server:
 
 ```uvicorn main:app --host 0.0.0.0 --port 8000```
+  
+&nbsp;&nbsp;&nbsp;&nbsp;*If the above does not work for you (might be the case on Windows), try*
+
+```uvicorn main:app --host 127.0.0.1 --port 8000```
 
 ## Usage
 
