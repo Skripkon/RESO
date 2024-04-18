@@ -123,10 +123,10 @@ async def process_neural(generator: str = Form(...),
 
 @app.post("/generate/edit")
 async def edit(file: str = Form(...),
-                           start: str = Form(...),
-                           end: str = Form(...),
-                           fade_in: str = Form(...),
-                           fade_out: str = Form(...)):
+               start: str = Form(...),
+               end: str = Form(...),
+               fade_in: str = Form(...),
+               fade_out: str = Form(...)):
 
     edit_id: int = random.randint(1, 100_000_000)
     edited_file = edit_mp3(file,

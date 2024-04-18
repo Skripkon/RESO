@@ -11,3 +11,6 @@ data/Mozart/*.mid
 data/Bach/notes
 data/Chopin/notes
 data/Mozart/notes
+generators/neural/models/Bach/*
+generators/neural/models/Chopin/*
+generators/neural/models/Mozart/*
