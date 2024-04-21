@@ -32,11 +32,15 @@
     line-height: 0.6;
     text-align: center;
     transition: 0.1s ease;
+    outline: none;
+}
+
+.InputField:hover {
+    box-shadow: 0px 0px 10px 0px #013a6388;
 }
 
 .InputField:focus {
     box-shadow: 0px 0px 10px 0px #013a6388;
-    outline: none;
 }
 
 .InputCheckBox {
@@ -49,6 +53,8 @@
     border-radius: 5px;
     display: inline-block;
     position: relative;
+    outline: none;
+    transition: 0.1s ease;
 }
 
 .InputCheckBox:checked:after {
@@ -62,11 +68,11 @@
 
 .InputCheckBox:focus {
     box-shadow: 0px 0px 10px 0px #013a6388;
-    outline: none;
 }
 
 .InputCheckBox:hover {
     cursor: pointer;
+    box-shadow: 0px 0px 10px 0px #013a6388;
 }
 
 .AlgoSettingLabel {
