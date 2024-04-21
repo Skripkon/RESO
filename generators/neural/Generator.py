@@ -1,8 +1,10 @@
 import numpy as np
 import music21
-import os
-from keras.models import load_model
 import pickle
+import time
+import os
+from utils.progress_bar import ProgressBar
+from keras.models import load_model
 from utils.scale import fix_scale
 
 
@@ -60,10 +62,12 @@ def generate_neural(composer: str,
     quarter_length = 0
     generated_notes = []
     generated_notes_lengths = []
-
+    progress_bar = ProgressBar(start_time=time.time(),
+                               target=quarters,
+                               message='Generating:',
+                               bar_length=40)
     while count_stream.quarterLength < quarters:
-        print("Generating...",
-              str(round((count_stream.quarterLength / quarters) * 100)) + '%')
+        progress_bar.update(count_stream.quarterLength, time.time())
         input_sequence = np.reshape(pattern, (1, len(pattern), 1))
         input_sequence = input_sequence / float(len(unique_notes))
 
@@ -99,6 +103,7 @@ def generate_neural(composer: str,
         shift += 0.3
         quarter_length = 0
 
+    progress_bar.end('Generation completed.')
     # Now we make the actual stream that will be rendered
     final_stream = music21.stream.Stream()
     final_stream.insert(0, music21.tempo.MetronomeMark(number=bpm))
