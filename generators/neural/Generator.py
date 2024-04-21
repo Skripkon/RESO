@@ -52,8 +52,8 @@ def generate_neural(composer: str,
 
     start_index = np.random.randint(0, len(input_sequences) - 1)
     pattern = input_sequences[start_index]
-    prev_pred_element = "-"
-    pred_element = "-"
+    prev_pred_element = None
+    pred_element = None
 
     # is just used to count time to fill the required duration
     count_stream = music21.stream.Stream()
@@ -66,7 +66,8 @@ def generate_neural(composer: str,
                                target=quarters,
                                message='Generating:',
                                bar_length=40)
-    while count_stream.quarterLength < quarters:
+    while count_stream.quarterLength < quarters and \
+            count_stream.quarterLength + quarter_length < quarters:
         progress_bar.update(count_stream.quarterLength, time.time())
         input_sequence = np.reshape(pattern, (1, len(pattern), 1))
         input_sequence = input_sequence / float(len(unique_notes))
@@ -79,7 +80,7 @@ def generate_neural(composer: str,
         pattern.append(pred_element_index)
         pattern = pattern[1:]
 
-        if prev_pred_element == "-":
+        if prev_pred_element is None:
             continue
         if pred_element == prev_pred_element:
             quarter_length += 0.3

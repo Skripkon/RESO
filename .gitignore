@@ -11,9 +11,5 @@ data/Chopin/*
 !data/Chopin/chopin.txt
 data/Mozart/*
 !data/Mozart/mozart.txt
-generators/neural/models/Bach/*
-!generators/neural/models/Bach/bach.txt
-generators/neural/models/Chopin/*
-!generators/neural/models/Chopin/chopin.txt
-generators/neural/models/Mozart/*
-!generators/neural/models/Mozart/mozart.txt
+generators/neural/models/*
+!generators/neural/models/links.txt
