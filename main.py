@@ -78,7 +78,8 @@ async def process_algorithmic(generator: str = Form(...),
              datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     if generator == "AlgoGen01":
-        generate_music01(scale=scale, name_of_the_file=name_of_the_file)
+        generate_music01(scale=scale, name_of_the_file=name_of_the_file,
+                         pulse=tempo, duration_sec=duration_sec)
         midi2mp3(name_of_the_file=name_of_the_file)
         return JSONResponse(content={"filename": name_of_the_file})
     elif generator == "AlgoGen02":
