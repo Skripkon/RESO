@@ -15,12 +15,11 @@
     top: 50%;
     left: 50%;
     width: 80%;
-    /* margin-top: 73px; */
     transform: translate(-50%, -50%);
-    background-color: #b1c7d7;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: transparent;
+    padding: 4px;
+    padding-bottom: 1px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
     z-index: 9999;
 }
 
