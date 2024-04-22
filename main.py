@@ -142,3 +142,9 @@ async def download_edited_file(filename: str):
 async def help_generators_type(request: Request):
     return templates.TemplateResponse("help_generators_type.html",
                                       {"request": request})
+
+
+@app.get("/about_us", response_class=HTMLResponse)
+async def about_us(request: Request):
+    return templates.TemplateResponse("about_us.html",
+                                      {"request": request})
