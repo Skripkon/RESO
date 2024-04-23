@@ -1,5 +1,4 @@
 from werkzeug.utils import secure_filename
-from utils.midi2mp3 import midi2mp3
 from generators.algorithmic.Generator01 import generate_music01
 from generators.algorithmic.Generator02 import generate_music02
 from generators.neural.Generator import generate_neural
@@ -9,8 +8,10 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.exceptions import HTTPException
 from fastapi import Form
+from utils.download_models_and_data import request_to_sownload_files
 from utils.audio_editing import edit_mp3, str_to_secs
 from utils.data_logging import log_data
+from utils.midi2mp3 import midi2mp3
 import random
 import os
 import datetime
@@ -28,6 +29,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/generated_data", StaticFiles(directory="generated_data"),
           name="generated_data")
 
+request_to_sownload_files()
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
