@@ -34,15 +34,18 @@ RESO
     </div>
 </div>
 
-<form class="gen_form" method="post" action="/generate/process_neural">
+<form class="gen_form" method="post" action="/generate/process_neural_start">
     <select id="NeuralGenerator">
         <option value="Mozart" selected>Mozart</option>
         <option value="Bach">Bach</option>
         <option value="Chopin">Chopin</option>
     </select>
-    <button class="main-button" id="GenerateNeuralMusic" type="button">Generate a song!</button>
+    <button class="main-button" id="GenerateNeuralMusic" type="button" onclick="generateNeuralTrack()">Generate a song!</button>
 </form>
 
+<div id="progressBar">
+    <div style="width: 0%"></div>
+</div>
 
 <div id="mp3PlayerContainerForNeuralMusic" class="main-audio-player"> </div>
 <!-- Hidden element to store track name for editing purposes -->
@@ -118,11 +121,13 @@ RESO
 <!-- Enforce correct edit inputs time format -->
 <script src="{{ url_for('static', path='js/edit_input_pattern_enforcement.js') }}"></script>
 
+
 <div id="loadingContainer">
     <img src="{{ url_for('static', path='images/loading.gif') }}" alt="Loading...">
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <!-- Process generated track -->
-<script src="{{ url_for('static', path='js/process_generated_track.js') }}"></script>
+<script src="{{ url_for('static', path='js/generate_neural_track.js') }}"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 {% endblock %}

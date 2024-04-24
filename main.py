@@ -7,7 +7,7 @@ from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.exceptions import HTTPException
-from fastapi import Form
+from fastapi import Form, BackgroundTasks
 from utils.download_models_and_data import request_to_sownload_files
 from utils.audio_editing import edit_mp3, str_to_secs
 from utils.data_logging import log_data
@@ -15,6 +15,8 @@ from utils.midi2mp3 import midi2mp3
 import random
 import os
 import datetime
+import redis
+
 
 os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 
@@ -22,6 +24,7 @@ app = FastAPI()
 
 # Configure Jinja2 templates
 templates = Jinja2Templates(directory="templates")
+db = redis.from_url("redis://localhost:6379/1", decode_responses=True)
 
 # Mount the static directory to serve static files (like CSS, JS, images, etc.)
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -30,6 +33,7 @@ app.mount("/generated_data", StaticFiles(directory="generated_data"),
           name="generated_data")
 
 request_to_sownload_files()
+
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
@@ -95,11 +99,17 @@ async def process_algorithmic(generator: str = Form(...),
     return JSONResponse(content={"filename": filename})
 
 
-@app.post("/generate/process_neural")
-async def process_neural(generator: str = Form(...),
-                         duration: str = Form(...),
-                         tempo: str = Form(...)):
+@app.get("/progress")
+async def progress(request: Request):
+    progress = 100 * float(db.get("progress") or 0)
+    return {"progress": progress}
 
+
+@app.post("/generate/process_neural_start")
+async def process_neural_start(background_tasks: BackgroundTasks,
+                               generator: str = Form(...),
+                               duration: str = Form(...),
+                               tempo: str = Form(...)):
     filename: int = random.randint(1, 100_000_000)
     minutes, seconds = map(int, duration.split(':'))
     duration_sec = minutes * 60 + seconds
@@ -112,15 +122,22 @@ async def process_neural(generator: str = Form(...),
     random_model = random.choice(all_models)
     model_path = os.path.join(models_folder, random_model)
 
-    generate_neural(composer=generator,
-                    model_path=model_path,
-                    filename=filename,
-                    tempo=tempo,
-                    duration=duration_sec,
-                    correct_scale=True
-                    )
-    midi2mp3(filename=filename)
+    db.set("progress", 0)
+    background_tasks.add_task(generate_neural,
+                              composer=generator,
+                              model_path=model_path,
+                              filename=filename,
+                              tempo=tempo,
+                              duration=duration_sec,
+                              correct_scale=True,
+                              db=db
+                              )
     return JSONResponse(content={"filename": filename})
+
+
+@app.post("/generate/process_neural_finish")
+async def process_neural_finish(filename: int = Form(...)):
+    midi2mp3(filename=filename)
 
 
 @app.post("/generate/edit")
