@@ -32,7 +32,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/generated_data", StaticFiles(directory="generated_data"),
           name="generated_data")
 
-request_to_sownload_files()
+# request_to_sownload_files()
 
 
 @app.get("/", response_class=HTMLResponse)

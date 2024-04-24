@@ -1,9 +1,27 @@
-#progressBar {
-    width: 100%;
-    background-color: #f3f3f3;
+.progressBarContainer {
+    display: none;
 }
-#progressBar div {
-    height: 20px;
-    width: 0;
-    background-color: #4CAF50;
+
+.progressBarHolder {
+    width: 70%;
+    display: inherit;
+    background-color: #dddde1;
+    margin: auto;
+    height: 5px;
+    margin-top: 3px;
+    margin-bottom: 7px;
+}
+.progressBar {
+    height: inherit;
+    display: inherit;
+    width: 35%;
+    background-color: #013a63;
+}
+.progressBarText {
+    display: inherit;
+    margin: auto;
+    font-weight: 300;
+    font-size: 18px;
+    text-align: center;
+    color: #013a63;
 }

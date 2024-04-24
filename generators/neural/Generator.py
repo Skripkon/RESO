@@ -68,15 +68,12 @@ def generate_neural(composer: str,
     progress_bar = ProgressBar(start_time=time.time(),
                                target=quarters,
                                message='Generating:',
+                               db=db,
                                bar_length=40)
     while count_stream.quarterLength < quarters and \
             count_stream.quarterLength + quarter_length < quarters:
 
         progress_bar.update(count_stream.quarterLength, time.time())
-
-        # update current progress for frontend
-        db.set("progress", float(count_stream.quarterLength / quarters))
-
         input_sequence = np.reshape(pattern, (1, len(pattern), 1))
         input_sequence = input_sequence / float(len(unique_notes))
 
@@ -113,7 +110,6 @@ def generate_neural(composer: str,
         quarter_length = 0
 
     progress_bar.end('Generation completed.')
-    db.set("progress", 1)
     # Now we make the actual stream that will be rendered
     final_stream = music21.stream.Stream()
     final_stream.insert(0, music21.tempo.MetronomeMark(number=bpm))

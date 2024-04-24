@@ -43,9 +43,14 @@ RESO
     <button class="main-button" id="GenerateNeuralMusic" type="button" onclick="generateNeuralTrack()">Generate a song!</button>
 </form>
 
-<div id="progressBar">
-    <div style="width: 0%"></div>
+<!-- Progress bar -->
+<div id="neuroProgressBarContainer" class="progressBarContainer">
+    <div id="neuroProgressBarHolder" class="progressBarHolder">
+        <div id="neuroProgressBar" class="progressBar"></div>
+    </div>
+    <div class="progressBarText" id="neuroProgressBarText">Initializing</div>
 </div>
+
 
 <div id="mp3PlayerContainerForNeuralMusic" class="main-audio-player"> </div>
 <!-- Hidden element to store track name for editing purposes -->
