@@ -58,7 +58,8 @@ def download_datasets(data_path='data/', force=False):
     print('-' * 30)
     print("DOWNLOADING DATASETS")
     print('-' * 30)
-    BASE_URL = 'https://cloud-api.yandex.net/v1/disk/public/resources/download?'
+    BASE_URL = \
+        'https://cloud-api.yandex.net/v1/disk/public/resources/download?'
     datasets_composers = [f.path for f in
                           os.scandir(data_path) if f.is_dir()]
     for comp in datasets_composers:
@@ -120,7 +121,7 @@ def download_datasets(data_path='data/', force=False):
         try:
             shutil.rmtree(unarchived_folder_path)
             os.remove(zip_path)
-        except:
+        except Exception:
             print("Error occurred while deleting temporary files.",
                   "Stable application work is not guaranteed.")
             pass
@@ -133,7 +134,8 @@ def download_models(models_path='generators/neural/lstm/models',
     print('-' * 30)
     print("DOWNLOADING MODELS")
     print('-' * 30)
-    BASE_URL = 'https://cloud-api.yandex.net/v1/disk/public/resources/download?'
+    BASE_URL = \
+        'https://cloud-api.yandex.net/v1/disk/public/resources/download?'
 
     try:
         links_file = open(os.path.join(models_path, 'links.txt'))
@@ -194,7 +196,7 @@ def download_models(models_path='generators/neural/lstm/models',
 
         try:
             response = requests.get(final_url)
-        except:
+        except Exception:
             print("Error occurred while downloading models.",
                   "Stable application work is not guaranteed.\n" + '-' * 30)
             continue
@@ -217,7 +219,7 @@ def download_models(models_path='generators/neural/lstm/models',
         try:
             shutil.rmtree(unarchived_folder_path)
             os.remove(zip_path)
-        except:
+        except Exception:
             print("Error occurred while deleting temporary files.",
                   "Stable application work is not guaranteed.")
             pass

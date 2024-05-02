@@ -106,7 +106,7 @@
 
       const barCount = (this.canvas.width / (this.barWidth + this.barGap)) - this.barGap;
       const bufferSize = (this.bufferLength * this.bufferPercentage) / 100;
-      let x = 0;
+      let x = 10;
 
       // this is a loss representation of the frequency
       // some data are loss to fit the size of the canvas
@@ -116,14 +116,16 @@
         // what the i percentage maps to in the frequency data
         const pos = Math.round((bufferSize * iPerc) / 100);
         const frequency = this.dataArray[pos];
-        // frequency value in percentage
-        const frequencyPerc = (frequency * 100) / 255;
+        // frequency value in fraction
+        const frequencyPerc = frequency / 255;
         // frequency percentage value in pixel in relation to the canvas height
-        const barHeight = (frequencyPerc * this.canvas.height) / 100;
+        // Power function is to slightly increase the visibility of low-volume frequences
+        const barHeight = Math.pow(frequencyPerc, 0.6) * this.canvas.height;
         // flip the height so the bar is drawn from the bottom
         const y = this.canvas.height - barHeight;
 
-        this.canvasCtx.fillStyle = `rgba(${frequency}, 255, 100)`;
+        // this.canvasCtx.fillStyle = `rgba(${frequency}, 255, 100)`;
+        this.canvasCtx.fillStyle = `rgb(42, 111, 151)`;
         this.canvasCtx.fillRect(x, y, this.barWidth, barHeight);
 
         x += (this.barWidth + this.barGap);
@@ -253,6 +255,7 @@
           background: #013a63;
           border-radius: 20px;
           padding: 15px;
+          padding-left: 15px;
           color: #fff;
           display: flex;
           align-items: center;
@@ -262,12 +265,17 @@
         .play-btn {
             width: 40px;
             height: 40px;
+            margin-right: 5px;
             background: url("/static/images/audio-player-icon-sprite.png") 0 center/500% 100% no-repeat;
-           
             appearance: none;
             border: none;
             text-indent: -999999px;
             overflow: hidden;
+            outline: none;
+        }
+
+        .play-btn:hover {
+          cursor: pointer;
         }
         
         .play-btn.playing {
@@ -286,6 +294,14 @@
         }
         .volume-bar.over {
             background: url("/static/images/audio-player-icon-sprite.png") 100% center/500% 100% no-repeat;
+        }
+
+        .volume-bar.over:hover {
+          cursor: pointer;
+        }
+
+        .volume-bar.half:hover {
+          cursor: pointer;
         }
         
         .volume-field {
@@ -306,7 +322,11 @@
             appearance: none;
             height: 20px;
             width: 20px;
-            background: black;
+            background: #61a5c2;
+        }
+
+        .volume-field::-webkit-slider-thumb:hover {
+          cursor: pointer;
         }
         
         .volume-field::-moz-range-thumb {
@@ -363,7 +383,7 @@
             width: 0;
             box-shadow: -300px 0 0 300px #ffffff38;
         }
-        
+
         .progress-bar::-moz-range-thumb {
             appearance: none;
             height: 20px;
@@ -383,11 +403,12 @@
             position: relative;
             z-index: 1;
             text-shadow: 0 0 2px #111;
+            font-weight: 300;
         }
         
         .duration {
             margin-left: 2px;
-            margin-right: 5px;
+            margin-right: 12px;
         }
         
         .duration::before {

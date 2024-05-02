@@ -1,0 +1,16 @@
+.sub-heading {
+    font-size: 37px;
+    font-weight: 300;
+    color: #013a63;
+    text-align: center;
+    margin-bottom: 17px;
+    margin-top: 17px;
+}
+
+.sub-heading::selection { 
+    background: transparent; 
+}
+
+.sub-heading:hover {
+    cursor: default;
+}

@@ -16,7 +16,6 @@ header {
 
 .logo {
     position: static;
-    margin-left: 1px;
     transition: transform 0.3s ease-in-out;
 }
 
@@ -28,19 +27,19 @@ header {
 .navbar-item {
     position: relative;
     float: right;
-
 }
 
 .navbar-link {
-    padding: 15px;
     color: rgb(255, 255, 255);
     font-weight: 100;
     font-style: normal;
     font-size: 25px;
     display: block;
-    border-radius: 30px;
     transition: transform 0.3s ease-in-out;
-    padding: 50px;
+    margin: 30px;
+    padding: 20px;
+    padding-top: 6px;
+    padding-bottom: 10px;
 }
 
 .navbar-link:hover {
