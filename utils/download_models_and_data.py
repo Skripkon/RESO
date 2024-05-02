@@ -127,7 +127,7 @@ def download_datasets(data_path='data/', force=False):
         print("Completed.\n" + '-' * 30)
 
 
-def download_models(models_path='generators/neural/models',
+def download_models(models_path='generators/neural/lstm/models',
                     all_required=True,
                     force=False):
     print('-' * 30)

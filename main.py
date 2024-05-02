@@ -1,7 +1,7 @@
 from werkzeug.utils import secure_filename
 from generators.algorithmic.Generator01 import generate_music01
 from generators.algorithmic.Generator02 import generate_music02
-from generators.neural.Generator import generate_neural
+from generators.neural.lstm.Generator import generate_neural
 from fastapi import FastAPI, Request, File, UploadFile
 from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
@@ -107,7 +107,7 @@ async def process_neural(generator: str = Form(...),
     log_data('utils/log.json', "Neural", generator,
              datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-    models_folder = os.path.join('generators', 'neural', 'models', generator)
+    models_folder = os.path.join('generators', 'neural', 'lstm', 'models', generator)
     all_models = os.listdir(models_folder)
     random_model = random.choice(all_models)
     model_path = os.path.join(models_folder, random_model)
