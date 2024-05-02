@@ -37,7 +37,7 @@ Or here, but opening it may take a while due to inactivity.
 
 2. Install system-wide packages:
 
-```apt-get install -y --fix-missing fluidsynth ffmpeg musescore3 libqt5core5a```
+```apt-get install -y --fix-missing fluidsynth ffmpeg musescore3 libqt5core5a timidity```
 
 3. Run a local server:
 

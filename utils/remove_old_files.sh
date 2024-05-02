@@ -1,13 +1,13 @@
 #!/bin/bash
 
 directory="../generated_data"
-extensions=("*.mid" "*.mp3")
-threshold=0 # Specifies the threshold (in days)
+extensions=("*.mid" "*.mp3" "*.pdf" "*.musicxml")
+threshold=$1 # Get the threshold from the argument (in minutes)
 
 # Find files with specified extensions that were created more than 1 day ago
 files_to_remove=""
 for extension in "${extensions[@]}"; do
-    files_to_remove+="$(find ../generated_data/ -type f -name "$extension" -ctime $threshold)"
+    files_to_remove+=" $(find ../generated_data/ -type f -name "$extension" -cmin +$threshold)"
 done
 
 # Loop through the files and remove them
@@ -18,4 +18,4 @@ for file in $files_to_remove; do
     rm $file
 done
 
-echo "$count ${extensions[*]} files older than $threshold days have been removed from $directory"
+echo "$count ${extensions[*]} files last edited more than $threshold minutes ago have been removed from $directory"

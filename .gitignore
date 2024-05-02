@@ -1,6 +1,15 @@
+.venv
 venv
 **/__pycache__
 **/.DS_Store
 __pycache__
 generated_data/*
 utils/log.json
+data/Bach/*
+!data/Bach/bach.txt
+data/Chopin/*
+!data/Chopin/chopin.txt
+data/Mozart/*
+!data/Mozart/mozart.txt
+generators/neural/models/*
+!generators/neural/models/links.txt

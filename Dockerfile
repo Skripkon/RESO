@@ -1,5 +1,5 @@
 # Use the official Python image as the base image
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 # Set the working directory inside the container
 WORKDIR /
@@ -9,7 +9,7 @@ COPY requirements.txt requirements.txt
 
 # Install required packages
 RUN apt-get update \
-    && apt-get install -y --fix-missing fluidsynth ffmpeg musescore3 libqt5core5a \
+    && apt-get install -y --fix-missing timidity ffmpeg musescore3 libqt5core5a \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* 
 

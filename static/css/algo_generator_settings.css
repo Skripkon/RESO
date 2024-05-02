@@ -42,13 +42,13 @@
     border-radius: 1px;
 }
 
-.AlgoGenSetting {
+.GenSetting {
     color: #013a63;
     text-align: center;
     justify-content: center;
 }
 
-.AlgoGenSettingTitle {
+.GenSettingTitle {
     font-weight: 300;
     margin-bottom: 3px;
 }

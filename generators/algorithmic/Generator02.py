@@ -17,7 +17,7 @@ left_hand_last_chord_index = 0
 right_hand_last_note_index = 0
 
 
-def generate_music02(scale: int, name_of_the_file: int, pulse: str = 'Normal',
+def generate_music02(scale: int, filename: int, pulse: str = 'Normal',
                      duration_sec: int = 60):
     INTERVAL_LENGTH = 3
     OCTAVE_SHIFT = 12
@@ -142,8 +142,8 @@ def generate_music02(scale: int, name_of_the_file: int, pulse: str = 'Normal',
     myStream.metadata.title = "Waltz"
     myStream.metadata.composer = "RESO"
     # Write to MIDI and PDF file
-    filepath_midi = os.path.join("generated_data", f"{name_of_the_file}.mid")
-    filepath_pdf = os.path.join("generated_data", f"{name_of_the_file}.pdf")
+    filepath_midi = os.path.join("generated_data", f"{filename}.mid")
+    filepath_pdf = os.path.join("generated_data", f"{filename}.pdf")
     myStream.write('midi', fp=filepath_midi)
     myStream.write('musicxml.pdf', fp=filepath_pdf)
 
