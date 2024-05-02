@@ -2,7 +2,7 @@ bach
 3 models
 https://disk.yandex.ru/d/UQZUoZITichAlQ
 chopin
-0 models
+4 models
 https://disk.yandex.ru/d/ORy95MA_luIU3Q
 mozart
 0 models
