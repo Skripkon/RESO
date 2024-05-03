@@ -41,6 +41,7 @@ body {
     line-height: 0.6;
     text-align: center;
     transition: 0.1s ease;
+    outline: none;
 }
 
 .main-button:hover {
@@ -66,7 +67,8 @@ body {
 
 /* Style for text based buttons like download button */
 .hyperlink-text {
-    padding: 15px;
+    margin: 8px;
+    padding: 7px;
     background: #013a6300;
     color: #013a63;
     font-size: 20px;

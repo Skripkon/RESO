@@ -1,5 +1,5 @@
 from .MinorMusicGenerator import MinorMusicGenerator
-from music21 import stream, note, chord, tempo, meter, metadata
+from music21 import stream, note, chord, tempo, meter, metadata, key
 import random
 import os
 # from music21 import environment
@@ -8,6 +8,9 @@ import os
 # env['musicxmlPath'] =  '/usr/local/bin/mscore'
 
 tempo_map = {'Normal': 100, 'Slow': 60, 'Fast': 120}
+number_to_scale = {59: 'B', 60: 'C', 61: 'C', 62: 'D', 63: 'Eb', 64: 'E',
+                   65: 'F', 66: 'F', 67: 'G', 68: 'G', 69: 'A', 70: 'Bb'}
+
 
 # it indicates the last chord for the left hand to make sequences unique
 left_hand_last_chord_index = 0
@@ -38,8 +41,14 @@ def generate_music02(scale: int, filename: int, pulse: str = 'Normal',
     # Initialize parts
     right_hand = stream.Part()
     left_hand = stream.Part()
+
+    tonality = number_to_scale[scale]
+    key_signature = key.Key(tonality + " m")  # "m" means minor
+
+    right_hand.append(key_signature)
     right_hand.append(meter.TimeSignature('3/4'))
     right_hand.insert(0, tempo.MetronomeMark(number=bpm))
+    left_hand.append(key_signature)
     left_hand.append(meter.TimeSignature('3/4'))
     left_hand.insert(0, tempo.MetronomeMark(number=bpm))
 
@@ -74,6 +83,8 @@ def generate_music02(scale: int, filename: int, pulse: str = 'Normal',
                 random_chord = chords[random_index].copy()
                 newChord = chord.Chord(
                     random_chord, quarterLength=current_duration)
+                for my_note in newChord:
+                    my_note.keySignature = key_signature
                 newChord.volume.velocity = velocity
                 right_hand.append(newChord)
                 continue
@@ -85,6 +96,7 @@ def generate_music02(scale: int, filename: int, pulse: str = 'Normal',
             right_hand_last_note_index = current_note_index
             random_note = right_hand_notes[current_note_index]
             my_note = note.Note(random_note, quarterLength=current_duration)
+            my_note.keySignature = key_signature
             my_note.volume.velocity = velocity
             right_hand.append(my_note)
 
@@ -94,6 +106,8 @@ def generate_music02(scale: int, filename: int, pulse: str = 'Normal',
             for i in range(len(random_chord)):
                 random_chord[i] -= OCTAVE_SHIFT * chord_shift
             newChord = chord.Chord(random_chord, quarterLength=1)
+            for my_note in newChord:
+                my_note.keySignature = key_signature
             newChord.volume.velocity = chord_velocity
             left_hand.append(newChord)
 
@@ -110,6 +124,8 @@ def generate_music02(scale: int, filename: int, pulse: str = 'Normal',
         random_chord = [chords[random_index][0] -
                         OCTAVE_SHIFT, chords[random_index][0]]
         newChord = chord.Chord(random_chord, quarterLength=1)
+        for my_note in newChord:
+            my_note.keySignature = key_signature
         newChord.volume.velocity = 128
         left_hand.append(newChord)
         # Add two more chords for the left hand

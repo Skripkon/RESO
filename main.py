@@ -1,7 +1,7 @@
 from werkzeug.utils import secure_filename
 from generators.algorithmic.Generator01 import generate_music01
 from generators.algorithmic.Generator02 import generate_music02
-from generators.neural.Generator import generate_neural
+from generators.neural.lstm.Generator import generate_neural
 from fastapi import FastAPI, Request, File, UploadFile
 from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
@@ -88,7 +88,10 @@ async def process_algorithmic(generator: str = Form(...),
 
     match generator:
         case "AlgoGen01":
-            generate_music01(scale=scale, filename=filename)
+            generate_music01(scale=scale,
+                             filename=filename,
+                             pulse=tempo,
+                             duration_sec=duration_sec)
         case "AlgoGen02":
             generate_music02(scale=scale,
                              filename=filename,
@@ -118,7 +121,8 @@ async def process_neural_start(background_tasks: BackgroundTasks,
     log_data('utils/log.json', "Neural", generator,
              datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-    models_folder = os.path.join('generators', 'neural', 'models', generator)
+    models_folder = \
+        os.path.join('generators', 'neural', 'lstm', 'models', generator)
     all_models = os.listdir(models_folder)
     random_model = random.choice(all_models)
     model_path = os.path.join(models_folder, random_model)
@@ -195,4 +199,10 @@ async def download_edited_file(filename: str):
 @app.get("/help/generators_type", response_class=HTMLResponse)
 async def help_generators_type(request: Request):
     return templates.TemplateResponse("help_generators_type.html",
+                                      {"request": request})
+
+
+@app.get("/about_us", response_class=HTMLResponse)
+async def about_us(request: Request):
+    return templates.TemplateResponse("about_us.html",
                                       {"request": request})

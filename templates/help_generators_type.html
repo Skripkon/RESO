@@ -6,6 +6,38 @@ RESO
 
 {% block body %}
 
-<p style="font-size: 80px; color: white">404 Not Found</p>
+<div>
+    <img src="{{ url_for('static', path='images/logo_full_white.png') }}" class="small-logo">
+</div>
 
+
+<p class="big-heading">Music engine types</p>
+<p class="website-description">
+    There are two main music engines implemented on RESO: algorithmic and neural.
+</p>
+<p class="sub-heading">
+    Algorithmic
+</p>
+<p class="website-description">
+    Fast and versatile, it can generate stunning pieces in mere seconds.
+    This engine utilizes algorithms for music creation based on patterns. 
+    It has a variety of options including Calm music, Waltz and &lt;DATA DELETED&gt;. Each of them supports 
+    fully customizable duration, tempo and scale configuration. Although algorithmic engine lacks diversity, it is an
+    incredible tool for quick and reliable music making.
+</p>
+<p class="sub-heading">
+    Neural
+</p>
+<p class="website-description">
+    Imagine having your very own magical music composer at your fingertips - that's exactly what our neural music generator 
+    is all about! This innovative tool can whip up beautiful piano melodies in the style of iconic composers like Mozart, Bach, and Chopin.
+    Customize tempo and duration of your track and experience the true potential of modern neural networks. The outcome may be 
+    unpredictable though, so don't hesitate to regenerate at any time to get even more unique tunes!  
+</p>
+</br>
+<p class="website-description">
+    Each music engine has its unique sound and features. Experience them yourself by exploring RESO! 
+</p>
+
+<a href="/generate" class="help-text">Go back</a>
 {% endblock %}

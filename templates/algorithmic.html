@@ -79,10 +79,9 @@ RESO
 </div>
 
 <div class="overlay" id="overlay"></div>
-<div class="pdf-container" id="pdf-container">
-    <div class="close-button" id="close-button">Close</div>
-    <iframe id="pdf-iframe"></iframe>
-</div>
+    <div class="pdf-container" id="pdf-container">
+        <iframe id="pdf-iframe"></iframe>
+    </div>
 
 <div id="ViewSheetMusicButtonContainer">
     <button class="main-button" id="ViewSheetMusicButton">View Sheet Music</button>
@@ -139,6 +138,7 @@ RESO
 
 <!-- Script for showing PDF -->
 <script src="{{ url_for('static', path='js/sheet_music_viewer.js') }}"></script>
+
 <!-- Script for showing editing settings -->
 <script src="{{ url_for('static', path='js/open_editing_settings.js') }}"></script>
 
