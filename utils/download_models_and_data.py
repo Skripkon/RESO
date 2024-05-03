@@ -103,8 +103,20 @@ def download_datasets(data_path='data/', force=False):
         print(f"Downloading new files from {public_key}")
 
         final_url = BASE_URL + urlencode(dict(public_key=public_key))
-        response = requests.get(final_url)
-        download_url = response.json()['href']
+
+        try:
+            response = requests.get(final_url)
+        except Exception:
+            print("Error occurred while downloading models. Aborting.",
+                  "Stable application work is not guaranteed.\n" + '-' * 30)
+            continue
+
+        try:
+            download_url = response.json()['href']
+        except KeyError:
+            print("Error occurred while downloading models. Aborting.",
+                  "Stable application work is not guaranteed.\n" + '-' * 30)
+            continue
 
         download_response = requests.get(download_url)
         zip_path = os.path.join(comp, 'downloaded_file.zip')
@@ -197,11 +209,17 @@ def download_models(models_path='generators/neural/lstm/models',
         try:
             response = requests.get(final_url)
         except Exception:
-            print("Error occurred while downloading models.",
+            print("Error occurred while downloading models. Aborting.",
                   "Stable application work is not guaranteed.\n" + '-' * 30)
             continue
 
-        download_url = response.json()['href']
+        try:
+            download_url = response.json()['href']
+        except KeyError:
+            print("Error occurred while downloading models. Aborting.",
+                  "Stable application work is not guaranteed.\n" + '-' * 30)
+            continue
+
         download_response = requests.get(download_url)
         zip_path = os.path.join(comp_model_path, 'downloaded_file.zip')
         with open(zip_path, 'wb') as f:

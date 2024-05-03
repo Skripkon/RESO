@@ -11,5 +11,5 @@ data/Chopin/*
 !data/Chopin/chopin.txt
 data/Mozart/*
 !data/Mozart/mozart.txt
-generators/neural/models/*
-!generators/neural/models/links.txt
+generators/neural/lstm/models/*
+!generators/neural/lstm/models/links.txt
