@@ -1,7 +1,6 @@
 import numpy as np
 import music21
 import pickle
-import redis
 import time
 import os
 from utils.progress_bar import ProgressBar
@@ -15,7 +14,7 @@ def generate_neural(composer: str,
                     tempo: str,
                     filename: str,
                     correct_scale: bool = True,
-                    db: redis.Redis = None
+                    progress_map: dict = None
                     ):
     """
     Generates and saves as 'filename' a midi file using given model, duration
@@ -68,7 +67,8 @@ def generate_neural(composer: str,
     progress_bar = ProgressBar(start_time=time.time(),
                                target=quarters,
                                message='Generating:',
-                               db=db,
+                               filename=filename,
+                               progress_map=progress_map,
                                bar_length=40)
     while count_stream.quarterLength < quarters and \
             count_stream.quarterLength + quarter_length < quarters:

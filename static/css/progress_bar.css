@@ -1,20 +1,24 @@
 .progressBarContainer {
     display: none;
+    margin-top: 3px;
+    margin-bottom: 22px;
 }
 
 .progressBarHolder {
-    width: 70%;
+    width: 50%;
     display: inherit;
     background-color: #dddde1;
     margin: auto;
     height: 5px;
-    margin-top: 3px;
+    margin-top: 5px;
     margin-bottom: 7px;
+    border-radius: 5px;
 }
 .progressBar {
     height: inherit;
     display: inherit;
-    width: 35%;
+    border-radius: inherit;
+    width: 0%;
     background-color: #013a63;
 }
 .progressBarText {

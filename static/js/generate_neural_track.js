@@ -10,6 +10,7 @@ function countDotsAtEnd(text) {
     return match ? match[0].length : 0;
 }
 
+// function that shows a little text animation while the track is generating 
 async function cycleThroughDots() {
     var element = document.getElementById('neuroProgressBarText');
     var text = element.innerText;
@@ -17,29 +18,35 @@ async function cycleThroughDots() {
     element.innerText = text.substring(0, text.length - count) + '.'.repeat(count == 3 ? 0 : count + 1);
 }
 
+// function that is called once every PROGRESS_BAR_REFRESH_RATE ms. It updates the progress bar length and
+// starts the finish() function if the progress is at 100%
 async function updateProgressNeuro(filename) {
-    const response = await fetch('/progress');
-    const data = await response.json();
-    document.getElementById('neuroProgressBar').style.width = `${data.progress}%`;
-    if (data.progress > 0 && generationState == 'initial') {
-        generationState = 'generating';
-        document.getElementById('neuroProgressBarText').innerText = "Generating";
-    }
-    if (data.progress == 100 && generationState == 'generating') {
-        generationState = 'rendering';
-        document.getElementById('neuroProgressBarText').innerText = "Rendering";
-        clearInterval(neuroRefreshIntervalId);
-        finish(filename);
-    }
+    $.ajax({
+        type: 'POST',
+        url: '/progress',
+        data: { 'filename': filename },
+        success: function (data) {
+            document.getElementById('neuroProgressBar').style.width = `${data.progress}%`;
+            if (data.progress > 0 && generationState == 'initial') {
+                generationState = 'generating';
+                document.getElementById('neuroProgressBarText').innerText = "Generating";
+            }
+            if (data.progress == 100 && generationState == 'generating') {
+                generationState = 'rendering';
+                document.getElementById('neuroProgressBarText').innerText = "Rendering";
+                clearInterval(neuroRefreshIntervalId);
+                finish(filename);
+            }
+        }
+    });
 }
 
+// main function that initializes the track generation
 function generateNeuralTrack() {
     var NeuralGenerator = $('#NeuralGenerator').val();
     var DurationOfTheTrack = $('#DurationOfTheTrack').val();
     var TempoOfTheTrack = $('#TempoOfTheTrack').val();
     
-    // Show loading spinner
-    // $('#loadingContainer').show();
     document.getElementById('neuroProgressBarText').innerText = "Initializing";
     document.getElementById('neuroProgressBar').setAttribute("style","width: 0%");
     $('#neuroProgressBarContainer').show();
@@ -50,11 +57,13 @@ function generateNeuralTrack() {
         url: '/generate/process_neural_start',
         data: { 'generator': NeuralGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack },
         success: function (data) {
+            disableGenerateButton();
             neuroRefreshIntervalId = setInterval(updateProgressNeuro, PROGRESS_BAR_REFRESH_RATE, data.filename);
         }
     });
 }
 
+// switch from 'generating' state to 'generated' state (render the track, show editing buttons)
 function finish(filename) {
     $.ajax({
         type: 'POST',
@@ -89,6 +98,19 @@ function finish(filename) {
             $('#mp3PlayerContainerForNeuralMusicEdited').html('');
             $('#downloadEditedMP3ButtonContainer').html('');
             document.getElementById('EditNeuroRenderButton').innerText = "Render";
+            enableGenerateButton();
         }
     });   
+}
+
+function disableGenerateButton() {
+    const generateButton = document.getElementById('GenerateNeuralMusic');
+    generateButton.disabled = true;
+    // generateButton.setAttribute("style","cursor: default");
+}
+
+function enableGenerateButton() {
+    const generateButton = document.getElementById('GenerateNeuralMusic');
+    generateButton.disabled = false;
+    // generateButton.setAttribute("style","cursor: pointer");
 }
