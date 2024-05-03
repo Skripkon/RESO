@@ -13,7 +13,9 @@ def generate_neural(composer: str,
                     duration: int,
                     tempo: str,
                     filename: str,
-                    correct_scale=True):
+                    correct_scale: bool = True,
+                    progress_map: dict = None
+                    ):
     """
     Generates and saves as 'filename' a midi file using given model, duration
     and tempo. Composer argument instructs the function which folder to take
@@ -65,9 +67,12 @@ def generate_neural(composer: str,
     progress_bar = ProgressBar(start_time=time.time(),
                                target=quarters,
                                message='Generating:',
+                               filename=filename,
+                               progress_map=progress_map,
                                bar_length=40)
     while count_stream.quarterLength < quarters and \
             count_stream.quarterLength + quarter_length < quarters:
+
         progress_bar.update(count_stream.quarterLength, time.time())
         input_sequence = np.reshape(pattern, (1, len(pattern), 1))
         input_sequence = input_sequence / float(len(unique_notes))

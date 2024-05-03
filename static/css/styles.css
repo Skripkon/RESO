@@ -33,7 +33,7 @@ body {
     padding: 15px;
     width: 500px;
     height: 60px;
-    background: #013a6300;
+    background: transparent;
     border: #013a63 solid 5px;
     border-radius: 31px;
     color: #013a63;
@@ -50,8 +50,14 @@ body {
     cursor: pointer;
 }
 
-/* TODO: normal loading bar */
-#loadingContainer {
+.main-button:disabled {
+    pointer-events: none;
+    color: #687780;
+    border-color: #687780;
+  }
+
+/* For an obsolete loading bar */
+  #loadingContainer {
     display: none;
     position: fixed;
     top: 50%;

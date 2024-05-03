@@ -25,7 +25,7 @@ audio::-webkit-media-controls-pause-button-container {
 .main-audio-player {
     width: 40%;
     margin-left: 30%;
-    margin-top: 20px;
+    margin-top: -12px;
     align-items: center;
     text-align: center;
 }
