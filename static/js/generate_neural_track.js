@@ -46,6 +46,7 @@ function generateNeuralTrack() {
     var NeuralGenerator = $('#NeuralGenerator').val();
     var DurationOfTheTrack = $('#DurationOfTheTrack').val();
     var TempoOfTheTrack = $('#TempoOfTheTrack').val();
+    var NeuroCorrectScale = $('#NeuroCorrectScale').val();
     
     document.getElementById('neuroProgressBarText').innerText = "Initializing";
     document.getElementById('neuroProgressBar').setAttribute("style","width: 0%");
@@ -55,7 +56,7 @@ function generateNeuralTrack() {
     $.ajax({
         type: 'POST',
         url: '/generate/process_neural_start',
-        data: { 'generator': NeuralGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack },
+        data: { 'generator': NeuralGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack, 'correct_scale': NeuroCorrectScale },
         success: function (data) {
             document.getElementById('GenerateNeuralMusic').disabled = true;
             neuroRefreshIntervalId = setInterval(neuroUpdateProgress, NEURO_PROGRESS_BAR_REFRESH_RATE, data.filename);

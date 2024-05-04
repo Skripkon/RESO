@@ -33,7 +33,7 @@
 
 #HorizontalBarContainter {
     height: 85px;
-    background-image: url("../images/main_bg.png");
+    background-image: url("../images/main_bg_seamless.png");
     display: flex;
     justify-content: center;
     align-items: center;
@@ -82,4 +82,13 @@
     display: none;
     position: relative;
     margin-bottom: 20px;
+}
+
+#NeuroCorrectScale, #NeuroCorrectScaleLabel {
+    margin-bottom: 5px;
+    margin-top: 0px;
+}
+
+#GenerateNeuralMusic {
+    margin-top: -5px;
 }
