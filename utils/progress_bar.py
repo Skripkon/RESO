@@ -9,7 +9,8 @@ class ProgressBar:
     defaults to 20). Also recieves the dictionary to communicate the front
     of the current progress of generation.
     """
-    def __init__(self, start_time: time,
+    def __init__(self,
+                 start_time: time,
                  target,
                  message: str,
                  filename: int,
@@ -23,7 +24,7 @@ class ProgressBar:
         self.bar_length = bar_length
         self.progress_map[filename] = 0
 
-    def update(self, current, cur_time):
+    def update(self, current, cur_time: time):
         percent = float(current) * 100 / self.target
         arrow = '-' * int(percent / 100 * self.bar_length - 1) + '>'
         spaces = ' ' * (self.bar_length - len(arrow))
@@ -39,7 +40,7 @@ class ProgressBar:
             print('Generating: [%s%s] %d%% ~ ETA inf'
                   % (arrow, spaces, percent), end='\r')
 
-    def end(self, end_message: str):
+    def end(self, end_message: str = 'Generation completed.'):
         self.progress_map[self.filename] = 1
         print(end_message + ' ' *
               (len(self.message) + self.bar_length - len(end_message) + 25))

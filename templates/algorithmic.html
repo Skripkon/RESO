@@ -58,8 +58,16 @@ RESO
         <option value="AlgoGen01" selected>Calm Melody</option>
         <option value="AlgoGen02">Waltz</option>
     </select>
-    <button class="main-button" id="GenerateAlgorithmicMusic" type="button">Generate a song!</button>
+    <button class="main-button" id="GenerateAlgorithmicMusic" type="button" onclick="generateAlgoTrack()">Generate a song!</button>
 </form>
+
+<!-- Progress bar -->
+<div id="algoProgressBarContainer" class="progressBarContainer">
+    <div id="algoProgressBarHolder" class="progressBarHolder">
+        <div id="algoProgressBar" class="progressBar"></div>
+    </div>
+    <div class="progressBarText" id="algoProgressBarText">Initializing</div>
+</div>
 
 <div id="mp3PlayerContainerForAlgorithmicMusic" class="main-audio-player"> </div>
 <!-- Hidden element to store track name for editing purposes -->
@@ -157,6 +165,6 @@ RESO
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <!-- Process generated track -->
-<script src="{{ url_for('static', path='js/process_generated_track.js') }}"></script>
+<script src="{{ url_for('static', path='js/generate_algo_track.js') }}"></script>
 
 {% endblock %}

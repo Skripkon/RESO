@@ -32,7 +32,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/generated_data", StaticFiles(directory="generated_data"),
           name="generated_data")
 
-request_to_sownload_files()
+# request_to_sownload_files()
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -72,11 +72,12 @@ async def neural_page(request: Request):
     return templates.TemplateResponse("neural.html", {"request": request})
 
 
-@app.post("/generate/process_algorithmic")
-async def process_algorithmic(generator: str = Form(...),
-                              duration: str = Form(...),
-                              tempo: str = Form(...),
-                              scale: int = Form(...)):
+@app.post("/generate/process_algorithmic_start")
+async def process_algorithmic_start(background_tasks: BackgroundTasks,
+                                    generator: str = Form(...),
+                                    duration: str = Form(...),
+                                    tempo: str = Form(...),
+                                    scale: int = Form(...)):
 
     filename: int = random.randint(1, 100_000_000)
 
@@ -88,18 +89,27 @@ async def process_algorithmic(generator: str = Form(...),
 
     match generator:
         case "AlgoGen01":
-            generate_music01(scale=scale,
-                             filename=filename,
-                             pulse=tempo,
-                             duration_sec=duration_sec)
+            background_tasks.add_task(generate_music01,
+                                      scale=scale,
+                                      filename=filename,
+                                      progress_map=progress_map,
+                                      pulse=tempo,
+                                      duration_sec=duration_sec)
         case "AlgoGen02":
-            generate_music02(scale=scale,
-                             filename=filename,
-                             pulse=tempo,
-                             duration_sec=duration_sec)
+            background_tasks.add_task(generate_music02,
+                                      scale=scale,
+                                      filename=filename,
+                                      progress_map=progress_map,
+                                      pulse=tempo,
+                                      duration_sec=duration_sec)
 
-    midi2mp3(filename=filename)
     return JSONResponse(content={"filename": filename})
+
+
+# render generated algo track
+@app.post("/generate/process_algo_finish")
+async def process_algo_finish(filename: int = Form(...)):
+    midi2mp3(filename=filename)
 
 
 # is used to get current generation progress in JS code

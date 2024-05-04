@@ -1,8 +1,8 @@
 var neuroRefreshIntervalId = NaN;
 var neuroProgressBarTextRefreshIntervalId = NaN;
-const PROGRESS_BAR_REFRESH_RATE = 100; // ms
-const PROGRESS_BAR_TEXT_REFRESH_RATE = 300; // ms
-var generationState = 'initial';
+const NEURO_PROGRESS_BAR_REFRESH_RATE = 100; // ms
+const NEURO_PROGRESS_BAR_TEXT_REFRESH_RATE = 300; // ms
+var neuroGenerationState = 'initial';
 
 function countDotsAtEnd(text) {
     const regex = /\.+$/;
@@ -11,7 +11,7 @@ function countDotsAtEnd(text) {
 }
 
 // function that shows a little text animation while the track is generating 
-async function cycleThroughDots() {
+async function neuroCycleThroughDots() {
     var element = document.getElementById('neuroProgressBarText');
     var text = element.innerText;
     var count = countDotsAtEnd(text);
@@ -19,23 +19,23 @@ async function cycleThroughDots() {
 }
 
 // function that is called once every PROGRESS_BAR_REFRESH_RATE ms. It updates the progress bar length and
-// starts the finish() function if the progress is at 100%
-async function updateProgressNeuro(filename) {
+// starts the neuroFinish() function if the progress is at 100%
+async function neuroUpdateProgress(filename) {
     $.ajax({
         type: 'POST',
         url: '/progress',
         data: { 'filename': filename },
         success: function (data) {
             document.getElementById('neuroProgressBar').style.width = `${data.progress}%`;
-            if (data.progress > 0 && generationState == 'initial') {
-                generationState = 'generating';
+            if (data.progress > 0 && neuroGenerationState == 'initial') {
+                neuroGenerationState = 'generating';
                 document.getElementById('neuroProgressBarText').innerText = "Generating";
             }
-            if (data.progress == 100 && generationState == 'generating') {
-                generationState = 'rendering';
+            if (data.progress == 100 && neuroGenerationState == 'generating') {
+                neuroGenerationState = 'rendering';
                 document.getElementById('neuroProgressBarText').innerText = "Rendering";
                 clearInterval(neuroRefreshIntervalId);
-                finish(filename);
+                neuroFinish(filename);
             }
         }
     });
@@ -50,21 +50,21 @@ function generateNeuralTrack() {
     document.getElementById('neuroProgressBarText').innerText = "Initializing";
     document.getElementById('neuroProgressBar').setAttribute("style","width: 0%");
     $('#neuroProgressBarContainer').show();
-    neuroProgressBarTextRefreshIntervalId = setInterval(cycleThroughDots, PROGRESS_BAR_TEXT_REFRESH_RATE);
+    neuroProgressBarTextRefreshIntervalId = setInterval(neuroCycleThroughDots, NEURO_PROGRESS_BAR_TEXT_REFRESH_RATE);
    
     $.ajax({
         type: 'POST',
         url: '/generate/process_neural_start',
         data: { 'generator': NeuralGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack },
         success: function (data) {
-            disableGenerateButton();
-            neuroRefreshIntervalId = setInterval(updateProgressNeuro, PROGRESS_BAR_REFRESH_RATE, data.filename);
+            document.getElementById('GenerateNeuralMusic').disabled = true;
+            neuroRefreshIntervalId = setInterval(neuroUpdateProgress, NEURO_PROGRESS_BAR_REFRESH_RATE, data.filename);
         }
     });
 }
 
 // switch from 'generating' state to 'generated' state (render the track, show editing buttons)
-function finish(filename) {
+function neuroFinish(filename) {
     $.ajax({
         type: 'POST',
         url: '/generate/process_neural_finish',
@@ -86,7 +86,7 @@ function finish(filename) {
             // $('#loadingContainer').hide();
             clearInterval(neuroProgressBarTextRefreshIntervalId);
             $('#neuroProgressBarContainer').hide();
-            generationState = 'initial';
+            neuroGenerationState = 'initial';
 
             $('#EditNeuroTrackButtonContainer').show();
 
@@ -98,19 +98,7 @@ function finish(filename) {
             $('#mp3PlayerContainerForNeuralMusicEdited').html('');
             $('#downloadEditedMP3ButtonContainer').html('');
             document.getElementById('EditNeuroRenderButton').innerText = "Render";
-            enableGenerateButton();
+            document.getElementById('GenerateNeuralMusic').disabled = false;
         }
     });   
-}
-
-function disableGenerateButton() {
-    const generateButton = document.getElementById('GenerateNeuralMusic');
-    generateButton.disabled = true;
-    // generateButton.setAttribute("style","cursor: default");
-}
-
-function enableGenerateButton() {
-    const generateButton = document.getElementById('GenerateNeuralMusic');
-    generateButton.disabled = false;
-    // generateButton.setAttribute("style","cursor: pointer");
 }
