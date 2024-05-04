@@ -123,7 +123,8 @@ async def progress(filename: int = Form(...)):
 async def process_neural_start(background_tasks: BackgroundTasks,
                                generator: str = Form(...),
                                duration: str = Form(...),
-                               tempo: str = Form(...)):
+                               tempo: str = Form(...),
+                               correct_scale: bool = Form(...)):
     filename: int = random.randint(1, 100_000_000)
     minutes, seconds = map(int, duration.split(':'))
     duration_sec = minutes * 60 + seconds
@@ -144,7 +145,7 @@ async def process_neural_start(background_tasks: BackgroundTasks,
                               filename=filename,
                               tempo=tempo,
                               duration=duration_sec,
-                              correct_scale=True,
+                              correct_scale=correct_scale,
                               progress_map=progress_map
                               )
     return JSONResponse(content={"filename": filename})

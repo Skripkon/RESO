@@ -23,12 +23,12 @@ def midi2mp3(filename: int):
 
     except Exception:  # this exception is for Linux systems only,
         # because sometimes fluidsynth doesn't work there
-        try:
-            os.remove(wav_file)
-        except OSError:
-            pass
         os.system(
             # amplify volume by 200 percent and run a conversion
             f'timidity {filepath} -Ow -o {mp3_file} --volume=200'
         )
+        try:
+            os.remove(wav_file)
+        except OSError:
+            pass
     return mp3_file

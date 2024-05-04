@@ -1,25 +1,12 @@
 /* Editing settings */
 
-#EditAlgoTrackButtonContainer {
+#EditAlgoTrackButtonContainer, #EditNeuroTrackButtonContainer {
     display: none;
     position: relative;
     margin-bottom: 20px;
 }
 
-#EditNeuroTrackButtonContainer {
-    display: none;
-    position: relative;
-    margin-bottom: 20px;
-}
-
-#EditAlgoTrackContainer {
-    display: none;
-    background-color: white 50%;
-    padding-top: 5px;
-    padding-bottom: 22px;
-}
-
-#EditNeuroTrackContainer {
+#EditAlgoTrackContainer, #EditNeuroTrackContainer {
     display: none;
     background-color: white 50%;
     padding-top: 5px;
@@ -92,6 +79,7 @@
     margin-right: 10px;
     color: #012a4a;
     font-weight: 300;
+    cursor: pointer;
 }
 
 #EditAlgoTrackFadesContainer {
@@ -105,7 +93,8 @@
 .render-button {
     display: block;
     margin: 0 auto;
-    margin-top: 15px;
+    margin-top: 10px;
+    margin-bottom: 36px;
     padding: 15px;
     width: 200px;
     height: 40px;
@@ -118,6 +107,7 @@
     text-align: center;
     transition: 0.1s ease;
     font-weight: 300;
+    outline: none;
 }
 
 .render-button:hover {
