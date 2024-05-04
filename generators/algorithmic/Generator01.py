@@ -1,6 +1,8 @@
 from .MinorMusicGenerator import MinorMusicGenerator
 from music21 import stream, note, chord, tempo, metadata, key
+from utils.progress_bar import ProgressBar
 import random
+import time
 import os
 
 tempo_map = {'Normal': 100, 'Slow': 60, 'Fast': 120}
@@ -8,8 +10,12 @@ number_to_scale = {59: 'B', 60: 'C', 61: 'C', 62: 'D', 63: 'Eb', 64: 'E',
                    65: 'F', 66: 'F', 67: 'G', 68: 'G', 69: 'A', 70: 'Bb'}
 
 
-def generate_music01(scale: int, filename: int, pulse: str = 'Normal',
-                     duration_sec: int = 60):
+def generate_music01(scale: int,
+                     filename: int,
+                     progress_map: dict,
+                     pulse: str = 'Normal',
+                     duration_sec: int = 60
+                     ):
     new_song_generator = MinorMusicGenerator(scale)
     new_song_generator.minor_chords += new_song_generator.additional_chords
     number_of_possible_chords = len(new_song_generator.minor_chords)
@@ -53,10 +59,20 @@ def generate_music01(scale: int, filename: int, pulse: str = 'Normal',
             newChord.volume.velocity = 60
             left_hand.append(newChord)
 
+    progress_bar = ProgressBar(start_time=time.time(),
+                               target=intervals,
+                               message='Algo generating:',
+                               filename=filename,
+                               progress_map=progress_map,
+                               bar_length=40)
+
     for i in range(intervals):
         add_one_interval(octave_shift_from_4=random.randint(-1, 1),
                          velocity=random.randint(70, 70))
+        progress_bar.update(current=i, cur_time=time.time())
+
     add_one_interval(velocity=50)
+    progress_bar.end()
 
     # Combine hands into stream
     myStream = stream.Stream([right_hand, left_hand])

@@ -1,7 +1,9 @@
 from .MinorMusicGenerator import MinorMusicGenerator
 from music21 import stream, note, chord, tempo, meter, metadata, key
+from utils.progress_bar import ProgressBar
 import random
 import os
+import time
 # from music21 import environment
 #   type "which mscore" in console and insert your path here
 # env = environment.Environment()
@@ -17,8 +19,12 @@ left_hand_last_chord_index = 0
 right_hand_last_note_index = 0
 
 
-def generate_music02(scale: int, filename: int, pulse: str = 'Normal',
-                     duration_sec: int = 60):
+def generate_music02(scale: int,
+                     filename: int,
+                     progress_map: dict,
+                     pulse: str = 'Normal',
+                     duration_sec: int = 60
+                     ):
     INTERVAL_LENGTH = 3
     OCTAVE_SHIFT = 12
     # Initialize music generator
@@ -133,8 +139,19 @@ def generate_music02(scale: int, filename: int, pulse: str = 'Normal',
         add_chord_left_hand(random_index, 0, 115)
 
     # Generate music
+    progress_bar = ProgressBar(start_time=time.time(),
+                               target=quarters_count,
+                               message="Algo generation:",
+                               filename=filename,
+                               progress_map=progress_map,
+                               bar_length=40
+                               )
     while right_hand.duration.quarterLength < quarters_count:
+        progress_bar.update(current=right_hand.duration.quarterLength,
+                            cur_time=time.time())
         add_one_interval()
+
+    progress_bar.end()
 
     # Combine hands into stream
     myStream = stream.Stream([right_hand, left_hand])
