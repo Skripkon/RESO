@@ -37,6 +37,11 @@ async function neuroUpdateProgress(filename) {
                 clearInterval(neuroRefreshIntervalId);
                 neuroFinish(filename);
             }
+        }, 
+        error: function(xhr, status, error) {
+            var errorMessage = xhr.responseJSON.error;
+            alert(errorMessage);
+            window.location.reload();
         }
     });
 }
@@ -60,6 +65,11 @@ function generateNeuralTrack() {
         success: function (data) {
             document.getElementById('GenerateNeuralMusic').disabled = true;
             neuroRefreshIntervalId = setInterval(neuroUpdateProgress, NEURO_PROGRESS_BAR_REFRESH_RATE, data.filename);
+        },
+        error: function(xhr, status, error) {
+            var errorMessage = xhr.responseJSON.error;
+            alert(errorMessage);
+            window.location.reload();
         }
     });
 }
@@ -100,6 +110,12 @@ function neuroFinish(filename) {
             $('#downloadEditedMP3ButtonContainer').html('');
             document.getElementById('EditNeuroRenderButton').innerText = "Render";
             document.getElementById('GenerateNeuralMusic').disabled = false;
+            enableGenerateButton();
+        },
+        error: function(xhr, status, error) {
+            var errorMessage = xhr.responseJSON.error;
+            alert(errorMessage);
+            window.location.reload();
         }
     });   
 }

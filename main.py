@@ -12,10 +12,12 @@ from utils.download_models_and_data import request_to_sownload_files
 from utils.audio_editing import edit_mp3, str_to_secs
 from utils.data_logging import log_data
 from utils.midi2mp3 import midi2mp3
+import subprocess
 import random
 import os
 import datetime
 
+MAX_TRACKS = 1
 
 os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 
@@ -25,6 +27,8 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
 progress_map = {}
+
+tracks_number_by_ip = {}
 
 # Mount the static directory to serve static files (like CSS, JS, images, etc.)
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -73,13 +77,31 @@ async def neural_page(request: Request):
 
 
 @app.post("/generate/process_algorithmic_start")
-async def process_algorithmic_start(background_tasks: BackgroundTasks,
-                                    generator: str = Form(...),
-                                    duration: str = Form(...),
-                                    tempo: str = Form(...),
-                                    scale: int = Form(...)):
+async def process_algorithmic(background_tasks: BackgroundTasks,
+                              request: Request,
+                              generator: str = Form(...),
+                              duration: str = Form(...),
+                              tempo: str = Form(...),
+                              scale: int = Form(...)):
+    ip_address = request.client.host
+    if ip_address in tracks_number_by_ip:
+        if tracks_number_by_ip[ip_address] >= MAX_TRACKS:
+            return JSONResponse(content={"error":
+                                         "Too Many Requests. "
+                                         "Please try again later."},
+                                status_code=429)
+        else:
+            tracks_number_by_ip[ip_address] += 1
+    else:
+        tracks_number_by_ip[ip_address] = 1
+
+    subprocess.run(["bash", "utils/remove_old_files.sh", "60"])
 
     filename: int = random.randint(1, 100_000_000)
+    filepath = os.path.join('generated_data', str(filename) + '.mid')
+    while os.path.exists(filepath):
+        filename = random.randint(1, 100_000_000)
+        filepath = os.path.join('generated_data', str(filename) + '.mid')
 
     minutes, seconds = map(int, duration.split(':'))
     duration_sec = minutes * 60 + seconds
@@ -102,14 +124,21 @@ async def process_algorithmic_start(background_tasks: BackgroundTasks,
                                       progress_map=progress_map,
                                       pulse=tempo,
                                       duration_sec=duration_sec)
-
     return JSONResponse(content={"filename": filename})
 
 
 # render generated algo track
 @app.post("/generate/process_algo_finish")
-async def process_algo_finish(filename: int = Form(...)):
+async def process_algo_finish(request: Request,
+                              filename: int = Form(...)):
+    ip_address = request.client.host
     midi2mp3(filename=filename)
+    filepath = os.path.join('generated_data', str(filename) + '.mp3')
+    if not os.path.exists(filepath):
+        tracks_number_by_ip[ip_address] -= 1
+        return JSONResponse(content={"error": "MP3 file not found"},
+                            status_code=500)
+    tracks_number_by_ip[ip_address] -= 1
 
 
 # is used to get current generation progress in JS code
@@ -121,22 +150,50 @@ async def progress(filename: int = Form(...)):
 # function that initializes neural track generation as a background task
 @app.post("/generate/process_neural_start")
 async def process_neural_start(background_tasks: BackgroundTasks,
+                               request: Request,
                                generator: str = Form(...),
                                duration: str = Form(...),
                                tempo: str = Form(...),
                                correct_scale: bool = Form(...)):
+    ip_address = request.client.host
+    if ip_address in tracks_number_by_ip:
+        if tracks_number_by_ip[ip_address] >= MAX_TRACKS:
+            return JSONResponse(content={"error": "Too Many Requests. "
+                                         "Please try again later."},
+                                status_code=429)
+        else:
+            tracks_number_by_ip[ip_address] += 1
+    else:
+        tracks_number_by_ip[ip_address] = 1
+
+    subprocess.run(["bash", "utils/remove_old_files.sh", "60"])
     filename: int = random.randint(1, 100_000_000)
+    filepath = os.path.join('generated_data', str(filename) + '.mid')
+    while os.path.exists(filepath):
+        filename = random.randint(1, 100_000_000)
+        filepath = os.path.join('generated_data', str(filename) + '.mid')
+
     minutes, seconds = map(int, duration.split(':'))
     duration_sec = minutes * 60 + seconds
 
     log_data('utils/log.json', "Neural", generator,
              datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-    models_folder = \
-        os.path.join('generators', 'neural', 'lstm', 'models', generator)
-    all_models = os.listdir(models_folder)
-    random_model = random.choice(all_models)
-    model_path = os.path.join(models_folder, random_model)
+    try:
+        models_folder = \
+            os.path.join('generators', 'neural', 'lstm', 'models', generator)
+        all_models = os.listdir(models_folder)
+        random_model = random.choice(all_models)
+        model_path = os.path.join(models_folder, random_model)
+    except Exception:
+        tracks_number_by_ip[ip_address] -= 1
+        return JSONResponse(content={"error": "Model file not found"},
+                            status_code=500)
+
+    if not os.path.exists(model_path):
+        tracks_number_by_ip[ip_address] -= 1
+        return JSONResponse(content={"error": "Model file not found"},
+                            status_code=500)
 
     progress_map[filename] = 0
     background_tasks.add_task(generate_neural,
@@ -153,8 +210,17 @@ async def process_neural_start(background_tasks: BackgroundTasks,
 
 # render generated neural track
 @app.post("/generate/process_neural_finish")
-async def process_neural_finish(filename: int = Form(...)):
+async def process_neural_finish(request: Request, filename: int = Form(...)):
+    ip_address = request.client.host
+
     midi2mp3(filename=filename)
+
+    filepath = os.path.join('generated_data', str(filename) + '.mp3')
+    if not os.path.exists(filepath):
+        tracks_number_by_ip[ip_address] -= 1
+        return JSONResponse(content={"error": "MP3 file not found"},
+                            status_code=500)
+    tracks_number_by_ip[ip_address] -= 1
 
 
 @app.post("/generate/edit")
@@ -164,13 +230,31 @@ async def edit(file: str = Form(...),
                fade_in: str = Form(...),
                fade_out: str = Form(...)):
 
+    subprocess.run(["bash", "utils/remove_old_files.sh", "60"])
+
     edit_id: int = random.randint(1, 100_000_000)
+    file_path = os.path.abspath(file)
+    export_path = os.path.join(os.path.dirname(
+        file_path), "edited_" + os.path.basename(file_path).
+            split('.')[0] + f'_{edit_id}.mp3')
+    while os.path.exists(export_path):
+        edit_id: int = random.randint(1, 100_000_000)
+        file_path = os.path.abspath(file)
+        export_path = os.path.join(os.path.dirname(
+            file_path), "edited_" + os.path.basename(file_path).
+                split('.')[0] + f'_{edit_id}.mp3')
+
     edited_file = edit_mp3(file,
                            str_to_secs(start),
                            str_to_secs(end),
                            edit_id,
                            int(fade_in),
                            int(fade_out))
+    print(export_path)
+    if not os.path.exists(export_path):
+        return JSONResponse(content={"error": "Edited file not found"},
+                            status_code=500)
+
     return JSONResponse(content={"file": edited_file})
 
 

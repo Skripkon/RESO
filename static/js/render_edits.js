@@ -20,6 +20,11 @@ $(document).ready(function () {
                 var mp3Url = '/generated_data/' + data.file;
                 $('#mp3PlayerContainerForAlgorithmicMusicEdited').html('<audio-player src="/generated_data/' + data.file + '" bar-width="5" bar-gap="2" preload loop> </audio-player>')
                 $('#downloadEditedMP3ButtonContainer').html('<a class="hyperlink-text" id="DownloadEditedMP3File" href="/downloadEditedMP3/' + data.file + '" download>Download MP3</a>');
+            }, 
+            error: function(xhr, status, error) {
+                var errorMessage = xhr.responseJSON.error;
+                alert(errorMessage);
+                window.location.reload();
             }
         });
     });
@@ -45,6 +50,11 @@ $(document).ready(function () {
                 var mp3Url = '/generated_data/' + data.file;
                 $('#mp3PlayerContainerForNeuralMusicEdited').html('<audio-player src="/generated_data/' + data.file + '" bar-width="5" bar-gap="2" preload loop> </audio-player>')
                 $('#downloadEditedMP3ButtonContainer').html('<a class="hyperlink-text" id="DownloadEditedMP3File" href="/downloadEditedMP3/' + data.file + '" download>Download MP3</a>');
+            }, 
+            error: function(xhr, status, error) {
+                var errorMessage = xhr.responseJSON.error;
+                alert(errorMessage);
+                window.location.reload();
             }
         });
     });

@@ -38,6 +38,11 @@ async function algoUpdateProgress(filename) {
                 clearInterval(algoRefreshIntervalId);
                 algoFinish(filename);
             }
+        },
+        error: function(xhr, status, error) {
+            var errorMessage = xhr.responseJSON.error;
+            alert(errorMessage);
+            window.location.reload();
         }
     });
 }
@@ -60,6 +65,11 @@ function generateAlgoTrack() {
         success: function (data) {
             document.getElementById('GenerateAlgorithmicMusic').disabled = true;
             algoRefreshIntervalId = setInterval(algoUpdateProgress, ALGO_PROGRESS_BAR_REFRESH_RATE, data.filename);
+        },
+        error: function(xhr, status, error) {
+            var errorMessage = xhr.responseJSON.error;
+            alert(errorMessage);
+            window.location.reload();
         }
     });
 }
@@ -114,6 +124,11 @@ function algoFinish(filename) {
             var renderButton = document.getElementById('EditAlgoRenderButton');
             renderButton.innerText = "Render";
             document.getElementById('GenerateAlgorithmicMusic').disabled = false;
+        },
+        error: function(xhr, status, error) {
+            var errorMessage = xhr.responseJSON.error;
+            alert(errorMessage);
+            window.location.reload();
         }
     });   
 }
