@@ -32,6 +32,7 @@ async function neuroUpdateProgress(filename) {
                 document.getElementById('neuroProgressBarText').innerText = "Generating";
             }
             if (data.progress == 100) {
+                console.log("Generation 100")
                 neuroGenerationState = 'rendering';
                 document.getElementById('neuroProgressBarText').innerText = "Rendering";
                 clearInterval(neuroRefreshIntervalId);
@@ -79,7 +80,7 @@ function neuroFinish(filename) {
     console.log("Finish")
     $.ajax({
         type: 'POST',
-        url: '/generate/process_neural_finish',
+        url: '/generate/process_track_finish',
         data: { 'filename': filename },
         success: function () {
             var filenameMP3 = filename + '.mp3';

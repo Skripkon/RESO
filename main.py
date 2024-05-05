@@ -121,10 +121,10 @@ async def process_algorithmic(background_tasks: BackgroundTasks,
     return JSONResponse(content={"filename": filename})
 
 
-# render generated algo track
-@app.post("/generate/process_algo_finish")
-async def process_algo_finish(request: Request,
-                              filename: int = Form(...)):
+# render generated track
+@app.post("/generate/process_track_finish")
+async def process_track_finish(request: Request,
+                               filename: int = Form(...)):
     ip_address = request.client.host
     tracks_number_by_ip[ip_address] -= 1
     midi2mp3(filename=filename)
@@ -204,19 +204,6 @@ async def process_neural_start(background_tasks: BackgroundTasks,
                               progress_map=progress_map
                               )
     return JSONResponse(content={"filename": filename})
-
-
-# render generated neural track
-@app.post("/generate/process_neural_finish")
-async def process_neural_finish(request: Request, filename: int = Form(...)):
-    ip_address = request.client.host
-    tracks_number_by_ip[ip_address] -= 1
-    del progress_map[filename]
-    midi2mp3(filename=filename)
-    filepath = os.path.join('generated_data', str(filename) + '.mp3')
-    if not os.path.exists(filepath):
-        return JSONResponse(content={"error": "MP3 file not found"},
-                            status_code=500)
 
 
 @app.post("/generate/edit")

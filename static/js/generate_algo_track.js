@@ -77,7 +77,7 @@ function generateAlgoTrack() {
 function algoFinish(filename) {
     $.ajax({
         type: 'POST',
-        url: '/generate/process_algo_finish',
+        url: '/generate/process_track_finish',
         data: { 'filename': filename },
         success: function () {
             // Update the MP3 player content with the returned filename
