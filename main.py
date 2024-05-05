@@ -39,6 +39,52 @@ app.mount("/generated_data", StaticFiles(directory="generated_data"),
 request_to_sownload_files()
 
 
+def generate_algo_task(generator, 
+                       scale, 
+                       filename,
+                       progress_map,
+                       pulse,
+                       duration_sec,
+                       ip_address):
+    match generator:
+        case "AlgoGen01":
+            generate_music01(scale=scale,
+                            filename=filename,
+                            progress_map=progress_map,
+                            pulse=pulse,
+                            duration_sec=duration_sec
+                            )
+            tracks_number_by_ip[ip_address] -= 1
+        case "AlgoGen02":
+            generate_music02(scale=scale,
+                            filename=filename,
+                            progress_map=progress_map,
+                            pulse=pulse,
+                            duration_sec=duration_sec
+                            )
+            tracks_number_by_ip[ip_address] -= 1
+
+
+def generate_neural_task(composer,
+                         model_path,
+                         filename,
+                         tempo,
+                         duration,
+                         correct_scale,
+                         progress_map,
+                         ip_address
+                         ):
+    generate_neural(composer=composer,
+                    model_path=model_path,
+                    filename=filename,
+                    tempo=tempo,
+                    duration=duration,
+                    correct_scale=correct_scale,
+                    progress_map=progress_map
+                    )
+    tracks_number_by_ip[ip_address] -= 1
+
+
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     return templates.TemplateResponse("main.html", {"request": request})
@@ -103,21 +149,14 @@ async def process_algorithmic(background_tasks: BackgroundTasks,
     log_data('utils/log.json', "Algo", generator,
              datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-    match generator:
-        case "AlgoGen01":
-            background_tasks.add_task(generate_music01,
-                                      scale=scale,
-                                      filename=filename,
-                                      progress_map=progress_map,
-                                      pulse=tempo,
-                                      duration_sec=duration_sec)
-        case "AlgoGen02":
-            background_tasks.add_task(generate_music02,
-                                      scale=scale,
-                                      filename=filename,
-                                      progress_map=progress_map,
-                                      pulse=tempo,
-                                      duration_sec=duration_sec)
+    background_tasks.add_task(generate_algo_task,
+                                generator=generator,
+                                scale=scale,
+                                filename=filename,
+                                progress_map=progress_map,
+                                pulse=tempo,
+                                duration_sec=duration_sec,
+                                ip_address=ip_address)
     return JSONResponse(content={"filename": filename})
 
 
@@ -194,14 +233,15 @@ async def process_neural_start(background_tasks: BackgroundTasks,
                             status_code=500)
 
     progress_map[filename] = 0
-    background_tasks.add_task(generate_neural,
+    background_tasks.add_task(generate_neural_task,
                               composer=generator,
                               model_path=model_path,
                               filename=filename,
                               tempo=tempo,
                               duration=duration_sec,
                               correct_scale=correct_scale,
-                              progress_map=progress_map
+                              progress_map=progress_map,
+                              ip_address=ip_address
                               )
     return JSONResponse(content={"filename": filename})
 
