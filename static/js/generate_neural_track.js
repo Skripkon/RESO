@@ -1,6 +1,6 @@
 var neuroRefreshIntervalId = NaN;
 var neuroProgressBarTextRefreshIntervalId = NaN;
-const NEURO_PROGRESS_BAR_REFRESH_RATE = 100; // ms
+const NEURO_PROGRESS_BAR_REFRESH_RATE = 150; // ms
 const NEURO_PROGRESS_BAR_TEXT_REFRESH_RATE = 300; // ms
 var neuroGenerationState = 'initial';
 
@@ -26,14 +26,26 @@ async function neuroUpdateProgress(filename) {
         url: '/progress',
         data: { 'filename': filename },
         success: function (data) {
-            document.getElementById('neuroProgressBar').style.width = `${data.progress}%`;
+            var neuroProgressBar = document.getElementById('neuroProgressBar');
+            var neuroProgressBarText = document.getElementById('neuroProgressBarText');
             if (data.progress > 0 && neuroGenerationState == 'initial') {
+                neuroProgressBar.style.width = `${data.progress}%`;
+                neuroProgressBarText.innerText = "Generating";
                 neuroGenerationState = 'generating';
-                document.getElementById('neuroProgressBarText').innerText = "Generating";
             }
-            if (data.progress == 100) {
+            if (data.progress < 100 && neuroGenerationState == 'generating') {
+                neuroProgressBar.style.width = `${data.progress}%`;
+            }
+            if (data.progress == 100 && neuroGenerationState == 'generating') {
+                neuroProgressBar.style.width = `${data.progress}%`;
+                neuroGenerationState = 'saving';
+                neuroProgressBarText.innerText = "Saving";
+            }
+            // special value that indicates that the midi has been saved
+            if (data.progress == 200) {
+                neuroProgressBar.style.width = "100%";
                 neuroGenerationState = 'rendering';
-                document.getElementById('neuroProgressBarText').innerText = "Rendering";
+                neuroProgressBarText.innerText = "Rendering";
                 clearInterval(neuroRefreshIntervalId);
                 neuroFinish(filename);
             }

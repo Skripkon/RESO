@@ -1,7 +1,7 @@
 from werkzeug.utils import secure_filename
 from generators.algorithmic.Generator01 import generate_music01
 from generators.algorithmic.Generator02 import generate_music02
-from generators.neural.lstm.Generator import generate_neural
+from generators.neural.lstm.NeuralGenerator import generate_neural
 from fastapi import FastAPI, Request, File, UploadFile
 from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
@@ -254,6 +254,10 @@ async def process_neural_start(background_tasks: BackgroundTasks,
 @app.post("/generate/process_track_finish")
 async def process_track_finish(request: Request,
                                filename: int = Form(...)):
+    if not os.path.exists(os.path.join('generated_data', f'{filename}.mid')):
+        return JSONResponse(content={"error": "MIDI file not found"},
+                            status_code=500)
+
     midi2mp3(filename=filename)
     filepath = os.path.join('generated_data', str(filename) + '.mp3')
     if not os.path.exists(filepath):

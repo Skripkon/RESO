@@ -151,7 +151,7 @@ def generate_music02(scale: int,
                             cur_time=time.time())
         add_one_interval()
 
-    progress_bar.end()
+    progress_bar.update(current=quarters_count, cur_time=time.time())
 
     # Combine hands into stream
     myStream = stream.Stream([right_hand, left_hand])
@@ -163,6 +163,8 @@ def generate_music02(scale: int,
     filepath_pdf = os.path.join("generated_data", f"{filename}.pdf")
     myStream.write('midi', fp=filepath_midi)
     myStream.write('musicxml.pdf', fp=filepath_pdf)
+
+    progress_bar.end()
 
     # For this download MuseScore 3
     # myStream.show()

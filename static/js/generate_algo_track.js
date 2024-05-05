@@ -1,6 +1,6 @@
 var algoRefreshIntervalId = NaN;
 var algoProgressBarTextRefreshIntervalId = NaN;
-const ALGO_PROGRESS_BAR_REFRESH_RATE = 50; // ms
+const ALGO_PROGRESS_BAR_REFRESH_RATE = 150; // ms
 const ALGO_PROGRESS_BAR_TEXT_REFRESH_RATE = 300; // ms
 var algoGenerationState = 'initial';
 
@@ -26,14 +26,26 @@ async function algoUpdateProgress(filename) {
         url: '/progress',
         data: { 'filename': filename },
         success: function (data) {
-            document.getElementById('algoProgressBar').style.width = `${data.progress}%`;
+            var algoProgressBar = document.getElementById('algoProgressBar');
+            var algoProgressBarText = document.getElementById('algoProgressBarText');
             if (data.progress > 0 && algoGenerationState == 'initial') {
+                algoProgressBar.style.width = `${data.progress}%`;
+                algoProgressBarText.innerText = "Generating";
                 algoGenerationState = 'generating';
-                document.getElementById('algoProgressBarText').innerText = "Generating";
+            }
+            if (data.progress < 100 && algoGenerationState == 'generating') {
+                algoProgressBar.style.width = `${data.progress}%`;
             }
             if (data.progress == 100 && algoGenerationState == 'generating') {
+                algoProgressBar.style.width = `${data.progress}%`;
+                algoGenerationState = 'saving';
+                algoProgressBarText.innerText = "Saving";
+            }
+            // special value that indicates that the midi has been saved
+            if (data.progress == 200) {
+                algoProgressBar.style.width = "100%";
                 algoGenerationState = 'rendering';
-                document.getElementById('algoProgressBarText').innerText = "Rendering";
+                algoProgressBarText.innerText = "Rendering";
                 clearInterval(algoRefreshIntervalId);
                 algoFinish(filename);
             }
