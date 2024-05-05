@@ -21,7 +21,6 @@ async function algoCycleThroughDots() {
 // function that is called once every PROGRESS_BAR_REFRESH_RATE ms. It updates the progress bar length and
 // starts the algoFinish() function if the progress is at 100%
 async function algoUpdateProgress(filename) {
-    console.log("updating algo track");
     $.ajax({
         type: 'POST',
         url: '/progress',
@@ -81,7 +80,6 @@ function algoFinish(filename) {
         data: { 'filename': filename },
         success: function () {
             // Update the MP3 player content with the returned filename
-            console.log("Algo finish")
             var filenameMP3 = filename + '.mp3';
             var filenameMID = filename + '.mid';
             var filenameMusicXML = filename + '.musicxml';

@@ -17,7 +17,13 @@ import random
 import os
 import datetime
 
+# tracks that were edited longer than this many minutes ago will be deleted
+DELETION_THRESHOLD = 10
+# number of tracks that can be generated per IP address at the same time
 MAX_TRACKS = 1
+
+tracks_number_by_ip = {}
+progress_map = {}
 
 os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 
@@ -26,9 +32,6 @@ app = FastAPI()
 # Configure Jinja2 templates
 templates = Jinja2Templates(directory="templates")
 
-progress_map = {}
-
-tracks_number_by_ip = {}
 
 # Mount the static directory to serve static files (like CSS, JS, images, etc.)
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -37,52 +40,6 @@ app.mount("/generated_data", StaticFiles(directory="generated_data"),
           name="generated_data")
 
 request_to_sownload_files()
-
-
-def generate_algo_task(generator, 
-                       scale, 
-                       filename,
-                       progress_map,
-                       pulse,
-                       duration_sec,
-                       ip_address):
-    match generator:
-        case "AlgoGen01":
-            generate_music01(scale=scale,
-                            filename=filename,
-                            progress_map=progress_map,
-                            pulse=pulse,
-                            duration_sec=duration_sec
-                            )
-            tracks_number_by_ip[ip_address] -= 1
-        case "AlgoGen02":
-            generate_music02(scale=scale,
-                            filename=filename,
-                            progress_map=progress_map,
-                            pulse=pulse,
-                            duration_sec=duration_sec
-                            )
-            tracks_number_by_ip[ip_address] -= 1
-
-
-def generate_neural_task(composer,
-                         model_path,
-                         filename,
-                         tempo,
-                         duration,
-                         correct_scale,
-                         progress_map,
-                         ip_address
-                         ):
-    generate_neural(composer=composer,
-                    model_path=model_path,
-                    filename=filename,
-                    tempo=tempo,
-                    duration=duration,
-                    correct_scale=correct_scale,
-                    progress_map=progress_map
-                    )
-    tracks_number_by_ip[ip_address] -= 1
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -122,6 +79,65 @@ async def neural_page(request: Request):
     return templates.TemplateResponse("neural.html", {"request": request})
 
 
+# is used to get current generation progress in JS code
+@app.post("/progress")
+async def progress(filename: int = Form(...)):
+    return {"progress": 100 * float(progress_map.get(filename, 0))}
+
+
+def max_generations_count_surpass(ip_address: str):
+    """
+    Checks whether the user has already reached synchronous generation
+    limit set by constant MAX_TRACK.
+    """
+    tracks_number_by_ip[ip_address] = tracks_number_by_ip.get(ip_address,
+                                                              0) + 1
+    if tracks_number_by_ip[ip_address] > MAX_TRACKS:
+        tracks_number_by_ip[ip_address] -= 1
+        return True
+    return False
+
+
+def get_filename():
+    """
+    Generates a random int to be used for a filename avoiding collisions.
+    """
+    filename: int = random.randint(1, 100_000_000)
+    filepath = os.path.join('generated_data', str(filename) + '.mid')
+    while os.path.exists(filepath):
+        filename = random.randint(1, 100_000_000)
+        filepath = os.path.join('generated_data', str(filename) + '.mid')
+    return filename
+
+
+# task to be added as a background task for algorithmic generation
+# generates the track and subtracts 1 from the according track count
+def generate_algo_task(generator,
+                       scale,
+                       filename,
+                       progress_map,
+                       pulse,
+                       duration_sec,
+                       ip_address):
+    match generator:
+        case "AlgoGen01":
+            generate_music01(scale=scale,
+                             filename=filename,
+                             progress_map=progress_map,
+                             pulse=pulse,
+                             duration_sec=duration_sec
+                             )
+        case "AlgoGen02":
+            generate_music02(scale=scale,
+                             filename=filename,
+                             progress_map=progress_map,
+                             pulse=pulse,
+                             duration_sec=duration_sec
+                             )
+    tracks_number_by_ip[ip_address] -= 1
+
+
+# function that initializes algorithmic track generation as a background task
 @app.post("/generate/process_algorithmic_start")
 async def process_algorithmic(background_tasks: BackgroundTasks,
                               request: Request,
@@ -132,16 +148,13 @@ async def process_algorithmic(background_tasks: BackgroundTasks,
     ip_address = request.client.host
     if max_generations_count_surpass(ip_address):
         return JSONResponse(content={
-            "error": "Too Many Requests. Please try again later."},
+            "error": "You have a generation running. Please try again later."},
             status_code=429)
 
-    subprocess.run(["bash", "utils/remove_old_files.sh", "60"])
+    subprocess.run(["bash", "utils/remove_old_files.sh",
+                    str(DELETION_THRESHOLD)])
 
-    filename: int = random.randint(1, 100_000_000)
-    filepath = os.path.join('generated_data', str(filename) + '.mid')
-    while os.path.exists(filepath):
-        filename = random.randint(1, 100_000_000)
-        filepath = os.path.join('generated_data', str(filename) + '.mid')
+    filename: int = get_filename()
 
     minutes, seconds = map(int, duration.split(':'))
     duration_sec = minutes * 60 + seconds
@@ -150,43 +163,36 @@ async def process_algorithmic(background_tasks: BackgroundTasks,
              datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     background_tasks.add_task(generate_algo_task,
-                                generator=generator,
-                                scale=scale,
-                                filename=filename,
-                                progress_map=progress_map,
-                                pulse=tempo,
-                                duration_sec=duration_sec,
-                                ip_address=ip_address)
+                              generator=generator,
+                              scale=scale,
+                              filename=filename,
+                              progress_map=progress_map,
+                              pulse=tempo,
+                              duration_sec=duration_sec,
+                              ip_address=ip_address)
     return JSONResponse(content={"filename": filename})
 
 
-# render generated track
-@app.post("/generate/process_track_finish")
-async def process_track_finish(request: Request,
-                               filename: int = Form(...)):
-    ip_address = request.client.host
+# task to be added as a background task for neural generation
+# generates the track and subtracts 1 from the according track count
+def generate_neural_task(composer,
+                         model_path,
+                         filename,
+                         tempo,
+                         duration,
+                         correct_scale,
+                         progress_map,
+                         ip_address
+                         ):
+    generate_neural(composer=composer,
+                    model_path=model_path,
+                    filename=filename,
+                    tempo=tempo,
+                    duration=duration,
+                    correct_scale=correct_scale,
+                    progress_map=progress_map
+                    )
     tracks_number_by_ip[ip_address] -= 1
-    midi2mp3(filename=filename)
-    filepath = os.path.join('generated_data', str(filename) + '.mp3')
-    if not os.path.exists(filepath):
-        return JSONResponse(content={"error": "MP3 file not found"},
-                            status_code=500)
-
-
-# is used to get current generation progress in JS code
-@app.post("/progress")
-async def progress(filename: int = Form(...)):
-    return {"progress": 100 * float(progress_map.get(filename, 0))}
-
-
-def max_generations_count_surpass(ip_address: str):
-    tracks_number_by_ip[ip_address] = tracks_number_by_ip.get(ip_address,
-                                                              0) + 1
-    if tracks_number_by_ip[ip_address] > MAX_TRACKS:
-        tracks_number_by_ip[ip_address] -= 1
-        print(f"IP address {ip_address} currently has {tracks_number_by_ip[ip_address]} tracks generating")
-        return True
-    return False
 
 
 # function that initializes neural track generation as a background task
@@ -200,15 +206,13 @@ async def process_neural_start(background_tasks: BackgroundTasks,
     ip_address = request.client.host
     if max_generations_count_surpass(ip_address):
         return JSONResponse(content={
-            "error": "Too Many Requests. Please try again later."},
+            "error": "You have a generation running. Please try again later."},
             status_code=429)
 
-    subprocess.run(["bash", "utils/remove_old_files.sh", "60"])
-    filename: int = random.randint(1, 100_000_000)
-    filepath = os.path.join('generated_data', str(filename) + '.mid')
-    while os.path.exists(filepath):
-        filename = random.randint(1, 100_000_000)
-        filepath = os.path.join('generated_data', str(filename) + '.mid')
+    subprocess.run(["bash", "utils/remove_old_files.sh",
+                    str(DELETION_THRESHOLD)])
+
+    filename: int = get_filename()
 
     minutes, seconds = map(int, duration.split(':'))
     duration_sec = minutes * 60 + seconds
@@ -246,6 +250,29 @@ async def process_neural_start(background_tasks: BackgroundTasks,
     return JSONResponse(content={"filename": filename})
 
 
+# render generated track
+@app.post("/generate/process_track_finish")
+async def process_track_finish(request: Request,
+                               filename: int = Form(...)):
+    midi2mp3(filename=filename)
+    filepath = os.path.join('generated_data', str(filename) + '.mp3')
+    if not os.path.exists(filepath):
+        return JSONResponse(content={"error": "MP3 file not found"},
+                            status_code=500)
+
+
+def get_edit_id(filename: int):
+    """
+    Generates a random int to be used for a filename avoiding collisions.
+    """
+    edit_id: int = random.randint(1, 100_000_000)
+    edit_filename = f'edited_{filename}_{edit_id}.mp3'
+    while os.path.exists(os.path.join('generated_data', edit_filename)):
+        edit_id: int = random.randint(1, 100_000_000)
+        edit_filename = f'edited_{filename}_{edit_id}.mp3'
+    return edit_id
+
+
 @app.post("/generate/edit")
 async def edit(file: str = Form(...),
                start: str = Form(...),
@@ -253,28 +280,18 @@ async def edit(file: str = Form(...),
                fade_in: str = Form(...),
                fade_out: str = Form(...)):
 
-    subprocess.run(["bash", "utils/remove_old_files.sh", "60"])
+    subprocess.run(["bash", "utils/remove_old_files.sh",
+                    str(DELETION_THRESHOLD)])
 
-    edit_id: int = random.randint(1, 100_000_000)
-    file_path = os.path.abspath(file)
-    export_path = os.path.join(os.path.dirname(
-        file_path), "edited_" + os.path.basename(file_path).
-            split('.')[0] + f'_{edit_id}.mp3')
-    while os.path.exists(export_path):
-        edit_id: int = random.randint(1, 100_000_000)
-        file_path = os.path.abspath(file)
-        export_path = os.path.join(os.path.dirname(
-            file_path), "edited_" + os.path.basename(file_path).
-                split('.')[0] + f'_{edit_id}.mp3')
-
+    edit_id: int = get_edit_id(int(os.path.basename(file).split('.')[0]))
     edited_file = edit_mp3(file,
                            str_to_secs(start),
                            str_to_secs(end),
                            edit_id,
                            int(fade_in),
                            int(fade_out))
-    print(export_path)
-    if not os.path.exists(export_path):
+
+    if not os.path.exists(os.path.join('generated_data', edited_file)):
         return JSONResponse(content={"error": "Edited file not found"},
                             status_code=500)
 
@@ -311,7 +328,7 @@ async def download_generated_file_pdf(filename: str):
 @app.get("/downloadEditedMP3/{filename}")
 async def download_edited_file(filename: str):
     file_path = os.path.join("generated_data", filename)
-    return FileResponse(file_path, media_type='audio/midi', filename=filename)
+    return FileResponse(file_path, media_type='audio/mpeg', filename=filename)
 
 
 @app.get("/help/generators_type", response_class=HTMLResponse)

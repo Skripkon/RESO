@@ -32,7 +32,6 @@ async function neuroUpdateProgress(filename) {
                 document.getElementById('neuroProgressBarText').innerText = "Generating";
             }
             if (data.progress == 100) {
-                console.log("Generation 100")
                 neuroGenerationState = 'rendering';
                 document.getElementById('neuroProgressBarText').innerText = "Rendering";
                 clearInterval(neuroRefreshIntervalId);
@@ -77,7 +76,6 @@ function generateNeuralTrack() {
 
 // switch from 'generating' state to 'generated' state (render the track, show editing buttons)
 function neuroFinish(filename) {
-    console.log("Finish")
     $.ajax({
         type: 'POST',
         url: '/generate/process_track_finish',
@@ -112,7 +110,6 @@ function neuroFinish(filename) {
             $('#downloadEditedMP3ButtonContainer').html('');
             document.getElementById('EditNeuroRenderButton').innerText = "Render";
             document.getElementById('GenerateNeuralMusic').disabled = false;
-            enableGenerateButton();
         },
         error: function(xhr, status, error) {
             var errorMessage = xhr.responseJSON.error;
