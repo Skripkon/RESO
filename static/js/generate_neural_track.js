@@ -1,6 +1,6 @@
 var neuroRefreshIntervalId = NaN;
 var neuroProgressBarTextRefreshIntervalId = NaN;
-const NEURO_PROGRESS_BAR_REFRESH_RATE = 100; // ms
+const NEURO_PROGRESS_BAR_REFRESH_RATE = 150; // ms
 const NEURO_PROGRESS_BAR_TEXT_REFRESH_RATE = 300; // ms
 var neuroGenerationState = 'initial';
 
@@ -26,14 +26,26 @@ async function neuroUpdateProgress(filename) {
         url: '/progress',
         data: { 'filename': filename },
         success: function (data) {
-            document.getElementById('neuroProgressBar').style.width = `${data.progress}%`;
+            var neuroProgressBar = document.getElementById('neuroProgressBar');
+            var neuroProgressBarText = document.getElementById('neuroProgressBarText');
             if (data.progress > 0 && neuroGenerationState == 'initial') {
+                neuroProgressBar.style.width = `${data.progress}%`;
+                neuroProgressBarText.innerText = "Generating";
                 neuroGenerationState = 'generating';
-                document.getElementById('neuroProgressBarText').innerText = "Generating";
+            }
+            if (data.progress < 100 && neuroGenerationState == 'generating') {
+                neuroProgressBar.style.width = `${data.progress}%`;
             }
             if (data.progress == 100 && neuroGenerationState == 'generating') {
+                neuroProgressBar.style.width = `${data.progress}%`;
+                neuroGenerationState = 'saving';
+                neuroProgressBarText.innerText = "Saving";
+            }
+            // special value that indicates that the midi has been saved
+            if (data.progress == 200) {
+                neuroProgressBar.style.width = "100%";
                 neuroGenerationState = 'rendering';
-                document.getElementById('neuroProgressBarText').innerText = "Rendering";
+                neuroProgressBarText.innerText = "Rendering";
                 clearInterval(neuroRefreshIntervalId);
                 neuroFinish(filename);
             }
@@ -53,16 +65,16 @@ function generateNeuralTrack() {
     var TempoOfTheTrack = $('#TempoOfTheTrack').val();
     var NeuroCorrectScale = $('#NeuroCorrectScale').val();
     
-    document.getElementById('neuroProgressBarText').innerText = "Initializing";
-    document.getElementById('neuroProgressBar').setAttribute("style","width: 0%");
-    $('#neuroProgressBarContainer').show();
-    neuroProgressBarTextRefreshIntervalId = setInterval(neuroCycleThroughDots, NEURO_PROGRESS_BAR_TEXT_REFRESH_RATE);
-   
+    
     $.ajax({
         type: 'POST',
         url: '/generate/process_neural_start',
         data: { 'generator': NeuralGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack, 'correct_scale': NeuroCorrectScale },
         success: function (data) {
+            document.getElementById('neuroProgressBarText').innerText = "Initializing";
+            document.getElementById('neuroProgressBar').setAttribute("style","width: 0%");
+            $('#neuroProgressBarContainer').show();
+            neuroProgressBarTextRefreshIntervalId = setInterval(neuroCycleThroughDots, NEURO_PROGRESS_BAR_TEXT_REFRESH_RATE);
             document.getElementById('GenerateNeuralMusic').disabled = true;
             neuroRefreshIntervalId = setInterval(neuroUpdateProgress, NEURO_PROGRESS_BAR_REFRESH_RATE, data.filename);
         },
@@ -78,7 +90,7 @@ function generateNeuralTrack() {
 function neuroFinish(filename) {
     $.ajax({
         type: 'POST',
-        url: '/generate/process_neural_finish',
+        url: '/generate/process_track_finish',
         data: { 'filename': filename },
         success: function () {
             var filenameMP3 = filename + '.mp3';
@@ -110,7 +122,6 @@ function neuroFinish(filename) {
             $('#downloadEditedMP3ButtonContainer').html('');
             document.getElementById('EditNeuroRenderButton').innerText = "Render";
             document.getElementById('GenerateNeuralMusic').disabled = false;
-            enableGenerateButton();
         },
         error: function(xhr, status, error) {
             var errorMessage = xhr.responseJSON.error;

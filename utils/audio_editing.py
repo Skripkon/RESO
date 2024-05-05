@@ -2,7 +2,10 @@ from pydub import AudioSegment
 import os
 
 
-def str_to_secs(time_str):
+def str_to_secs(time_str: str) -> int:
+    """
+    Converts string in format 'mm:ss' to seconds as an integer.
+    """
     minutes, seconds = time_str.split(':')
     return int(minutes) * 60 + int(seconds)
 
@@ -13,7 +16,7 @@ def edit_mp3(relative_file_path: str,
              edit_id: int,
              fade_in_len=0,
              fade_out_len=0
-             ):
+             ) -> str:
     """
         Cuts an mp3 file according to given time and applies
         fade-in and fade-out.

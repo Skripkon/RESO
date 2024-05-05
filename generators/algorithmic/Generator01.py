@@ -72,7 +72,8 @@ def generate_music01(scale: int,
         progress_bar.update(current=i, cur_time=time.time())
 
     add_one_interval(velocity=50)
-    progress_bar.end()
+
+    progress_bar.update(current=intervals, cur_time=time.time())
 
     # Combine hands into stream
     myStream = stream.Stream([right_hand, left_hand])
@@ -84,3 +85,5 @@ def generate_music01(scale: int,
     filepath_pdf = os.path.join("generated_data", f"{filename}.pdf")
     myStream.write('midi', fp=filepath_midi)
     myStream.write('musicxml.pdf', fp=filepath_pdf)
+
+    progress_bar.end()

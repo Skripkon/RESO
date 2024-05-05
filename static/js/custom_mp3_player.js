@@ -203,7 +203,6 @@
 
     changeVolume() {
       this.volume = this.MAX_VOLUME - Number(this.volumeBar.value);
-      console.log(this.volume)
 
       if (Number(this.volume) > 0) {
         this.volumeBar.parentNode.className = 'volume-bar over';

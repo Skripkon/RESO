@@ -116,6 +116,13 @@
     cursor: pointer;
 }
 
+.render-button:disabled {
+    pointer-events: none;
+    color: #687780;
+    border-color: #687780;
+    background-color: transparent;
+  }
+
 .ContainerWithDownloadButton {
     display: flex;
     justify-content: center;

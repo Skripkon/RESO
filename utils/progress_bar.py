@@ -41,6 +41,7 @@ class ProgressBar:
                   % (arrow, spaces, percent), end='\r')
 
     def end(self, end_message: str = 'Generation completed.'):
-        self.progress_map[self.filename] = 1
+        # special value that indicates that the midi file has been saved
+        self.progress_map[self.filename] = 2
         print(end_message + ' ' *
               (len(self.message) + self.bar_length - len(end_message) + 25))
