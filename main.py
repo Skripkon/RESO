@@ -84,16 +84,10 @@ async def process_algorithmic(background_tasks: BackgroundTasks,
                               tempo: str = Form(...),
                               scale: int = Form(...)):
     ip_address = request.client.host
-    if ip_address in tracks_number_by_ip:
-        if tracks_number_by_ip[ip_address] >= MAX_TRACKS:
-            return JSONResponse(content={"error":
-                                         "Too Many Requests. "
-                                         "Please try again later."},
-                                status_code=429)
-        else:
-            tracks_number_by_ip[ip_address] += 1
-    else:
-        tracks_number_by_ip[ip_address] = 1
+    if max_generations_count_surpass(ip_address):
+        return JSONResponse(content={
+            "error": "Too Many Requests. Please try again later."},
+            status_code=429)
 
     subprocess.run(["bash", "utils/remove_old_files.sh", "60"])
 
@@ -132,19 +126,28 @@ async def process_algorithmic(background_tasks: BackgroundTasks,
 async def process_algo_finish(request: Request,
                               filename: int = Form(...)):
     ip_address = request.client.host
+    tracks_number_by_ip[ip_address] -= 1
     midi2mp3(filename=filename)
     filepath = os.path.join('generated_data', str(filename) + '.mp3')
     if not os.path.exists(filepath):
-        tracks_number_by_ip[ip_address] -= 1
         return JSONResponse(content={"error": "MP3 file not found"},
                             status_code=500)
-    tracks_number_by_ip[ip_address] -= 1
 
 
 # is used to get current generation progress in JS code
 @app.post("/progress")
 async def progress(filename: int = Form(...)):
     return {"progress": 100 * float(progress_map.get(filename, 0))}
+
+
+def max_generations_count_surpass(ip_address: str):
+    tracks_number_by_ip[ip_address] = tracks_number_by_ip.get(ip_address,
+                                                              0) + 1
+    if tracks_number_by_ip[ip_address] > MAX_TRACKS:
+        tracks_number_by_ip[ip_address] -= 1
+        print(f"IP address {ip_address} currently has {tracks_number_by_ip[ip_address]} tracks generating")
+        return True
+    return False
 
 
 # function that initializes neural track generation as a background task
@@ -156,15 +159,10 @@ async def process_neural_start(background_tasks: BackgroundTasks,
                                tempo: str = Form(...),
                                correct_scale: bool = Form(...)):
     ip_address = request.client.host
-    if ip_address in tracks_number_by_ip:
-        if tracks_number_by_ip[ip_address] >= MAX_TRACKS:
-            return JSONResponse(content={"error": "Too Many Requests. "
-                                         "Please try again later."},
-                                status_code=429)
-        else:
-            tracks_number_by_ip[ip_address] += 1
-    else:
-        tracks_number_by_ip[ip_address] = 1
+    if max_generations_count_surpass(ip_address):
+        return JSONResponse(content={
+            "error": "Too Many Requests. Please try again later."},
+            status_code=429)
 
     subprocess.run(["bash", "utils/remove_old_files.sh", "60"])
     filename: int = random.randint(1, 100_000_000)
@@ -212,15 +210,13 @@ async def process_neural_start(background_tasks: BackgroundTasks,
 @app.post("/generate/process_neural_finish")
 async def process_neural_finish(request: Request, filename: int = Form(...)):
     ip_address = request.client.host
-
+    tracks_number_by_ip[ip_address] -= 1
+    del progress_map[filename]
     midi2mp3(filename=filename)
-
     filepath = os.path.join('generated_data', str(filename) + '.mp3')
     if not os.path.exists(filepath):
-        tracks_number_by_ip[ip_address] -= 1
         return JSONResponse(content={"error": "MP3 file not found"},
                             status_code=500)
-    tracks_number_by_ip[ip_address] -= 1
 
 
 @app.post("/generate/edit")

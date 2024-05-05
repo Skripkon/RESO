@@ -53,16 +53,16 @@ function generateAlgoTrack() {
     var TempoOfTheTrack = $('#TempoOfTheTrack').val();
     var ScaleOfTheTrack = $('#ScaleOfTheTrack').val();
 
-    document.getElementById('algoProgressBarText').innerText = "Initializing";
-    document.getElementById('algoProgressBar').setAttribute("style","width: 0%");
-    $('#algoProgressBarContainer').show();
-    algoProgressBarTextRefreshIntervalId = setInterval(algoCycleThroughDots, ALGO_PROGRESS_BAR_TEXT_REFRESH_RATE);
-
+    
     $.ajax({
         type: 'POST',
         url: '/generate/process_algorithmic_start',
         data: { 'generator': AlgoGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack, 'scale': ScaleOfTheTrack },
         success: function (data) {
+            document.getElementById('algoProgressBarText').innerText = "Initializing";
+            document.getElementById('algoProgressBar').setAttribute("style","width: 0%");
+            $('#algoProgressBarContainer').show();
+            algoProgressBarTextRefreshIntervalId = setInterval(algoCycleThroughDots, ALGO_PROGRESS_BAR_TEXT_REFRESH_RATE);
             document.getElementById('GenerateAlgorithmicMusic').disabled = true;
             algoRefreshIntervalId = setInterval(algoUpdateProgress, ALGO_PROGRESS_BAR_REFRESH_RATE, data.filename);
         },
@@ -79,7 +79,7 @@ function algoFinish(filename) {
         type: 'POST',
         url: '/generate/process_algo_finish',
         data: { 'filename': filename },
-        success: function (data) {
+        success: function () {
             // Update the MP3 player content with the returned filename
             console.log("Algo finish")
             var filenameMP3 = filename + '.mp3';

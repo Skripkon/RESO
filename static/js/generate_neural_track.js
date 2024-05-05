@@ -31,7 +31,7 @@ async function neuroUpdateProgress(filename) {
                 neuroGenerationState = 'generating';
                 document.getElementById('neuroProgressBarText').innerText = "Generating";
             }
-            if (data.progress == 100 && neuroGenerationState == 'generating') {
+            if (data.progress == 100) {
                 neuroGenerationState = 'rendering';
                 document.getElementById('neuroProgressBarText').innerText = "Rendering";
                 clearInterval(neuroRefreshIntervalId);
@@ -53,16 +53,16 @@ function generateNeuralTrack() {
     var TempoOfTheTrack = $('#TempoOfTheTrack').val();
     var NeuroCorrectScale = $('#NeuroCorrectScale').val();
     
-    document.getElementById('neuroProgressBarText').innerText = "Initializing";
-    document.getElementById('neuroProgressBar').setAttribute("style","width: 0%");
-    $('#neuroProgressBarContainer').show();
-    neuroProgressBarTextRefreshIntervalId = setInterval(neuroCycleThroughDots, NEURO_PROGRESS_BAR_TEXT_REFRESH_RATE);
-   
+    
     $.ajax({
         type: 'POST',
         url: '/generate/process_neural_start',
         data: { 'generator': NeuralGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack, 'correct_scale': NeuroCorrectScale },
         success: function (data) {
+            document.getElementById('neuroProgressBarText').innerText = "Initializing";
+            document.getElementById('neuroProgressBar').setAttribute("style","width: 0%");
+            $('#neuroProgressBarContainer').show();
+            neuroProgressBarTextRefreshIntervalId = setInterval(neuroCycleThroughDots, NEURO_PROGRESS_BAR_TEXT_REFRESH_RATE);
             document.getElementById('GenerateNeuralMusic').disabled = true;
             neuroRefreshIntervalId = setInterval(neuroUpdateProgress, NEURO_PROGRESS_BAR_REFRESH_RATE, data.filename);
         },
@@ -76,6 +76,7 @@ function generateNeuralTrack() {
 
 // switch from 'generating' state to 'generated' state (render the track, show editing buttons)
 function neuroFinish(filename) {
+    console.log("Finish")
     $.ajax({
         type: 'POST',
         url: '/generate/process_neural_finish',
