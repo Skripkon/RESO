@@ -61,7 +61,8 @@ function generateAlgoTrack() {
     $.ajax({
         type: 'POST',
         url: '/generate/process_algorithmic_start',
-        data: { 'generator': AlgoGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack, 'scale': ScaleOfTheTrack },
+        contentType: 'application/json',
+        data: JSON.stringify({ 'generator': AlgoGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack, 'scale': ScaleOfTheTrack }),
         success: function (data) {
             document.getElementById('GenerateAlgorithmicMusic').disabled = true;
             algoRefreshIntervalId = setInterval(algoUpdateProgress, ALGO_PROGRESS_BAR_REFRESH_RATE, data.filename);

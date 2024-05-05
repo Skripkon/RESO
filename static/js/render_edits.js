@@ -12,7 +12,8 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: '/generate/edit',
-            data: {'file': file, 'start': start, 'end': end, 'fade_in': fade_in, 'fade_out': fade_out},
+            contentType: 'application/json',
+            data: JSON.stringify({ 'file': file, 'start': start, 'end': end, 'fade_in': fade_in, 'fade_out': fade_out}),
             success: function (data) {
                 var renderButton = document.getElementById('EditAlgoRenderButton');
                 renderButton.innerText = "Rerender";
@@ -42,7 +43,8 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: '/generate/edit',
-            data: {'file': file, 'start': start, 'end': end, 'fade_in': fade_in, 'fade_out': fade_out},
+            contentType: 'application/json',
+            data: JSON.stringify({ 'file': file, 'start': start, 'end': end, 'fade_in': fade_in, 'fade_out': fade_out}),
             success: function (data) {
                 var renderButton = document.getElementById('EditNeuroRenderButton');
                 renderButton.innerText = "Rerender";

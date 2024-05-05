@@ -61,7 +61,8 @@ function generateNeuralTrack() {
     $.ajax({
         type: 'POST',
         url: '/generate/process_neural_start',
-        data: { 'generator': NeuralGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack, 'correct_scale': NeuroCorrectScale },
+        contentType: 'application/json',
+        data: JSON.stringify({ 'generator': NeuralGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack, 'correct_scale': NeuroCorrectScale}),
         success: function (data) {
             document.getElementById('GenerateNeuralMusic').disabled = true;
             neuroRefreshIntervalId = setInterval(neuroUpdateProgress, NEURO_PROGRESS_BAR_REFRESH_RATE, data.filename);
