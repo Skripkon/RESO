@@ -1,16 +1,17 @@
-from .MinorMusicGenerator import MinorMusicGenerator
-from music21 import stream, note, chord, tempo, meter, metadata
 import os
 import random
+
+from music21 import chord, metadata, meter, note, stream, tempo
+
+from .MinorMusicGenerator import MinorMusicGenerator
 
 tempo_map = {'Normal': 100, 'Slow': 60, 'Fast': 120}
 
 
 def generate_music03(scale: int, filename: int, pulse: str = 'Normal',
                      duration_sec: int = 60):
-    
-    INTERVAL_LENGTH = 3 # 20 notes in a left hand. Duration of each note is 0.25
-    OCTAVE_SHIFT: int = 12
+
+    INTERVAL_LENGTH = 3  # 20 notes in a left hand. Duration of each note is 0.25
 
     new_song_generator = MinorMusicGenerator(scale)
     myStream = stream.Stream()
@@ -18,13 +19,10 @@ def generate_music03(scale: int, filename: int, pulse: str = 'Normal',
     right_hand_chords = new_song_generator.minor_chords.copy()
     right_hand_notes = new_song_generator.correct_notes.copy()
 
-    # List of possible notes for the right hand
-    CORRECT_NOTES_COUNT = len(right_hand_notes)
-
     # Get BPM
     bpm = tempo_map.get(pulse, tempo_map['Normal'])
     volumes = [120, 50, 60, 80, 90, 110, 120, 110, 90, 80, 70, 50]
-    
+
     # Initialize parts
     right_hand = stream.Part()
     left_hand = stream.Part()
@@ -36,7 +34,7 @@ def generate_music03(scale: int, filename: int, pulse: str = 'Normal',
     # Calculate number of quarters
     quarters_count = duration_sec * (bpm / 60)
 
-    number_of_notes = [1, 2, 3, 6, 12] # this list is needed to randomize a number of notes for a single interval;
+    number_of_notes = [1, 2, 3, 6, 12]  # this list is needed to randomize a number of notes for a single interval;
     # a duration of each note is then determined by the following formula: INTERVAL_LENGTH / number_of_notes
 
     def add_one_interval():
@@ -63,7 +61,7 @@ def generate_music03(scale: int, filename: int, pulse: str = 'Normal',
                 newChord.volume.velocity = velocity
                 right_hand.append(newChord)
                 continue
-            
+
             random_note = right_hand_notes[random.randint(0, len(right_hand_notes) - 1)]
             my_note = note.Note(random_note, quarterLength=current_duration)
             my_note.volume.velocity = velocity
@@ -98,5 +96,7 @@ def generate_music03(scale: int, filename: int, pulse: str = 'Normal',
 
     # For this download MuseScore 3
     # myStream.show()
+
+
 if __name__ == '__main__':
     generate_music03(64, 'example.midi')

@@ -34,7 +34,7 @@ jobs:
         docker run -d -p 8000:8000 deploy-reso
     - name: Lint with flake8
       run: |
-        python -m flake8
+        flake8 .
 
 
 
