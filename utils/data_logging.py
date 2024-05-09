@@ -1,7 +1,8 @@
 from collections import Counter, defaultdict
-import matplotlib.pyplot as plt
 import datetime
 import json
+
+import matplotlib.pyplot as plt
 
 
 def log_data(log_path: str,

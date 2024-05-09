@@ -1,9 +1,12 @@
-from .MinorMusicGenerator import MinorMusicGenerator
-from music21 import stream, note, chord, tempo, meter, metadata, key
-from utils.progress_bar import ProgressBar
-import random
 import os
+import random
 import time
+
+from music21 import chord, key, metadata, meter, note, stream, tempo
+from utils.progress_bar import ProgressBar
+
+from .MinorMusicGenerator import MinorMusicGenerator
+
 # from music21 import environment
 #   type "which mscore" in console and insert your path here
 # env = environment.Environment()

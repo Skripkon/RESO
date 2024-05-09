@@ -1,5 +1,6 @@
-from pydub import AudioSegment
 import os
+
+from pydub import AudioSegment
 
 
 def str_to_secs(time_str: str) -> int:

@@ -1,6 +1,7 @@
-from music21 import converter, note, chord, clef, tempo, meter, bar, metadata
-import threading
 import os
+import threading
+
+from music21 import bar, chord, clef, converter, metadata, meter, note, tempo
 
 
 class NotesParser:
