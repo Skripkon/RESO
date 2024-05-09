@@ -109,7 +109,9 @@ def generate_neural(composer: str,
         shift += 0.3
         quarter_length = 0
 
-    progress_bar.end('Generation completed.')
+    print("Updating to 100%")
+    progress_bar.update(current=quarters, cur_time=time.time())
+
     # Now we make the actual stream that will be rendered
     final_stream = music21.stream.Stream()
     final_stream.insert(0, music21.tempo.MetronomeMark(number=bpm))
@@ -134,3 +136,5 @@ def generate_neural(composer: str,
         shift += 0.3
 
     final_stream.write('midi', fp=filepath_midi)
+
+    progress_bar.end()

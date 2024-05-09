@@ -1,6 +1,6 @@
 var algoRefreshIntervalId = NaN;
 var algoProgressBarTextRefreshIntervalId = NaN;
-const ALGO_PROGRESS_BAR_REFRESH_RATE = 50; // ms
+const ALGO_PROGRESS_BAR_REFRESH_RATE = 150; // ms
 const ALGO_PROGRESS_BAR_TEXT_REFRESH_RATE = 300; // ms
 var algoGenerationState = 'initial';
 
@@ -21,20 +21,31 @@ async function algoCycleThroughDots() {
 // function that is called once every PROGRESS_BAR_REFRESH_RATE ms. It updates the progress bar length and
 // starts the algoFinish() function if the progress is at 100%
 async function algoUpdateProgress(filename) {
-    console.log("updating algo track");
     $.ajax({
         type: 'POST',
         url: '/progress',
         data: { 'filename': filename },
         success: function (data) {
-            document.getElementById('algoProgressBar').style.width = `${data.progress}%`;
+            var algoProgressBar = document.getElementById('algoProgressBar');
+            var algoProgressBarText = document.getElementById('algoProgressBarText');
             if (data.progress > 0 && algoGenerationState == 'initial') {
+                algoProgressBar.style.width = `${data.progress}%`;
+                algoProgressBarText.innerText = "Generating";
                 algoGenerationState = 'generating';
-                document.getElementById('algoProgressBarText').innerText = "Generating";
+            }
+            if (data.progress < 100 && algoGenerationState == 'generating') {
+                algoProgressBar.style.width = `${data.progress}%`;
             }
             if (data.progress == 100 && algoGenerationState == 'generating') {
+                algoProgressBar.style.width = `${data.progress}%`;
+                algoGenerationState = 'saving';
+                algoProgressBarText.innerText = "Saving";
+            }
+            // special value that indicates that the midi has been saved
+            if (data.progress == 200) {
+                algoProgressBar.style.width = "100%";
                 algoGenerationState = 'rendering';
-                document.getElementById('algoProgressBarText').innerText = "Rendering";
+                algoProgressBarText.innerText = "Rendering";
                 clearInterval(algoRefreshIntervalId);
                 algoFinish(filename);
             }
@@ -53,17 +64,17 @@ function generateAlgoTrack() {
     var TempoOfTheTrack = $('#TempoOfTheTrack').val();
     var ScaleOfTheTrack = $('#ScaleOfTheTrack').val();
 
-    document.getElementById('algoProgressBarText').innerText = "Initializing";
-    document.getElementById('algoProgressBar').setAttribute("style","width: 0%");
-    $('#algoProgressBarContainer').show();
-    algoProgressBarTextRefreshIntervalId = setInterval(algoCycleThroughDots, ALGO_PROGRESS_BAR_TEXT_REFRESH_RATE);
-
+    
     $.ajax({
         type: 'POST',
         url: '/generate/process_algorithmic_start',
         contentType: 'application/json',
         data: JSON.stringify({ 'generator': AlgoGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack, 'scale': ScaleOfTheTrack }),
         success: function (data) {
+            document.getElementById('algoProgressBarText').innerText = "Initializing";
+            document.getElementById('algoProgressBar').setAttribute("style","width: 0%");
+            $('#algoProgressBarContainer').show();
+            algoProgressBarTextRefreshIntervalId = setInterval(algoCycleThroughDots, ALGO_PROGRESS_BAR_TEXT_REFRESH_RATE);
             document.getElementById('GenerateAlgorithmicMusic').disabled = true;
             algoRefreshIntervalId = setInterval(algoUpdateProgress, ALGO_PROGRESS_BAR_REFRESH_RATE, data.filename);
         },
@@ -78,11 +89,10 @@ function generateAlgoTrack() {
 function algoFinish(filename) {
     $.ajax({
         type: 'POST',
-        url: '/generate/process_algo_finish',
+        url: '/generate/process_track_finish',
         data: { 'filename': filename },
-        success: function (data) {
+        success: function () {
             // Update the MP3 player content with the returned filename
-            console.log("Algo finish")
             var filenameMP3 = filename + '.mp3';
             var filenameMID = filename + '.mid';
             var filenameMusicXML = filename + '.musicxml';
