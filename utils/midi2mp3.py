@@ -1,5 +1,6 @@
-from pydub import AudioSegment
 import os
+
+from pydub import AudioSegment
 
 
 def midi2mp3(filename: int):

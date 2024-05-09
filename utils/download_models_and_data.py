@@ -1,9 +1,10 @@
-from urllib.parse import urlencode
-from pyunpack import Archive
-import requests
-import shutil
 import os
 import re
+import shutil
+from urllib.parse import urlencode
+
+from pyunpack import Archive
+import requests
 
 
 def request_to_sownload_files():

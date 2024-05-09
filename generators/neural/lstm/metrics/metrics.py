@@ -1,6 +1,7 @@
-import music21
 import pickle
+
 from keras.models import load_model
+import music21
 import numpy as np
 
 

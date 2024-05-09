@@ -1,10 +1,11 @@
-import numpy as np
-import music21
+import os
 import pickle
 import time
-import os
-from utils.progress_bar import ProgressBar
+
 from keras.models import load_model
+import music21
+import numpy as np
+from utils.progress_bar import ProgressBar
 from utils.scale import fix_scale
 
 

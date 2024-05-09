@@ -1,22 +1,23 @@
-from werkzeug.utils import secure_filename
+import datetime
+import os
+import random
+import subprocess
+
+from fastapi import BackgroundTasks
+from fastapi import FastAPI, File, Request, UploadFile
+from fastapi.exceptions import HTTPException
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from generators.algorithmic.Generator01 import generate_music01
 from generators.algorithmic.Generator02 import generate_music02
 from generators.neural.lstm.NeuralGenerator import generate_neural
-from fastapi import FastAPI, Request, File, UploadFile
-from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
-from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
-from fastapi.exceptions import HTTPException
-from fastapi import BackgroundTasks
-from utils.download_models_and_data import request_to_sownload_files
+from pydantic import BaseModel
 from utils.audio_editing import edit_mp3, str_to_secs
 from utils.data_logging import log_data
+from utils.download_models_and_data import request_to_sownload_files
 from utils.midi2mp3 import midi2mp3
-import subprocess
-import random
-import os
-import datetime
-from pydantic import BaseModel
+from werkzeug.utils import secure_filename
 
 
 # data validation model

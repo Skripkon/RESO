@@ -1,9 +1,12 @@
-from .MinorMusicGenerator import MinorMusicGenerator
-from music21 import stream, note, chord, tempo, metadata, key
-from utils.progress_bar import ProgressBar
+import os
 import random
 import time
-import os
+
+from music21 import chord, key, metadata, note, stream, tempo
+from utils.progress_bar import ProgressBar
+
+from .MinorMusicGenerator import MinorMusicGenerator
+
 
 tempo_map = {'Normal': 100, 'Slow': 60, 'Fast': 120}
 number_to_scale = {59: 'B', 60: 'C', 61: 'C', 62: 'D', 63: 'Eb', 64: 'E',
