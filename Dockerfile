@@ -4,6 +4,7 @@ FROM python:3.10-slim
 # Set the working directory inside the container
 WORKDIR /
 
+ENV QT_QPA_PLATFORM=offscreen
 # Copy the requirements.txt file into the container
 COPY requirements.txt requirements.txt
 

@@ -14,7 +14,8 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: '/generate/edit',
-            data: {'file': file, 'start': start, 'end': end, 'fade_in': fade_in, 'fade_out': fade_out},
+            contentType: 'application/json',
+            data: JSON.stringify({ 'file': file, 'start': start, 'end': end, 'fade_in': fade_in, 'fade_out': fade_out}),
             success: function (data) {
                 renderButton.innerText = "Rerender";
                 renderButton.disabled = false;
@@ -45,7 +46,8 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: '/generate/edit',
-            data: {'file': file, 'start': start, 'end': end, 'fade_in': fade_in, 'fade_out': fade_out},
+            contentType: 'application/json',
+            data: JSON.stringify({ 'file': file, 'start': start, 'end': end, 'fade_in': fade_in, 'fade_out': fade_out}),
             success: function (data) {
                 renderButton.innerText = "Rerender";
                 renderButton.disabled = false;

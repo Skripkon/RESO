@@ -68,7 +68,8 @@ function generateAlgoTrack() {
     $.ajax({
         type: 'POST',
         url: '/generate/process_algorithmic_start',
-        data: { 'generator': AlgoGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack, 'scale': ScaleOfTheTrack },
+        contentType: 'application/json',
+        data: JSON.stringify({ 'generator': AlgoGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack, 'scale': ScaleOfTheTrack }),
         success: function (data) {
             document.getElementById('algoProgressBarText').innerText = "Initializing";
             document.getElementById('algoProgressBar').setAttribute("style","width: 0%");

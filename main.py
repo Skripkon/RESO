@@ -7,7 +7,7 @@ from fastapi.responses import HTMLResponse, FileResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.exceptions import HTTPException
-from fastapi import Form, BackgroundTasks
+from fastapi import BackgroundTasks
 from utils.download_models_and_data import request_to_sownload_files
 from utils.audio_editing import edit_mp3, str_to_secs
 from utils.data_logging import log_data
@@ -16,6 +16,31 @@ import subprocess
 import random
 import os
 import datetime
+from pydantic import BaseModel
+
+
+# data validation model
+class ProcessStart(BaseModel):
+    generator: str
+    duration: str
+    tempo: str
+    correct_scale: bool = False
+    scale: int = 60
+
+
+# data validation model
+class Editing(BaseModel):
+    file: str
+    start: str
+    end: str
+    fade_in: str
+    fade_out: str
+
+
+# data validation model
+class Filename(BaseModel):
+    filename: str
+
 
 # tracks that were edited longer than this many minutes ago will be deleted
 DELETION_THRESHOLD = 10
@@ -81,8 +106,8 @@ async def neural_page(request: Request):
 
 # is used to get current generation progress in JS code
 @app.post("/progress")
-async def progress(filename: int = Form(...)):
-    return {"progress": 100 * float(progress_map.get(filename, 0))}
+async def progress(form: Filename):
+    return {"progress": 100 * float(progress_map.get(form.filename, 0))}
 
 
 def max_generations_count_surpass(ip_address: str):
@@ -141,10 +166,7 @@ def generate_algo_task(generator,
 @app.post("/generate/process_algorithmic_start")
 async def process_algorithmic(background_tasks: BackgroundTasks,
                               request: Request,
-                              generator: str = Form(...),
-                              duration: str = Form(...),
-                              tempo: str = Form(...),
-                              scale: int = Form(...)):
+                              form: ProcessStart):
     ip_address = request.client.host
     if max_generations_count_surpass(ip_address):
         return JSONResponse(content={
@@ -156,18 +178,18 @@ async def process_algorithmic(background_tasks: BackgroundTasks,
 
     filename: int = get_filename()
 
-    minutes, seconds = map(int, duration.split(':'))
+    minutes, seconds = map(int, form.duration.split(':'))
     duration_sec = minutes * 60 + seconds
 
-    log_data('utils/log.json', "Algo", generator,
+    log_data('utils/log.json', "Algo", form.generator,
              datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     background_tasks.add_task(generate_algo_task,
-                              generator=generator,
-                              scale=scale,
+                              generator=form.generator,
+                              scale=form.scale,
                               filename=filename,
                               progress_map=progress_map,
-                              pulse=tempo,
+                              pulse=form.tempo,
                               duration_sec=duration_sec,
                               ip_address=ip_address)
     return JSONResponse(content={"filename": filename})
@@ -197,12 +219,9 @@ def generate_neural_task(composer,
 
 # function that initializes neural track generation as a background task
 @app.post("/generate/process_neural_start")
-async def process_neural_start(background_tasks: BackgroundTasks,
-                               request: Request,
-                               generator: str = Form(...),
-                               duration: str = Form(...),
-                               tempo: str = Form(...),
-                               correct_scale: bool = Form(...)):
+async def process_neural_start(form: ProcessStart,
+                               background_tasks: BackgroundTasks,
+                               request: Request):
     ip_address = request.client.host
     if max_generations_count_surpass(ip_address):
         return JSONResponse(content={
@@ -214,15 +233,16 @@ async def process_neural_start(background_tasks: BackgroundTasks,
 
     filename: int = get_filename()
 
-    minutes, seconds = map(int, duration.split(':'))
+    minutes, seconds = map(int, form.duration.split(':'))
     duration_sec = minutes * 60 + seconds
 
-    log_data('utils/log.json', "Neural", generator,
+    log_data('utils/log.json', "Neural", form.generator,
              datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     try:
         models_folder = \
-            os.path.join('generators', 'neural', 'lstm', 'models', generator)
+            os.path.join('generators', 'neural', 'lstm',
+                         'models', form.generator)
         all_models = os.listdir(models_folder)
         random_model = random.choice(all_models)
         model_path = os.path.join(models_folder, random_model)
@@ -238,12 +258,12 @@ async def process_neural_start(background_tasks: BackgroundTasks,
 
     progress_map[filename] = 0
     background_tasks.add_task(generate_neural_task,
-                              composer=generator,
+                              composer=form.generator,
                               model_path=model_path,
                               filename=filename,
-                              tempo=tempo,
+                              tempo=form.tempo,
                               duration=duration_sec,
-                              correct_scale=correct_scale,
+                              correct_scale=form.correct_scale,
                               progress_map=progress_map,
                               ip_address=ip_address
                               )
@@ -253,13 +273,13 @@ async def process_neural_start(background_tasks: BackgroundTasks,
 # render generated track
 @app.post("/generate/process_track_finish")
 async def process_track_finish(request: Request,
-                               filename: int = Form(...)):
-    if not os.path.exists(os.path.join('generated_data', f'{filename}.mid')):
+                               form: Filename):
+    if not os.path.exists(os.path.join('generated_data', f'{form.filename}.mid')):
         return JSONResponse(content={"error": "MIDI file not found"},
                             status_code=500)
 
-    midi2mp3(filename=filename)
-    filepath = os.path.join('generated_data', str(filename) + '.mp3')
+    midi2mp3(filename=form.filename)
+    filepath = os.path.join('generated_data', str(form.filename) + '.mp3')
     if not os.path.exists(filepath):
         return JSONResponse(content={"error": "MP3 file not found"},
                             status_code=500)
@@ -278,22 +298,19 @@ def get_edit_id(filename: int):
 
 
 @app.post("/generate/edit")
-async def edit(file: str = Form(...),
-               start: str = Form(...),
-               end: str = Form(...),
-               fade_in: str = Form(...),
-               fade_out: str = Form(...)):
+@app.post("/generate/edit")
+async def edit(form: Editing):
 
     subprocess.run(["bash", "utils/remove_old_files.sh",
                     str(DELETION_THRESHOLD)])
 
-    edit_id: int = get_edit_id(int(os.path.basename(file).split('.')[0]))
-    edited_file = edit_mp3(file,
-                           str_to_secs(start),
-                           str_to_secs(end),
+    edit_id: int = get_edit_id(int(os.path.basename(form.file).split('.')[0]))
+    edited_file = edit_mp3(form.file,
+                           str_to_secs(form.start),
+                           str_to_secs(form.end),
                            edit_id,
-                           int(fade_in),
-                           int(fade_out))
+                           int(form.fade_in),
+                           int(form.fade_out))
 
     if not os.path.exists(os.path.join('generated_data', edited_file)):
         return JSONResponse(content={"error": "Edited file not found"},
