@@ -40,7 +40,7 @@ class Editing(BaseModel):
 
 # data validation model
 class Filename(BaseModel):
-    filename: str
+    filename: int
 
 
 # tracks that were edited longer than this many minutes ago will be deleted
@@ -75,12 +75,12 @@ async def convert_midi2mp3(form: Filename):
     if not form:
         raise HTTPException(status_code=400, detail='No file part')
 
-    if form.filename == '':
+    if str(form.filename) == '':
         raise HTTPException(status_code=400, detail='No selected file')
 
-    filename = secure_filename(form.filename)
+    filename = secure_filename(str(form.filename))
     with open(filename, 'wb') as f:
-        f.write(form.filename.read())
+        f.write(str(form.filename).read())
 
     mp3_file_path = midi2mp3(filename)
     return FileResponse(mp3_file_path, media_type='audio/mpeg',
@@ -105,7 +105,7 @@ async def neural_page(request: Request):
 # is used to get current generation progress in JS code
 @app.post("/progress")
 async def progress(form: Filename):
-    return {"progress": 100 * float(progress_map.get(int(form.filename), 0))}
+    return {"progress": 100 * float(progress_map.get(form.filename, 0))}
 
 
 def max_generations_count_surpass(ip_address: str):
@@ -271,12 +271,12 @@ async def process_neural_start(background_tasks: BackgroundTasks,
 # render generated track
 @app.post("/generate/process_track_finish")
 async def process_track_finish(form: Filename):
-    if not os.path.exists(os.path.join('generated_data', f'{form.filename}.mid')):
+    if not os.path.exists(os.path.join('generated_data', f'{str(form.filename)}.mid')):
         return JSONResponse(content={"error": "MIDI file not found"},
                             status_code=500)
 
-    midi2mp3(filename=int(form.filename))
-    filepath = os.path.join('generated_data', form.filename + '.mp3')
+    midi2mp3(filename=form.filename)
+    filepath = os.path.join('generated_data', str(form.filename) + '.mp3')
     if not os.path.exists(filepath):
         return JSONResponse(content={"error": "MP3 file not found"},
                             status_code=500)

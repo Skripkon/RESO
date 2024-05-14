@@ -78,7 +78,7 @@ function generateNeuralTrack() {
             $('#neuroProgressBarContainer').show();
             neuroProgressBarTextRefreshIntervalId = setInterval(neuroCycleThroughDots, NEURO_PROGRESS_BAR_TEXT_REFRESH_RATE);
             document.getElementById('GenerateNeuralMusic').disabled = true;
-            neuroRefreshIntervalId = setInterval(neuroUpdateProgress, NEURO_PROGRESS_BAR_REFRESH_RATE, data.filename);
+            neuroRefreshIntervalId = setInterval(neuroUpdateProgress, NEURO_PROGRESS_BAR_REFRESH_RATE, Number(data.filename));
         },
         error: function(xhr, status, error) {
             var errorMessage = xhr.responseJSON.error;

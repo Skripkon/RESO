@@ -77,7 +77,7 @@ function generateAlgoTrack() {
             $('#algoProgressBarContainer').show();
             algoProgressBarTextRefreshIntervalId = setInterval(algoCycleThroughDots, ALGO_PROGRESS_BAR_TEXT_REFRESH_RATE);
             document.getElementById('GenerateAlgorithmicMusic').disabled = true;
-            algoRefreshIntervalId = setInterval(algoUpdateProgress, ALGO_PROGRESS_BAR_REFRESH_RATE, data.filename);
+            algoRefreshIntervalId = setInterval(algoUpdateProgress, ALGO_PROGRESS_BAR_REFRESH_RATE, Number(data.filename));
         },
         error: function(xhr, status, error) {
             var errorMessage = xhr.responseJSON.error;
