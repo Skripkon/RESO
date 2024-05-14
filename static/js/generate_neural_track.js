@@ -24,7 +24,8 @@ async function neuroUpdateProgress(filename) {
     $.ajax({
         type: 'POST',
         url: '/progress',
-        data: { 'filename': filename },
+        contentType: 'application/json',
+        data: JSON.stringify({ 'filename': filename }),
         success: function (data) {
             var neuroProgressBar = document.getElementById('neuroProgressBar');
             var neuroProgressBarText = document.getElementById('neuroProgressBarText');
@@ -92,7 +93,8 @@ function neuroFinish(filename) {
     $.ajax({
         type: 'POST',
         url: '/generate/process_track_finish',
-        data: { 'filename': filename },
+        contentType: 'application/json',
+        data: JSON.stringify({ 'filename': filename }),
         success: function () {
             var filenameMP3 = filename + '.mp3';
             var filenameMID = filename + '.mid';

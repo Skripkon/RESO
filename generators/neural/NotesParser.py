@@ -25,7 +25,7 @@ class NotesParser:
             Exception: Provided path is not valid.
         """
         self.concatFiles = True
-        self.maxFiles = 1e6
+        self.max_files = 1e6
         self.files_parsed = 0
         self.folder_path = None
         self.file_path = None
@@ -197,7 +197,7 @@ class NotesParser:
                     else:
                         self.notes.append(temp_notes)
 
-    def get_notes_from_files(self, path: str = None, concatFiles: bool = True, maxFiles: int = 1e6) -> list:
+    def get_notes_from_files(self, path: str = None, concatFiles: bool = True, max_files: int = 1e6, one_scale: bool = False) -> list:
         """
         Gets the sequence of all notes and chords from the MIDI files in the specified directory.
 
@@ -209,7 +209,8 @@ class NotesParser:
             concatFiles (bool, optional): Determines how to process many files:
                 - if `self.concatFiles` is set to False, then this is a list of lists, where each nested list represents a single file.
                 - if `self.concatFiles` is set to True, then this is a list of str objects.
-            maxFiles (int, optional): The maximum amount of files that could be parsed.
+            max_files (int, optional): The maximum amount of files that could be parsed. Defaults to 1e6.
+            one_scale (bool, optional). If one_scale is set to True, all compositions are transposed to one scale. Defaults to False.
 
         Raises:
             Exception: If the specified path is not valid or no path is specified during initialization of the Parser.
@@ -218,7 +219,7 @@ class NotesParser:
             list: The list of parsed pitches.
         """
         self.concatFiles = concatFiles
-        self.maxFiles = maxFiles
+        self.max_files = max_files
         self.files_parsed = 0
         self.files = []
         if path is not None:
@@ -241,8 +242,8 @@ class NotesParser:
             else:
                 raise Exception("You forgot to provide a path.")
 
-        if len(self.files) > maxFiles:  # Take into account a possible constraint on the number of files to be processed.
-            self.files = self.files[0: maxFiles]
+        if len(self.files) > max_files:  # Take into account a possible constraint on the number of files to be processed.
+            self.files = self.files[0: max_files]
         self.notes = []
         thread_list = []
 

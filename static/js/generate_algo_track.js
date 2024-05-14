@@ -24,7 +24,8 @@ async function algoUpdateProgress(filename) {
     $.ajax({
         type: 'POST',
         url: '/progress',
-        data: { 'filename': filename },
+        contentType: 'application/json',
+        data: JSON.stringify({ 'filename': filename }),
         success: function (data) {
             var algoProgressBar = document.getElementById('algoProgressBar');
             var algoProgressBarText = document.getElementById('algoProgressBarText');
@@ -90,7 +91,8 @@ function algoFinish(filename) {
     $.ajax({
         type: 'POST',
         url: '/generate/process_track_finish',
-        data: { 'filename': filename },
+        contentType: 'application/json',
+        data: JSON.stringify({ 'filename': filename }),
         success: function () {
             // Update the MP3 player content with the returned filename
             var filenameMP3 = filename + '.mp3';

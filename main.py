@@ -51,13 +51,10 @@ MAX_TRACKS = 1
 tracks_number_by_ip = {}
 progress_map = {}
 
-os.environ['QT_QPA_PLATFORM'] = 'offscreen'
-
 app = FastAPI()
 
 # Configure Jinja2 templates
 templates = Jinja2Templates(directory="templates")
-
 
 # Mount the static directory to serve static files (like CSS, JS, images, etc.)
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -74,16 +71,16 @@ async def read_root(request: Request):
 
 
 @app.post('/convert_midi2mp3')
-async def convert_midi2mp3(midi_file: UploadFile = File(...)):
-    if not midi_file:
+async def convert_midi2mp3(form: Filename):
+    if not form:
         raise HTTPException(status_code=400, detail='No file part')
 
-    if midi_file.filename == '':
+    if form.filename == '':
         raise HTTPException(status_code=400, detail='No selected file')
 
-    filename = secure_filename(midi_file.filename)
+    filename = secure_filename(form.filename)
     with open(filename, 'wb') as f:
-        f.write(midi_file.file.read())
+        f.write(form.filename.read())
 
     mp3_file_path = midi2mp3(filename)
     return FileResponse(mp3_file_path, media_type='audio/mpeg',
@@ -108,7 +105,7 @@ async def neural_page(request: Request):
 # is used to get current generation progress in JS code
 @app.post("/progress")
 async def progress(form: Filename):
-    return {"progress": 100 * float(progress_map.get(form.filename, 0))}
+    return {"progress": 100 * float(progress_map.get(int(form.filename), 0))}
 
 
 def max_generations_count_surpass(ip_address: str):
@@ -126,7 +123,7 @@ def max_generations_count_surpass(ip_address: str):
 
 def get_filename():
     """
-    Generates a random int to be used for a filename avoiding collisions.
+    Generates a random int to be used as a filename avoiding collisions.
     """
     filename: int = random.randint(1, 100_000_000)
     filepath = os.path.join('generated_data', str(filename) + '.mid')
@@ -220,9 +217,9 @@ def generate_neural_task(composer,
 
 # function that initializes neural track generation as a background task
 @app.post("/generate/process_neural_start")
-async def process_neural_start(form: ProcessStart,
-                               background_tasks: BackgroundTasks,
-                               request: Request):
+async def process_neural_start(background_tasks: BackgroundTasks,
+                               request: Request,
+                               form: ProcessStart):
     ip_address = request.client.host
     if max_generations_count_surpass(ip_address):
         return JSONResponse(content={
@@ -273,14 +270,13 @@ async def process_neural_start(form: ProcessStart,
 
 # render generated track
 @app.post("/generate/process_track_finish")
-async def process_track_finish(request: Request,
-                               form: Filename):
+async def process_track_finish(form: Filename):
     if not os.path.exists(os.path.join('generated_data', f'{form.filename}.mid')):
         return JSONResponse(content={"error": "MIDI file not found"},
                             status_code=500)
 
-    midi2mp3(filename=form.filename)
-    filepath = os.path.join('generated_data', str(form.filename) + '.mp3')
+    midi2mp3(filename=int(form.filename))
+    filepath = os.path.join('generated_data', form.filename + '.mp3')
     if not os.path.exists(filepath):
         return JSONResponse(content={"error": "MP3 file not found"},
                             status_code=500)
@@ -298,7 +294,6 @@ def get_edit_id(filename: int):
     return edit_id
 
 
-@app.post("/generate/edit")
 @app.post("/generate/edit")
 async def edit(form: Editing):
 
