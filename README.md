@@ -53,3 +53,19 @@ Or here, but opening it may take a while due to inactivity.
 2. Choose a music engine (*algorithmic / neural*).
 3. Specify the desired properties of the composion.
 4. Listen to this!
+
+## Testing
+
+*Instructions below are for Linux only (it was tested on Ubuntu 20.04+)*
+
+Tests require Chrome browser and the according version of chromedriver installed in your system (do not forget to put path to the chromedriver in your system's `PATH` variable).
+
+The app can be tested locally using
+
+```python3 run_tests.py --port 8000 --run-server```
+
+or 
+
+```python3 run_tests.py --port 8000```
+
+if you have already started the server on port 8000 in a separate process.

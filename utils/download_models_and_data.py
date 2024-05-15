@@ -9,16 +9,20 @@ import requests
 
 def request_to_sownload_files():
     while True:
-        agree = input((
-            "Dow you want do download missing files? [Y/n] "
-        ))
-        match agree.lower():
-            case 'y':
-                break
-            case 'n':
-                return
-            case _:
-                print('No such option!')
+        try:
+            agree = input((
+                "Dow you want do download missing files? [Y/n] "
+            ))
+            match agree.lower():
+                case 'y':
+                    break
+                case 'n':
+                    return
+                case _:
+                    print('No such option!')
+        except:
+            print("no input")
+            return
 
     while True:
         download_models_options = input((
