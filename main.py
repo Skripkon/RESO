@@ -1,11 +1,10 @@
 import datetime
-import logging
 import os
 import random
 import subprocess
 
 from fastapi import BackgroundTasks
-from fastapi import FastAPI, File, Request, UploadFile
+from fastapi import FastAPI, Request
 from fastapi.exceptions import HTTPException
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -52,7 +51,6 @@ MAX_TRACKS = 1
 tracks_number_by_ip = {}
 progress_map = {}
 
-# logger = logging.getLogger('uvicorn.error')
 app = FastAPI()
 
 # Configure Jinja2 templates
@@ -68,7 +66,6 @@ request_to_sownload_files()
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
-    # logger.debug('this is a debug message')
     return templates.TemplateResponse(request, "main.html")
 
 
@@ -291,7 +288,12 @@ async def edit(form: Editing):
     subprocess.run(["bash", "utils/remove_old_files.sh",
                     str(DELETION_THRESHOLD)])
 
-    edit_id: int = get_edit_id(int(os.path.basename(form.file).split('.')[0]))
+    edit_id: int = get_edit_id(filename=int(os.path.basename(form.file).split('.')[0]))
+    print(f'{form.file}: {type(form.file)}\n',
+          f'{form.start}: {type(form.start)}\n',
+          f'{form.end}: {type(form.end)}\n',
+          f'{form.fade_in}: {type(form.fade_in)}\n',
+          f'{form.fade_out}: {type(form.fade_out)}')
     edited_file = edit_mp3(form.file,
                            str_to_secs(form.start),
                            str_to_secs(form.end),

@@ -69,3 +69,5 @@ or
 ```python3 run_tests.py --port 8000```
 
 if you have already started the server on port 8000 in a separate process.
+
+*For more info see `python3 run_tests.py --help`*

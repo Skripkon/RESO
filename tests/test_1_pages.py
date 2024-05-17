@@ -6,9 +6,6 @@ import pytest
 import requests
 
 
-IP = '127.0.0.1'
-
-
 @pytest.fixture
 def get_client():
     sys.path.append(os.getcwd())
@@ -26,7 +23,7 @@ def test_pages_1(page, get_client):
 
 
 @pytest.mark.parametrize("page", ['/', '/generate', '/generate/algorithmic', '/generate/neural', '/about_us', '/help/generators_type'])
-def test_pages_2(page, get_port):
-    port = get_port
-    response = requests.get(f'http://{IP}:{port}{page}')
+def test_pages_2(page, get_ip, get_port, get_max_timeout):
+    ip, port, max_timeout = get_ip, get_port, get_max_timeout
+    response = requests.get(f'http://{ip}:{port}{page}', timeout=max_timeout)
     assert response.status_code == 200
