@@ -289,11 +289,6 @@ async def edit(form: Editing):
                     str(DELETION_THRESHOLD)])
 
     edit_id: int = get_edit_id(filename=int(os.path.basename(form.file).split('.')[0]))
-    print(f'{form.file}: {type(form.file)}\n',
-          f'{form.start}: {type(form.start)}\n',
-          f'{form.end}: {type(form.end)}\n',
-          f'{form.fade_in}: {type(form.fade_in)}\n',
-          f'{form.fade_out}: {type(form.fade_out)}')
     edited_file = edit_mp3(form.file,
                            str_to_secs(form.start),
                            str_to_secs(form.end),

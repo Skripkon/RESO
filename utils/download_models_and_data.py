@@ -20,7 +20,7 @@ def request_to_sownload_files():
                     return
                 case _:
                     print('No such option!')
-        except:
+        except ValueError:
             print("no input")
             return
 

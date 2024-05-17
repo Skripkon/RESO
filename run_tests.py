@@ -6,6 +6,7 @@ import sys
 from time import sleep
 
 import click
+from utils.download_models_and_data import download_models, download_notes
 
 
 class ServerError(Exception):
@@ -33,16 +34,20 @@ def run_tests(ip, port, max_timeout, run_server, all):
         server_pid = start_server(ip, port)
 
     sys.path.append(os.path.abspath('tests/'))
-    for test in [f for f in os.listdir('tests/') if f.startswith('test') and f.endswith('.py')]:
+    test_result = 0
+    for test in sorted([f for f in os.listdir('tests/') if f.startswith('test') and f.endswith('.py')]):
         comlist = ['python3', '-m', 'pytest', f'tests/{test}', '-s', '-p no:warnings', '--ip', ip, '--port', str(port), '--max-timeout', str(max_timeout), '-x']
         print(' '.join(comlist))
         res = subprocess.run(comlist, input=b'n', stderr=subprocess.PIPE)
+        test_result |= res.returncode
         if res.returncode != 0 and not all:
             print("TEST FAILED, QUITTING")
             break
 
     if run_server:
         stop_server()
+
+    exit(test_result)
 
 
 def server_process_serverstop_handler(signum, frame):
@@ -67,8 +72,10 @@ def background_server_runner(ip: str, port: str):
     signal.signal(SERVER_STOP_SIGNAL_ID, server_process_serverstop_handler)
     signal.signal(signal.SIGINT, empty_signal_handler)
     f_err = open(LOG_PATH, 'a', os.O_NONBLOCK)
+    download_models(force=True)
+    download_notes(force=True)
     command = ['uvicorn', 'main:app', '--host', ip, '--port', port]
-    subprocess.run(command, input=b'n', stderr=f_err, stdout=f_err)
+    subprocess.run(command, input=b'n', stderr=f_err)  # , stdout=f_err)
 
 
 def start_server(ip: str, port: int) -> int:
@@ -89,7 +96,7 @@ def start_server(ip: str, port: int) -> int:
             stop_server()
             raise ServerError("Could not start the server.")
         if "Application startup complete." in log and "Application shutdown complete." not in log:
-            print("SERVER STARTED")
+            print("\n=============\nSERVER STARTED\n=============")
             break
     return proc.pid
 

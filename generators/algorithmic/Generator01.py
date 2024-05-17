@@ -7,6 +7,9 @@ from utils.progress_bar import ProgressBar
 
 from .MinorMusicGenerator import MinorMusicGenerator
 
+# env = environment.Environment()
+
+# env['musicxmlPath'] = '/usr/bin/musescore3'
 
 tempo_map = {'Normal': 100, 'Slow': 60, 'Fast': 120}
 number_to_scale = {59: 'B', 60: 'C', 61: 'C', 62: 'D', 63: 'Eb', 64: 'E',
