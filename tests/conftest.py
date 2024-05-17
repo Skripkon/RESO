@@ -4,8 +4,8 @@ from selenium.webdriver.chrome.service import Service
 
 
 def pytest_addoption(parser):
-    parser.addoption("--port", action="store", default=8000)
     parser.addoption("--ip", action="store", default='127.0.0.1')
+    parser.addoption("--port", action="store", default=8000)
     parser.addoption("--max-timeout", action="store", default=10)
 
 
@@ -17,14 +17,8 @@ def get_ip(pytestconfig):
 
 @pytest.fixture
 def get_port(pytestconfig):
-    port = int(pytestconfig.getoption("port"))
-    yield port
-
-
-@pytest.fixture
-def get_max_timeout(pytestconfig):
-    max_timeout = int(pytestconfig.getoption("max_timeout"))
-    yield max_timeout
+    port = pytestconfig.getoption("port")
+    yield int(port)
 
 
 @pytest.fixture
@@ -36,3 +30,9 @@ def get_driver(pytestconfig):
     yield driver
     print("\nKILLING DRIVER")
     driver.quit()
+
+
+@pytest.fixture
+def get_max_timeout(pytestconfig):
+    max_timeout = pytestconfig.getoption("max_timeout")
+    yield int(max_timeout)
