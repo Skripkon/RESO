@@ -28,7 +28,7 @@ that test waits for the page to load before failing.')
 @click.option('--run-server', '-r', required=False, is_flag=True, help='Start own server and not rely on it already running.')
 @click.option('--get-models', '-m', required=False, is_flag=True, help='Download models required for the tests on server start \
 (ignored if --run-server is not used).')
-@click.option('--show-logs', '-m', required=False, is_flag=True, help='Print server logs to stdout \
+@click.option('--show-logs', '-l', required=False, is_flag=True, help='Print server logs to stdout \
 (ignored if --run-server is not used).')
 @click.option('--all', '-a', required=False, is_flag=True, help='Run all tests regardless of whether they fail or not.')
 def run_tests(ip, port, max_timeout, run_server, get_models, show_logs, all):

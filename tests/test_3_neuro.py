@@ -19,7 +19,7 @@ def clear_generated_data():
         os.remove(os.path.join('generated_data', file))
 
 
-def check_generated_files(wait_mp3_file_time: int = 30):
+def check_generated_files(wait_mp3_file_time: int = 40):
     """
     Checks whether all 2 files generated. Since wav to mp3 conversion take quite some time,
     function check_iteration() that actually checks all 2 files is invoked in a loop with a

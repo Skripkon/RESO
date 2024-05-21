@@ -11,11 +11,12 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from generators.algorithmic.Generator01 import generate_music01
 from generators.algorithmic.Generator02 import generate_music02
+from generators.algorithmic.Generator03 import generate_music03
 from generators.neural.lstm.NeuralGenerator import generate_neural
 from pydantic import BaseModel
 from utils.audio_editing import edit_mp3, str_to_secs
 from utils.data_logging import log_data
-from utils.download_models_and_data import request_to_sownload_files
+from utils.download_models_and_data import request_to_download_files
 from utils.midi2mp3 import midi2mp3
 from werkzeug.utils import secure_filename
 
@@ -61,7 +62,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.mount("/generated_data", StaticFiles(directory="generated_data"), name="generated_data")
 
-request_to_sownload_files()
+request_to_download_files()
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -149,6 +150,13 @@ def generate_algo_task(generator,
                              )
         case "AlgoGen02":
             generate_music02(scale=scale,
+                             filename=filename,
+                             progress_map=progress_map,
+                             pulse=pulse,
+                             duration_sec=duration_sec
+                             )
+        case "AlgoGen03":
+            generate_music03(scale=scale,
                              filename=filename,
                              progress_map=progress_map,
                              pulse=pulse,
