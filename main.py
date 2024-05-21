@@ -4,7 +4,7 @@ import random
 import subprocess
 
 from fastapi import BackgroundTasks
-from fastapi import FastAPI, File, Request, UploadFile
+from fastapi import FastAPI, Request
 from fastapi.exceptions import HTTPException
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -59,15 +59,14 @@ templates = Jinja2Templates(directory="templates")
 # Mount the static directory to serve static files (like CSS, JS, images, etc.)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-app.mount("/generated_data", StaticFiles(directory="generated_data"),
-          name="generated_data")
+app.mount("/generated_data", StaticFiles(directory="generated_data"), name="generated_data")
 
 request_to_sownload_files()
 
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
-    return templates.TemplateResponse("main.html", {"request": request})
+    return templates.TemplateResponse(request, "main.html")
 
 
 @app.post('/convert_midi2mp3')
@@ -83,23 +82,22 @@ async def convert_midi2mp3(form: Filename):
         f.write(str(form.filename).read())
 
     mp3_file_path = midi2mp3(filename)
-    return FileResponse(mp3_file_path, media_type='audio/mpeg',
-                        filename='converted.mp3')
+    return FileResponse(mp3_file_path, media_type='audio/mpeg', filename='converted.mp3')
 
 
 @app.get("/generate", response_class=HTMLResponse)
 async def generate(request: Request):
-    return templates.TemplateResponse("generate.html", {"request": request})
+    return templates.TemplateResponse(request, "generate.html")
 
 
 @app.get("/generate/algorithmic", response_class=HTMLResponse)
 async def algorithmic_page(request: Request):
-    return templates.TemplateResponse("algorithmic.html", {"request": request})
+    return templates.TemplateResponse(request, "algorithmic.html")
 
 
 @app.get("/generate/neural", response_class=HTMLResponse)
 async def neural_page(request: Request):
-    return templates.TemplateResponse("neural.html", {"request": request})
+    return templates.TemplateResponse(request, "neural.html")
 
 
 # is used to get current generation progress in JS code
@@ -113,8 +111,7 @@ def max_generations_count_surpass(ip_address: str):
     Checks whether the user has already reached synchronous generation
     limit set by constant MAX_TRACK.
     """
-    tracks_number_by_ip[ip_address] = tracks_number_by_ip.get(ip_address,
-                                                              0) + 1
+    tracks_number_by_ip[ip_address] = tracks_number_by_ip.get(ip_address, 0) + 1
     if tracks_number_by_ip[ip_address] > MAX_TRACKS:
         tracks_number_by_ip[ip_address] -= 1
         return True
@@ -167,20 +164,17 @@ async def process_algorithmic(background_tasks: BackgroundTasks,
                               form: ProcessStart):
     ip_address = request.client.host
     if max_generations_count_surpass(ip_address):
-        return JSONResponse(content={
-            "error": "You have a generation running. Please try again later."},
-            status_code=429)
+        return JSONResponse(content={"error": "You have a generation running. Please try again later."},
+                            status_code=429)
 
-    subprocess.run(["bash", "utils/remove_old_files.sh",
-                    str(DELETION_THRESHOLD)])
+    subprocess.run(["bash", "utils/remove_old_files.sh", str(DELETION_THRESHOLD)])
 
     filename: int = get_filename()
 
     minutes, seconds = map(int, form.duration.split(':'))
     duration_sec = minutes * 60 + seconds
 
-    log_data('utils/log.json', "Algo", form.generator,
-             datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    log_data('utils/log.json', "Algo", form.generator, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     background_tasks.add_task(generate_algo_task,
                               generator=form.generator,
@@ -222,12 +216,10 @@ async def process_neural_start(background_tasks: BackgroundTasks,
                                form: ProcessStart):
     ip_address = request.client.host
     if max_generations_count_surpass(ip_address):
-        return JSONResponse(content={
-            "error": "You have a generation running. Please try again later."},
-            status_code=429)
+        return JSONResponse(content={"error": "You have a generation running. Please try again later."},
+                            status_code=429)
 
-    subprocess.run(["bash", "utils/remove_old_files.sh",
-                    str(DELETION_THRESHOLD)])
+    subprocess.run(["bash", "utils/remove_old_files.sh", str(DELETION_THRESHOLD)])
 
     filename: int = get_filename()
 
@@ -246,13 +238,11 @@ async def process_neural_start(background_tasks: BackgroundTasks,
         model_path = os.path.join(models_folder, random_model)
     except Exception:
         tracks_number_by_ip[ip_address] -= 1
-        return JSONResponse(content={"error": "Model file not found"},
-                            status_code=500)
+        return JSONResponse(content={"error": "Model file not found"}, status_code=500)
 
     if not os.path.exists(model_path):
         tracks_number_by_ip[ip_address] -= 1
-        return JSONResponse(content={"error": "Model file not found"},
-                            status_code=500)
+        return JSONResponse(content={"error": "Model file not found"}, status_code=500)
 
     progress_map[filename] = 0
     background_tasks.add_task(generate_neural_task,
@@ -272,14 +262,12 @@ async def process_neural_start(background_tasks: BackgroundTasks,
 @app.post("/generate/process_track_finish")
 async def process_track_finish(form: Filename):
     if not os.path.exists(os.path.join('generated_data', f'{str(form.filename)}.mid')):
-        return JSONResponse(content={"error": "MIDI file not found"},
-                            status_code=500)
+        return JSONResponse(content={"error": "MIDI file not found"}, status_code=500)
 
     midi2mp3(filename=form.filename)
     filepath = os.path.join('generated_data', str(form.filename) + '.mp3')
     if not os.path.exists(filepath):
-        return JSONResponse(content={"error": "MP3 file not found"},
-                            status_code=500)
+        return JSONResponse(content={"error": "MP3 file not found"}, status_code=500)
 
 
 def get_edit_id(filename: int):
@@ -300,7 +288,7 @@ async def edit(form: Editing):
     subprocess.run(["bash", "utils/remove_old_files.sh",
                     str(DELETION_THRESHOLD)])
 
-    edit_id: int = get_edit_id(int(os.path.basename(form.file).split('.')[0]))
+    edit_id: int = get_edit_id(filename=int(os.path.basename(form.file).split('.')[0]))
     edited_file = edit_mp3(form.file,
                            str_to_secs(form.start),
                            str_to_secs(form.end),
@@ -309,8 +297,7 @@ async def edit(form: Editing):
                            int(form.fade_out))
 
     if not os.path.exists(os.path.join('generated_data', edited_file)):
-        return JSONResponse(content={"error": "Edited file not found"},
-                            status_code=500)
+        return JSONResponse(content={"error": "Edited file not found"}, status_code=500)
 
     return JSONResponse(content={"file": edited_file})
 
@@ -330,16 +317,13 @@ async def download_generated_file_mp3(filename: str):
 @app.get("/downloadMusicXML/{filename}")
 async def download_generated_file_xml(filename: str):
     file_path = os.path.join("generated_data", filename)
-    return FileResponse(file_path,
-                        media_type='application/vnd.recordare.musicxml+xml',
-                        filename=filename)
+    return FileResponse(file_path, media_type='application/vnd.recordare.musicxml+xml', filename=filename)
 
 
 @app.get("/downloadPDF/{filename}")
 async def download_generated_file_pdf(filename: str):
     file_path = os.path.join("generated_data", filename)
-    return FileResponse(file_path, media_type='application/pdf',
-                        filename=filename)
+    return FileResponse(file_path, media_type='application/pdf', filename=filename)
 
 
 @app.get("/downloadEditedMP3/{filename}")
@@ -350,11 +334,9 @@ async def download_edited_file(filename: str):
 
 @app.get("/help/generators_type", response_class=HTMLResponse)
 async def help_generators_type(request: Request):
-    return templates.TemplateResponse("help_generators_type.html",
-                                      {"request": request})
+    return templates.TemplateResponse(request, "help_generators_type.html")
 
 
 @app.get("/about_us", response_class=HTMLResponse)
 async def about_us(request: Request):
-    return templates.TemplateResponse("about_us.html",
-                                      {"request": request})
+    return templates.TemplateResponse(request, "about_us.html")

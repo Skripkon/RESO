@@ -18,7 +18,15 @@ def midi2mp3(filename: int):
             f'fluidsynth -ni "{soundfont}" "{filepath}"\
             -F "{wav_file}" -r 44100')
         # Convert to .mp3 from .wav
-        audio = AudioSegment.from_wav(wav_file)
+
+        # Why try-catch block?
+        # -> see https://stackoverflow.com/questions/70660431/couldntdecodeerror-decoding-failed-ffmpeg-returned-error-code-69
+        try:
+            audio = AudioSegment.from_wav(wav_file, format="mp3")
+        except Exception:
+            audio = AudioSegment.from_file(wav_file, format="mp4")
+
+        # audio = AudioSegment.from_wav(wav_file)
         audio.export(mp3_file, format='mp3')
         os.remove(wav_file)
 

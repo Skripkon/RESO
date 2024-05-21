@@ -4,13 +4,18 @@ FROM python:3.10-slim
 # Set the working directory inside the container
 WORKDIR /
 
+# For opening PDF files
 ENV QT_QPA_PLATFORM=offscreen
+
+# For running tests
+ENV DISPLAY=:99
+
 # Copy the requirements.txt file into the container
 COPY requirements.txt requirements.txt
 
 # Install required packages
 RUN apt-get update \
-    && apt-get install -y --fix-missing timidity ffmpeg musescore3 libqt5core5a \
+    && apt-get install -y --fix-missing timidity ffmpeg musescore3 libqt5core5a wget unzip dpkg \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* 
 
