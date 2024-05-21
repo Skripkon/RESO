@@ -7,7 +7,7 @@ from pyunpack import Archive
 import requests
 
 
-def request_to_sownload_files():
+def request_to_download_files():
     while True:
         try:
             agree = input((
@@ -366,7 +366,7 @@ def download_datasets(data_path='data/', force=False):
 
 
 if __name__ == "__main__":
-    request_to_sownload_files()
+    request_to_download_files()
     # download_datasets(force=False)
     # download_notes(force=False)
     # download_models(all_required=True)

@@ -49,7 +49,7 @@ def generate_music03(scale: int, filename: int,
         velocity = random.randint(80, 100)
 
         # Generate notes for the right hand
-        for i in range(notes_count):
+        for _ in range(notes_count):
             if (random.randint(1, 11) % 7 == 0):  # drop notes randomly
                 pause_note = note.Rest()
                 pause_note.duration.quarterLength = current_duration
@@ -93,6 +93,7 @@ def generate_music03(scale: int, filename: int,
                                )
     # Generate music
     while right_hand.duration.quarterLength < quarters_count:
+        progress_bar.update(current=right_hand.duration.quarterLength, cur_time=time.time())
         add_one_interval()
 
     progress_bar.update(current=quarters_count, cur_time=time.time())
@@ -100,7 +101,7 @@ def generate_music03(scale: int, filename: int,
     # Combine hands into stream
     myStream = stream.Stream([right_hand, left_hand])
     myStream.metadata = metadata.Metadata()
-    myStream.metadata.title = "Waltz"
+    myStream.metadata.title = "Etude"
     myStream.metadata.composer = "RESO"
     # Write to MIDI and PDF file
     filepath_midi = os.path.join("generated_data", f"{filename}.mid")

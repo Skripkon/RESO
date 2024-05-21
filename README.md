@@ -57,7 +57,7 @@ For local testing (you don't need to run the server beforehand):
 
 ```python3 run_tests.py --port 8000 --run-server```
 
-*For more info run `python3 run_tests.py --help`*
+*For more info run* `python3 run_tests.py --help`
 
 **Note** that we use [Selenium](https://www.selenium.dev/), which requires Google Chrome to be installed on your machine.
 You can install it with the following commands:

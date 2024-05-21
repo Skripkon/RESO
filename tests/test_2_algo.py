@@ -169,5 +169,24 @@ def test_algo_4(get_ip: str, get_port: int, get_driver: webdriver.Chrome):
     fade_out.send_keys(Keys.BACKSPACE + "6")
 
     try_editing(render_button, WebDriverWait(driver, 50))
+
+
+def test_algo_5(get_ip: str, get_port: int, get_driver: webdriver.Chrome):
+    ip, port, driver = get_ip, get_port, get_driver
+    driver.get(f'http://{ip}:{port}/generate/algorithmic')
+
+    generate_button = driver.find_element(by=By.ID, value="GenerateAlgorithmicMusic")
+    generator_select = Select(driver.find_element(by=By.ID, value="AlgoGenerator"))
+    duration_select = Select(driver.find_element(by=By.ID, value="DurationOfTheTrack"))
+    tempo_select = Select(driver.find_element(by=By.ID, value="TempoOfTheTrack"))
+    scale_select = Select(driver.find_element(by=By.ID, value="ScaleOfTheTrack"))
+
+    generator_select.select_by_visible_text("Etude")
+    duration_select.select_by_visible_text("02:00")
+    tempo_select.select_by_visible_text("Fast")
+    scale_select.select_by_visible_text("B")
+
+    clear_generated_data()
+    try_generation(generate_button, WebDriverWait(driver, 50))
     sleep(3)
     clear_generated_data()
