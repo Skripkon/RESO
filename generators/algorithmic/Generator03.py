@@ -1,14 +1,18 @@
 import os
 import random
+import time
 
 from music21 import chord, metadata, meter, note, stream, tempo
+from utils.progress_bar import ProgressBar
 
 from .MinorMusicGenerator import MinorMusicGenerator
 
 tempo_map = {'Normal': 100, 'Slow': 60, 'Fast': 120}
 
 
-def generate_music03(scale: int, filename: int, pulse: str = 'Normal',
+def generate_music03(scale: int, filename: int,
+                     progress_map: dict,
+                     pulse: str = 'Normal',
                      duration_sec: int = 60):
 
     INTERVAL_LENGTH = 3  # 20 notes in a left hand. Duration of each note is 0.25
@@ -80,8 +84,18 @@ def generate_music03(scale: int, filename: int, pulse: str = 'Normal',
             left_hand.append(new_note)
 
     # Generate music
+    progress_bar = ProgressBar(start_time=time.time(),
+                               target=quarters_count,
+                               message="Algo generation:",
+                               filename=filename,
+                               progress_map=progress_map,
+                               bar_length=40
+                               )
+    # Generate music
     while right_hand.duration.quarterLength < quarters_count:
         add_one_interval()
+
+    progress_bar.update(current=quarters_count, cur_time=time.time())
 
     # Combine hands into stream
     myStream = stream.Stream([right_hand, left_hand])
@@ -94,9 +108,4 @@ def generate_music03(scale: int, filename: int, pulse: str = 'Normal',
     myStream.write('midi', fp=filepath_midi)
     myStream.write('musicxml.pdf', fp=filepath_pdf)
 
-    # For this download MuseScore 3
-    # myStream.show()
-
-
-if __name__ == '__main__':
-    generate_music03(64, 'example.midi')
+    progress_bar.end()
