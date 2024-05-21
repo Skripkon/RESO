@@ -8,9 +8,6 @@ on:
   push:
     branches:
       - "**"
-  pull_request:
-    branches:
-      - "**"
 
 permissions:
   contents: read
@@ -50,4 +47,4 @@ jobs:
 
     - name: Run tests
       run: |
-        python run_tests.py --ip 127.0.0.1 --port 8000 --run-server
+        python run_tests.py --ip 127.0.0.1 --port 8000 --run-server --get-models 

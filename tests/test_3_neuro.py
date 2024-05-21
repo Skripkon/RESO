@@ -69,12 +69,46 @@ def try_editing(render_button: WebElement, wait: WebDriverWait):
     check_edited_file()
 
 
-def test_neuro_ok(get_ip: str, get_port: int, get_driver: webdriver.Chrome):
+def test_neuro_1(get_ip: str, get_port: int, get_driver: webdriver.Chrome):
     ip, port, driver = get_ip, get_port, get_driver
 
     driver.get(f'http://{ip}:{port}/')
     driver.find_element(by=By.ID, value="startButton").click()
     driver.find_element(by=By.ID, value="neuroEngine").click()
+
+    generate_button = driver.find_element(by=By.ID, value="GenerateNeuralMusic")
+    duration_select = Select(driver.find_element(by=By.ID, value="DurationOfTheTrack"))
+    tempo_select = Select(driver.find_element(by=By.ID, value="TempoOfTheTrack"))
+
+    duration_select.select_by_visible_text("00:30")
+    tempo_select.select_by_visible_text("Slow")
+
+    clear_generated_data()
+    try_generation(generate_button, WebDriverWait(driver, 90))
+
+
+def test_neuro_2(get_ip: str, get_port: int, get_driver: webdriver.Chrome):
+    ip, port, driver = get_ip, get_port, get_driver
+    driver.get(f'http://{ip}:{port}/generate/neural')
+
+    generate_button = driver.find_element(by=By.ID, value="GenerateNeuralMusic")
+    duration_select = Select(driver.find_element(by=By.ID, value="DurationOfTheTrack"))
+    tempo_select = Select(driver.find_element(by=By.ID, value="TempoOfTheTrack"))
+    generator_select = Select(driver.find_element(by=By.ID, value="NeuralGenerator"))
+    correct_scale = driver.find_element(by=By.ID, value="NeuroCorrectScale")
+
+    duration_select.select_by_visible_text("00:30")
+    tempo_select.select_by_visible_text("Slow")
+    generator_select.select_by_visible_text("Chopin")
+    correct_scale.click()
+
+    clear_generated_data()
+    try_generation(generate_button, WebDriverWait(driver, 90))
+
+
+def test_neuro_3(get_ip: str, get_port: int, get_driver: webdriver.Chrome):
+    ip, port, driver = get_ip, get_port, get_driver
+    driver.get(f'http://{ip}:{port}/generate/neural')
 
     generate_button = driver.find_element(by=By.ID, value="GenerateNeuralMusic")
     generator_select = Select(driver.find_element(by=By.ID, value="NeuralGenerator"))
@@ -89,25 +123,13 @@ def test_neuro_ok(get_ip: str, get_port: int, get_driver: webdriver.Chrome):
     fade_out = driver.find_element(by=By.ID, value="NeuroFadeOutTime")
     render_button = driver.find_element(by=By.ID, value="EditNeuroRenderButton")
 
-    wait = WebDriverWait(driver, 50)
-
     duration_select.select_by_visible_text("00:30")
     tempo_select.select_by_visible_text("Slow")
-
-    clear_generated_data()
-    try_generation(generate_button, wait)
-
-    generator_select.select_by_visible_text("Chopin")
-    correct_scale.click()
-
-    clear_generated_data()
-    try_generation(generate_button, wait)
-
     generator_select.select_by_visible_text("Bach")
     correct_scale.click()
 
     clear_generated_data()
-    try_generation(generate_button, wait)
+    try_generation(generate_button, WebDriverWait(driver, 90))
 
     edit_button.click()
     start_time.send_keys(Keys.BACKSPACE * 2 + "05")
@@ -116,6 +138,6 @@ def test_neuro_ok(get_ip: str, get_port: int, get_driver: webdriver.Chrome):
     fade_in.send_keys(Keys.BACKSPACE + "3")
     fade_out.send_keys(Keys.BACKSPACE + "6")
 
-    try_editing(render_button, wait)
+    try_editing(render_button, WebDriverWait(driver, 20))
+    sleep(3)
     clear_generated_data()
-    # assert False

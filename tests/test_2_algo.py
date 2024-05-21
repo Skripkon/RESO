@@ -169,5 +169,5 @@ def test_algo_4(get_ip: str, get_port: int, get_driver: webdriver.Chrome):
     fade_out.send_keys(Keys.BACKSPACE + "6")
 
     try_editing(render_button, WebDriverWait(driver, 50))
-    sleep(2)
+    sleep(3)
     clear_generated_data()
