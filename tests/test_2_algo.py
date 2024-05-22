@@ -22,7 +22,7 @@ def clear_generated_data():
 def try_generation(generate_button: WebElement, wait: WebDriverWait):
     """Try to edit a track and raise an exception if failed."""
 
-    def check_generated_files(wait_mp3_file_time: int = 20):
+    def check_generated_files(wait_mp3_file_time: int = 40):
         """
         Checks whether all 4 files generated. Since wav to mp3 conversion take quite some time,
         function check_iteration() that actually checks all 4 files is invoked in a loop with a

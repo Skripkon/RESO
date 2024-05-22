@@ -348,3 +348,8 @@ async def help_generators_type(request: Request):
 @app.get("/about_us", response_class=HTMLResponse)
 async def about_us(request: Request):
     return templates.TemplateResponse(request, "about_us.html")
+
+
+@app.get("/contacts", response_class=HTMLResponse)
+async def contacts(request: Request):
+    return templates.TemplateResponse(request, "contacts.html")
