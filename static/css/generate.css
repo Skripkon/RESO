@@ -17,13 +17,14 @@
 .help-text {
     display: block;
     margin: 0 auto;
-    padding-top: 25px;
+    margin-top: 18px;
+    padding-top: 7px;
     padding-bottom: 7px;
-    width: 500px;
-    height: 20px;
     color: #013a63;
     line-height: 0.6;
-    text-align: center;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
 }
 
 .help-text:hover {
