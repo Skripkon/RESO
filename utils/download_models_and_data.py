@@ -13,13 +13,13 @@ def request_to_download_files():
             agree = input((
                 "Dow you want do download missing files? [Y/n] "
             ))
-            match agree.lower():
-                case 'y':
-                    break
-                case 'n':
-                    return
-                case _:
-                    print('No such option!')
+            agree_lower = agree.lower():
+            if agree_lower == 'y':
+                break
+            elif agree_lower == 'n':
+                return
+            else:
+                print('No such option!')
         except ValueError:
             print("no input")
             return
@@ -33,21 +33,17 @@ def request_to_download_files():
             "as many models as required\n"
             "f - force update of all models\n"
             "n - do not download models\n"))
-
-        match download_models_options.lower():
-            case 'o':
-                download_models(all_required=False, force=False)
-                break
-            case 's':
-                download_models(all_required=True, force=False)
-                break
-            case 'f':
-                download_models(all_required=True, force=True)
-                break
-            case 'n':
-                break
-            case _:
-                print("No such option!")
+        download_models_options_lower = download_models_options.lower()
+        if download_models_options_lower == 'o':
+            download_models(all_required=False, force=False)
+        elif download_models_options_lower == 's':
+            download_models(all_required=True, force=False)
+        elif download_models_options_lower == 'f':
+            download_models(all_required=True, force=True)
+        elif download_models_options_lower == 'n':
+            break
+        else:
+            print("No such option!")
 
     while True:
         do_download_notes = input((
@@ -56,18 +52,15 @@ def request_to_download_files():
             "the notes file\n"
             "f - force update of all notes files\n"
             "n - do not download notes files\n"))
-
-        match do_download_notes.lower():
-            case 's':
-                download_notes(force=False)
-                break
-            case 'f':
-                download_notes(force=True)
-                break
-            case 'n':
-                break
-            case _:
-                print("No such option!")
+        do_download_notes_lower = do_download_notes.lower()
+        if do_download_notes_lower == 's':
+            download_notes(force=False)
+        elif do_download_notes_lower == 'f':
+            download_notes(force=True)
+        elif do_download_notes_lower == 'n':
+            break
+        else:
+            print("No such option!")
 
     while True:
         do_download_datasets = input((
@@ -76,18 +69,15 @@ def request_to_download_files():
             "as many MIDIs as required\n"
             "f - force update of all datasets\n"
             "n - do not download datasets\n"))
-
-        match do_download_datasets.lower():
-            case 's':
-                download_datasets(force=False)
+        do_download_datasets_lower = do_download_datasets.lower()
+        if do_download_datasets_lower == 's':
+            download_datasets(force=False)
+        elif do_download_datasets_lower == 'f':
+            download_datasets(force=True)    
+        elif do_download_datasets_lower == 'n':
                 break
-            case 'f':
-                download_datasets(force=True)
-                break
-            case 'n':
-                break
-            case _:
-                print("No such option!")
+        else:
+            print("No such option!")
     return
 
 

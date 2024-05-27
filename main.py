@@ -140,28 +140,27 @@ def generate_algo_task(generator,
                        pulse,
                        duration_sec,
                        ip_address):
-    match generator:
-        case "AlgoGen01":
-            generate_music01(scale=scale,
-                             filename=filename,
-                             progress_map=progress_map,
-                             pulse=pulse,
-                             duration_sec=duration_sec
-                             )
-        case "AlgoGen02":
-            generate_music02(scale=scale,
-                             filename=filename,
-                             progress_map=progress_map,
-                             pulse=pulse,
-                             duration_sec=duration_sec
-                             )
-        case "AlgoGen03":
-            generate_music03(scale=scale,
-                             filename=filename,
-                             progress_map=progress_map,
-                             pulse=pulse,
-                             duration_sec=duration_sec
-                             )
+    if generator == "AlgoGen01":
+        generate_music01(scale=scale,
+                         filename=filename,
+                         progress_map=progress_map,
+                         pulse=pulse,
+                         duration_sec=duration_sec
+                         )
+    elif generator == "AlgoGen02":
+        generate_music02(scale=scale,
+                         filename=filename,
+                         progress_map=progress_map,
+                         pulse=pulse,
+                         duration_sec=duration_sec
+                         )
+    elif generator == "AlgoGen03":
+        generate_music03(scale=scale,
+                         filename=filename,
+                         progress_map=progress_map,
+                         pulse=pulse,
+                         duration_sec=duration_sec
+                         )
     tracks_number_by_ip[ip_address] -= 1
 
 
