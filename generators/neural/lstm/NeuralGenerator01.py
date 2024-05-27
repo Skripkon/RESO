@@ -9,7 +9,7 @@ from utils.progress_bar import ProgressBar
 from utils.scale import fix_scale
 
 
-def generate_neural(composer: str,
+def generate_neural01(composer: str,
                     model_path: str,
                     duration: int,
                     tempo: str,

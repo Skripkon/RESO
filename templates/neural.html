@@ -35,7 +35,13 @@ RESO
 </div>
 
 <form class="gen_form" method="post" action="/generate/process_neural_start">
-    <select id="NeuralGenerator">
+    <label class="Label">Choose model</label>
+    <select id="Model">
+        <option value="LSTM" selected>LSTM</option>
+        <option value="GPT-2">GPT-2</option>
+    </select>
+    <label class="Label">Choose composer</label>
+    <select id="Composer">
         <option value="Mozart" selected>Mozart</option>
         <option value="Bach">Bach</option>
         <option value="Chopin">Chopin</option>
