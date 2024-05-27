@@ -53,13 +53,12 @@ class NotesParser:
             str: The same pitch but without a flat symbol.
         """
 
-        match pitch[0]:
-            case "C":
-                return "B"
-            case "F":
-                return "E"
-            case _:
-                return self._previous_note[pitch[0]] + "#"
+        if pitch[0] == "C":
+            return "B"
+        elif pitch[0] == "F":
+            return "E"
+        else:
+            return self._previous_note[pitch[0]] + "#"
 
     def _format_note(self, note: str) -> str:
         """
