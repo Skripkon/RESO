@@ -1,20 +1,21 @@
 import os
+import random
 import time
 
 import note_seq
-import random
-from .Decode import token_sequence_to_note_sequence
-from utils.progress_bar import ProgressBar
 from transformers import AutoTokenizer, GPT2LMHeadModel
+from utils.progress_bar import ProgressBar
+
+from .Decode import token_sequence_to_note_sequence
 
 
 def generate_neural02(composer: str,
-                    model_path: str,
-                    duration: int,
-                    tempo: str,
-                    filename: str,
-                    progress_map: dict = None
-                    ):
+                      model_path: str,
+                      duration: int,
+                      tempo: str,
+                      filename: str,
+                      progress_map: dict = None
+                      ):
     """
     Generates and saves as 'filename' a midi file using given model, duration
     and tempo. Composer argument instructs the function which folder to take
