@@ -1,0 +1,58 @@
+.fa {
+    padding: 16px;
+    font-size: 100px;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50%;
+  }
+  
+  .fa:hover {
+    opacity: 0.7;
+  }
+    
+  .fa-envelope-o {
+    background: #3B5998;
+    color: white;
+  }
+  
+  .fa-telegram {
+    background: #55ACEE;
+    color: white;
+  }
+  
+  .fa-youtube {
+    background: #ff0000;
+    color: white;
+  }
+
+  .fa-github {
+    background: #000000;
+    color: white;
+  }
+
+  .social-networks {
+    display: block;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  .social-networks li {
+    float: left;
+    display: inline;
+    margin: auto;
+    margin-left: 7px;
+    margin-right: 7px;
+  }
+
+  .h-line-contacts { 
+    width:100%; 
+    height:4px; 
+    background-color: #013a63;
+    margin-top: 100px;
+    margin-bottom: 10px;
+}

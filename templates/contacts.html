@@ -1,0 +1,56 @@
+{% extends 'header.html' %}
+
+{% block title %}
+RESO
+{% endblock %}
+
+{% block body %}
+
+<link href="{{ url_for('static', path='css/contacts.css') }}" rel="stylesheet">
+<!-- Add icons library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div>
+    <img src="{{ url_for('static', path='images/logo_full_white.png') }}" class="small-logo">
+</div>
+
+<p class="big-heading"> Contact us </p>
+
+<div class="h-line-contacts" style="margin-top: 10px;"></div>
+
+<p class="sub-heading">Sergey</p>
+<ul class="social-networks">
+    <li> <a href="https://t.me/not_Nowwwd"><i class="fa fa-telegram"></i></a> </li>
+    <li> <a href="mailto:sergfedchin@gmail.com"><i class="fa fa-envelope-o"></i></a> </li>
+    <li> <a href="https://github.com/sergfedchin"><i class="fa fa-github"></i></a> </li>
+</ul>
+
+<div class="h-line-contacts"></div>
+
+<p class="sub-heading">Nadezhda</p>
+<ul class="social-networks">
+    <li> <a href="https://t.me/nadezhdigo"><i class="fa fa-telegram"></i></a> </li>
+    <li> <a href="mailto:nad.igolki@gmail.com"><i class="fa fa-envelope-o"></i></a> </li>
+    <li> <a href="https://github.com/nad-igolki"><i class="fa fa-github"></i></a> </li>
+</ul>
+
+<div class="h-line-contacts"></div>
+
+<p class="sub-heading">Nikolay</p>
+<ul class="social-networks">
+    <li> <a href="https://t.me/nskripko"><i class="fa fa-telegram"></i></a> </li>
+    <li> <a href="mailto:nskripko@icloud.com"><i class="fa fa-envelope-o"></i></a> </li>
+    <li> <a href="https://www.youtube.com/@_NickTech"><i class="fa fa-youtube"></i></a> </li>
+    <li> <a href="https://github.com/Skripkon"><i class="fa fa-github"></i></a> </li>
+</ul>
+
+<div class="h-line-contacts"></div>
+
+<p class="sub-heading">Our GitHub repository</p>
+<ul class="social-networks">
+    <li> <a href="https://github.com/Skripkon/RESO"><i class="fa fa-github"></i></a> </li>
+</ul>
+
+<br><br><br><br>
+
+{% endblock %}

@@ -20,7 +20,6 @@ def request_to_download_files():
                 return
             else:
                 print('No such option!')
-                continue
         except ValueError:
             print("no input")
             return
@@ -83,6 +82,7 @@ def request_to_download_files():
             break
         else:
             print("No such option!")
+            continue
         break
     return
 
