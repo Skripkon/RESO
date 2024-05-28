@@ -13,7 +13,7 @@ def request_to_download_files():
             agree = input((
                 "Dow you want do download missing files? [Y/n] "
             ))
-            agree_lower = agree.lower():
+            agree_lower = agree.lower()
             if agree_lower == 'y':
                 break
             elif agree_lower == 'n':
@@ -44,6 +44,8 @@ def request_to_download_files():
             break
         else:
             print("No such option!")
+            continue
+        break
 
     while True:
         do_download_notes = input((
@@ -61,6 +63,8 @@ def request_to_download_files():
             break
         else:
             print("No such option!")
+            continue
+        break
 
     while True:
         do_download_datasets = input((
@@ -73,11 +77,13 @@ def request_to_download_files():
         if do_download_datasets_lower == 's':
             download_datasets(force=False)
         elif do_download_datasets_lower == 'f':
-            download_datasets(force=True)    
+            download_datasets(force=True)
         elif do_download_datasets_lower == 'n':
-                break
+            break
         else:
             print("No such option!")
+            continue
+        break
     return
 
 

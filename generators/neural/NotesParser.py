@@ -53,7 +53,8 @@ class NotesParser:
             str: The same pitch but without a flat symbol.
         """
 
-        if pitch[0] == "C"
+
+        if pitch[0] == "C":
             return "B"
         elif pitch[0] == "F":
             return "E"
