@@ -7,7 +7,16 @@ from pyunpack import Archive
 import requests
 
 
-def request_to_sownload_files():
+BASE_URL = 'https://cloud-api.yandex.net/v1/disk/public/resources/download?'
+
+
+def print_header(text: str):
+    print('-' * 30)
+    print(text)
+    print('-' * 30)
+
+
+def request_to_download_files():
     while True:
         agree = input((
             "Dow you want do download missing files? [Y/n] "
@@ -21,8 +30,8 @@ def request_to_sownload_files():
                 print('No such option!')
 
     while True:
-        download_models_options = input((
-            "Would you like to download models? (necessary)\n"
+        download_lstm_models_options = input((
+            "Would you like to download lstm models? (necessary)\n"
             "o - only download models for composers that currently have no "
             "models at all\n"
             "s - skip download for composers that have exactly "
@@ -30,21 +39,39 @@ def request_to_sownload_files():
             "f - force update of all models\n"
             "n - do not download models\n"))
 
-        match download_models_options.lower():
-            case 'o':
-                download_models(all_required=False, force=False)
-                break
-            case 's':
-                download_models(all_required=True, force=False)
-                break
-            case 'f':
-                download_models(all_required=True, force=True)
-                break
-            case 'n':
-                break
-            case _:
-                print("No such option!")
+        download_lstm_models_options_lower = download_lstm_models_options.lower()
+        if download_lstm_models_options_lower == 'o':
+            download_lstm_models(all_required=False, force=False)
+        elif download_lstm_models_options_lower == 's':
+            download_lstm_models(all_required=True, force=False)
+        elif download_lstm_models_options_lower == 'f':
+            download_lstm_models(all_required=True, force=True)
+        elif download_lstm_models_options_lower == 'n':
+            break
+        else:
+            print("No such option!")
+            continue
+        break
 
+    while True:
+        download_gpt2_models_options = input((
+            "Would you like to download GPT-2 models? (necessary)\n"
+            "s - skip download for composers that already have models\n"
+            "f - force update of all models\n"
+            "n - do not download models\n"))
+
+        download_gpt2_models_options_lower = download_gpt2_models_options.lower()
+        if download_gpt2_models_options_lower == 's':
+            download_gpt2_models(force=False)
+        elif download_gpt2_models_options_lower == 'f':
+            download_gpt2_models(force=True)
+        elif download_gpt2_models_options_lower == 'n':
+            break
+        else:
+            print("No such option!")
+            continue
+        break
+        
     while True:
         do_download_notes = input((
             "Would you like to download notes files? (necessary)\n"
@@ -87,22 +114,54 @@ def request_to_sownload_files():
     return
 
 
-def download_models(models_path='generators/neural/lstm/models',
-                    all_required=True,
-                    force=False):
-    print('-' * 30)
-    print("DOWNLOADING MODELS")
-    print('-' * 30)
-    BASE_URL = \
-        'https://cloud-api.yandex.net/v1/disk/public/resources/download?'
+def download_and_unpack_zip(what: str, public_key: str, destination_folder: str, unarchived_folder_path: str) -> bool:
+    final_url = BASE_URL + urlencode(dict(public_key=public_key))
+    try:
+        response = requests.get(final_url)
+    except Exception:
+        print(f"Error occurred while downloading {what}. Aborting. Stable application work is not guaranteed.\n")
+        return False
 
+    try:
+        download_url = response.json()['href']
+    except KeyError:
+        print(f"Error occurred while downloading {what}. Aborting. Stable application work is not guaranteed.\n")
+        return False
+
+    download_response = requests.get(download_url)
+    zip_path = os.path.join(destination_folder, 'downloaded_file.zip')
+    with open(zip_path, 'wb') as f:
+        f.write(download_response.content)
+
+    print("Archive downloaded, unpacking...")
+    Archive(zip_path).extractall(destination_folder)
+    for filename in os.listdir(unarchived_folder_path):
+        shutil.move(os.path.join(unarchived_folder_path, filename),
+                    destination_folder)
+
+    print("Clearing temporary files...")
+    try:
+        shutil.rmtree(unarchived_folder_path)
+        os.remove(zip_path)
+    except Exception:
+        print("Error occurred while deleting temporary files. Stable application work is not guaranteed.")
+        return False
+
+    return True
+
+
+def download_lstm_models(models_path=os.path.join('generators', 'neural', 'lstm', 'models'),
+                         all_required=True,
+                         force=False):
+    print_header("DOWNLOADING LSTM MODELS")
     try:
         links_file = open(os.path.join(models_path, 'links.txt'))
     except FileNotFoundError:
         print("Error: could not find required file",
               f"'{os.path.join(os.path.join(models_path, 'links.txt'))}."
               "Application will not work as intended.")
-        pass
+        print('-' * 30)
+        return
 
     while True:
         comp_name = links_file.readline()[:-1]
@@ -151,52 +210,77 @@ def download_models(models_path='generators/neural/lstm/models',
         print(f"Directory '{comp_model_path}' cleared.")
         print(f"Downloading new files from {public_key}")
 
-        final_url = BASE_URL + urlencode(dict(public_key=public_key))
+        if download_and_unpack_zip(what="lstm models",
+                                   public_key=public_key,
+                                   destination_folder=comp_model_path,
+                                   unarchived_folder_path=os.path.join(comp_model_path, comp_name.upper())):
+            print("Completed.")
+        print('-' * 30)
+        continue
 
+
+def _clear_dir(folder: str):
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
         try:
-            response = requests.get(final_url)
-        except Exception:
-            print("Error occurred while downloading models. Aborting.",
-                  "Stable application work is not guaranteed.\n" + '-' * 30)
-            continue
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print('Failed to delete %s. Reason: %s' % (file_path, e))
 
-        try:
-            download_url = response.json()['href']
-        except KeyError:
-            print("Error occurred while downloading models. Aborting.",
-                  "Stable application work is not guaranteed.\n" + '-' * 30)
-            continue
 
-        download_response = requests.get(download_url)
-        zip_path = os.path.join(comp_model_path, 'downloaded_file.zip')
-        with open(zip_path, 'wb') as f:
-            f.write(download_response.content)
+def download_gpt2_models(models_path=os.path.join('generators', 'neural', 'transformer', 'gpt2', 'models'),
+                         force=False):
+    print_header("DOWNLOADING GPT-2 MODELS")
+    try:
+        links_file = open(os.path.join(models_path, 'links.txt'))
+    except FileNotFoundError:
+        print("Error: could not find required file",
+              f"'{os.path.join(os.path.join(models_path, 'links.txt'))}."
+              "Application will not work as intended.")
+        print('-' * 30)
+        return
 
-        print("Archive downloaded, unpacking...")
-        Archive(zip_path).extractall(comp_model_path)
-        unarchived_folder_path = os.path.join(comp_model_path,
-                                              comp_name.upper())
-        for filename in os.listdir(unarchived_folder_path):
-            shutil.move(os.path.join(unarchived_folder_path, filename),
-                        comp_model_path)
+    while True:
+        comp_name = links_file.readline()[:-1]
+        if not comp_name:
+            break
+        public_key = links_file.readline()[:-1]
 
-        print("Clearing temporary files...")
-        try:
-            shutil.rmtree(unarchived_folder_path)
-            os.remove(zip_path)
-        except Exception:
-            print("Error occurred while deleting temporary files.",
-                  "Stable application work is not guaranteed.")
-            pass
-        print("Completed.\n" + '-' * 30)
+        # check whether models are already available
+        comp_model_path = os.path.join(models_path, comp_name.capitalize())
+        if os.path.exists(comp_model_path):
+            if len(os.listdir(comp_model_path)) > 0:
+                if force:
+                    _clear_dir(comp_model_path)
+                    print(f"Cleared folder '{comp_model_path}'")
+                else:
+                    print(f"{comp_name.capitalize()} models already present. Skipping.")
+                    print('-' * 30)
+                    continue
+        else:
+            os.mkdir(comp_model_path)
+
+        if force:
+            print(f"{comp_name.capitalize()}: forcing update from cloud...")
+        else:
+            print(f"{comp_name.capitalize()}: downloading from cloud initialized...")
+
+        print(f"Downloading new files from {public_key}")
+
+        if download_and_unpack_zip(what="GPT-2 models",
+                                   public_key=public_key,
+                                   destination_folder=comp_model_path,
+                                   unarchived_folder_path=os.path.join(comp_model_path, comp_name.upper())):
+            print("Completed.")
+        print('-' * 30)
+        continue
 
 
 def download_notes(data_path='data/', force=False):
-    print('-' * 30)
-    print("DOWNLOADING NOTES")
-    print('-' * 30)
-    BASE_URL = \
-        'https://cloud-api.yandex.net/v1/disk/public/resources/download?'
+    print_header("DOWNLOADING NOTES")
     composers = [f.path for f in os.scandir(data_path) if f.is_dir()]
 
     for comp in composers:
@@ -228,43 +312,13 @@ def download_notes(data_path='data/', force=False):
         public_key = comp_file.readline()
         print(f"Downloading new files from {public_key}")
 
-        final_url = BASE_URL + urlencode(dict(public_key=public_key))
-
-        try:
-            response = requests.get(final_url)
-        except Exception:
-            print("Error occurred while downloading notes. Aborting.",
-                  "Stable application work is not guaranteed.\n" + '-' * 30)
-            continue
-
-        try:
-            download_url = response.json()['href']
-        except KeyError:
-            print("Error occurred while downloading notes. Aborting.",
-                  "Stable application work is not guaranteed.\n" + '-' * 30)
-            continue
-
-        download_response = requests.get(download_url)
-        zip_path = os.path.join(comp, 'downloaded_file.zip')
-        with open(zip_path, 'wb') as f:
-            f.write(download_response.content)
-
-        print("Archive downloaded, unpacking...")
-        Archive(zip_path).extractall(comp)
-        unarchived_folder_path = os.path.join(comp,
-                                              comp_name.upper() + '_NOTES')
-        for filename in os.listdir(unarchived_folder_path):
-            shutil.move(os.path.join(unarchived_folder_path, filename), comp)
-
-        print("Clearing temporary files...")
-        try:
-            shutil.rmtree(unarchived_folder_path)
-            os.remove(zip_path)
-        except Exception:
-            print("Error occurred while deleting temporary files.",
-                  "Stable application work is not guaranteed.")
-            pass
-        print("Completed.\n" + '-' * 30)
+        if download_and_unpack_zip(what="notes",
+                                   public_key=public_key,
+                                   destination_folder=comp,
+                                   unarchived_folder_path=os.path.join(comp, comp_name.upper() + '_NOTES')):
+            print("Completed.")
+        print('-' * 30)
+        continue
 
 
 def files_cnt(path: str, extensions: list):
@@ -273,11 +327,7 @@ def files_cnt(path: str, extensions: list):
 
 
 def download_datasets(data_path='data/', force=False):
-    print('-' * 30)
-    print("DOWNLOADING DATASETS")
-    print('-' * 30)
-    BASE_URL = \
-        'https://cloud-api.yandex.net/v1/disk/public/resources/download?'
+    print_header("DOWNLOADING DATASETS")
     datasets_composers = [f.path for f in
                           os.scandir(data_path) if f.is_dir()]
     for comp in datasets_composers:
@@ -322,47 +372,18 @@ def download_datasets(data_path='data/', force=False):
         print(f"Directory '{comp}' cleared.")
         print(f"Downloading new files from {public_key}")
 
-        final_url = BASE_URL + urlencode(dict(public_key=public_key))
-
-        try:
-            response = requests.get(final_url)
-        except Exception:
-            print("Error occurred while downloading datasets. Aborting.",
-                  "Stable application work is not guaranteed.\n" + '-' * 30)
-            continue
-
-        try:
-            download_url = response.json()['href']
-        except KeyError:
-            print("Error occurred while downloading datasets. Aborting.",
-                  "Stable application work is not guaranteed.\n" + '-' * 30)
-            continue
-
-        download_response = requests.get(download_url)
-        zip_path = os.path.join(comp, 'downloaded_file.zip')
-        with open(zip_path, 'wb') as f:
-            f.write(download_response.content)
-
-        print("Archive downloaded, unpacking...")
-        Archive(zip_path).extractall(comp)
-        unarchived_folder_path = os.path.join(comp,
-                                              comp_name.upper() + '_MIDIS')
-        for filename in os.listdir(unarchived_folder_path):
-            shutil.move(os.path.join(unarchived_folder_path, filename), comp)
-
-        print("Clearing temporary files...")
-        try:
-            shutil.rmtree(unarchived_folder_path)
-            os.remove(zip_path)
-        except Exception:
-            print("Error occurred while deleting temporary files.",
-                  "Stable application work is not guaranteed.")
-            pass
-        print("Completed.\n" + '-' * 30)
+        if download_and_unpack_zip(what="datasets",
+                                   public_key=public_key,
+                                   destination_folder=comp,
+                                   unarchived_folder_path=os.path.join(comp, comp_name.upper() + '_MIDIS')):
+            print("Completed.")
+        print('-' * 30)
+        continue
 
 
 if __name__ == "__main__":
-    request_to_sownload_files()
+    request_to_download_files()
+    # download_gpt2_models(force=True)
     # download_datasets(force=False)
     # download_notes(force=False)
     # download_models(all_required=True)

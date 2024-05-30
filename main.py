@@ -16,7 +16,7 @@ from generators.neural.transformer.gpt2.NeuralGenerator02 import generate_neural
 from pydantic import BaseModel
 from utils.audio_editing import edit_mp3, str_to_secs
 from utils.data_logging import log_data
-from utils.download_models_and_data import request_to_sownload_files
+from utils.download_models_and_data import request_to_download_files
 from utils.midi2mp3 import midi2mp3
 from werkzeug.utils import secure_filename
 
@@ -71,7 +71,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/generated_data", StaticFiles(directory="generated_data"),
           name="generated_data")
 
-request_to_sownload_files()
+request_to_download_files()
 
 
 @app.get("/", response_class=HTMLResponse)

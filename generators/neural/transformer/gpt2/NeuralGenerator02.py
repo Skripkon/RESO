@@ -36,12 +36,6 @@ def generate_neural02(composer: str,
     model = GPT2LMHeadModel.from_pretrained(model_path, device_map="cpu")
     tokenizer = AutoTokenizer.from_pretrained(model_path, device_map="cpu")
 
-    progress_bar = ProgressBar(start_time=time.time(),
-                               target=quarters,
-                               message='Generating:',
-                               filename=filename,
-                               progress_map=progress_map,
-                               bar_length=40)
 
     all_tokens = []
     input_ids = tokenizer.encode(
@@ -51,7 +45,14 @@ def generate_neural02(composer: str,
     last_tokens_index = 0
     last_tokens_len = 0
     i = 0
+    progress_bar = ProgressBar(start_time=time.time(),
+                               target=duration,
+                               message='Generating:',
+                               filename=filename,
+                               progress_map=progress_map,
+                               bar_length=40)
     while 0.1 * NOTE_LENGTH * len(all_tokens) < duration:
+        progress_bar.update(0.1 * NOTE_LENGTH * len(all_tokens), time.time())
         if last_tokens_index > 1 and last_tokens_len == len(all_tokens):
             all_tokens = []
             input_ids = tokenizer.encode(
@@ -113,7 +114,6 @@ def generate_neural02(composer: str,
     note_sequence.total_time = duration
     print(note_sequence.total_time)
 
-    print("Updating to 100%")
     progress_bar.update(current=quarters, cur_time=time.time())
 
     note_seq.note_sequence_to_midi_file(note_sequence, filepath_midi)

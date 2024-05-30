@@ -1,9 +1,7 @@
-.venv
-venv
-venv_wsl
-**/__pycache__
-**/.DS_Store
-__pycache__
+.*/
+*venv*/
+__*__/
+
 generated_data/*
 utils/log.json
 data/Bach/*
@@ -14,3 +12,6 @@ data/Mozart/*
 !data/Mozart/mozart.txt
 generators/neural/lstm/models/*
 !generators/neural/lstm/models/links.txt
+generators/neural/transformer/gpt2/models/*
+!generators/neural/transformer/gpt2/models/links.txt
+!.github
