@@ -1,12 +1,10 @@
 import os
-import random
 import time
 
 import note_seq
-from transformers import AutoTokenizer, GPT2LMHeadModel
-from utils.progress_bar import ProgressBar
-
 from .Decode import token_sequence_to_note_sequence
+from utils.progress_bar import ProgressBar
+from transformers import AutoTokenizer, GPT2LMHeadModel
 
 
 def generate_neural02(composer: str,
@@ -22,19 +20,21 @@ def generate_neural02(composer: str,
     notes file from. The generated track is also corrected to fit the scale
     better if the corresponding option is selected.
     """
-    TEMPO_MAP = {'Normal': 100, 'Slow': 60, 'Fast': 120}
-    COMPOSERS = ['Mozart', 'Bach', 'Chopin']
+    TEMPO_MAP = {"Normal": 100, "Slow": 60, "Fast": 120}
+    COMPOSERS = ["Mozart", "Bach", "Chopin"]
 
     assert composer in COMPOSERS and duration in range(30, 160)
-    bpm = TEMPO_MAP.get(tempo, TEMPO_MAP['Normal'])
+    bpm = TEMPO_MAP.get(tempo, TEMPO_MAP["Normal"])
+    NOTE_LENGTH = 0.25 * 60 / bpm
+    BAR_LENGTH = 4.0 * 60 / bpm
 
     # TODO
     quarters = 10
 
     filepath_midi = os.path.join("generated_data", f"{filename}.mid")
 
-    model = GPT2LMHeadModel.from_pretrained(model_path, device_map='cpu')
-    tokenizer = AutoTokenizer.from_pretrained(model_path, device_map='cpu') 
+    model = GPT2LMHeadModel.from_pretrained(model_path, device_map="cpu")
+    tokenizer = AutoTokenizer.from_pretrained(model_path, device_map="cpu")
 
     progress_bar = ProgressBar(start_time=time.time(),
                                target=quarters,
@@ -44,49 +44,79 @@ def generate_neural02(composer: str,
                                bar_length=40)
 
     all_tokens = []
-    input_ids = tokenizer.encode("PIECE_START GENRE=OTHER", return_tensors="pt") 
+    input_ids = tokenizer.encode(
+        "PIECE_START TIME_SIGNATURE=4_4 GENRE=OTHER TRACK_START", return_tensors="pt"
+    )
     additional_tokens = 2048
-    number_of_regenerations = 4
-    for i in range(number_of_regenerations):
+    last_tokens_index = 0
+    last_tokens_len = 0
+    i = 0
+    while 0.1 * NOTE_LENGTH * len(all_tokens) < duration:
+        if last_tokens_index > 1 and last_tokens_len == len(all_tokens):
+            all_tokens = []
+            input_ids = tokenizer.encode(
+                "PIECE_START TIME_SIGNATURE=4_4 GENRE=OTHER TRACK_START",
+                return_tensors="pt",
+            )
+            last_tokens_index = 0
+            last_tokens_len = 0
+            i = 0
+            continue
+        if last_tokens_len == len(all_tokens) and i != 0:
+            last_tokens_index += 1
+        if last_tokens_len != len(all_tokens):
+            last_tokens_index = 0
+            last_tokens_len = 0
         generated_ids = model.generate(
             input_ids,
             max_length=input_ids.shape[1] + additional_tokens,
             do_sample=True,
             temperature=0.75,
-            eos_token_id=tokenizer.encode("TRACK_END")[0]
+            eos_token_id=tokenizer.encode("TRACK_END")[0],
         )
-        all_tokens += list(generated_ids[0][:-20])
-        input_ids = generated_ids[:, -20:-1]
+        if i == 1:
+            all_tokens = (
+                list(
+                    tokenizer.encode(
+                        "PIECE_START TIME_SIGNATURE=4_4 GENRE=OTHER TRACK_START",
+                        return_tensors="pt",
+                    )[0]
+                )
+                + all_tokens
+            )
+        if i > 0:
+            all_tokens += list(generated_ids[0][:-100])
+        input_ids = generated_ids[:, -100:-1]
+        i += 1
     all_tokens += list(generated_ids[0])
     token_sequence = tokenizer.decode(all_tokens)
-    note_sequence = token_sequence_to_note_sequence(token_sequence, qpm=bpm)
+    note_sequence = token_sequence_to_note_sequence(
+        token_sequence, qpm=bpm, NOTE_LENGTH=NOTE_LENGTH, BAR_LENGTH=BAR_LENGTH
+    )
 
-    seconds_per_beat = 60.0 / bpm
-    current_time = 0.0
-    prev_end = 0.0
-    durations = [1, 1.3, 1.7, 2]
-
+    prev_end = 0
+    new_notes = []
     for note in note_sequence.notes:
-        current_time = note.end_time
-        if current_time > duration:
-            note.start_time = current_time
-            note.end_time = current_time
+        if note.start_time > duration:
             continue
-        generated_duration = note.end_time - note.start_time
+        if note.end_time > duration:
+            note.end_time = duration
+            new_notes.append(note)
+            continue
         if prev_end < note.start_time:
             note.start_time = prev_end
-        duration_seconds = random.choice(durations)
-        duration_beats = duration_seconds * seconds_per_beat
-        if generated_duration < duration_beats * seconds_per_beat:
-            note.end_time = note.start_time + duration_beats
         prev_end = note.end_time
+        new_notes.append(note)
 
+    del note_sequence.notes[:]
+    note_sequence.notes.extend(new_notes)
+    note_sequence.total_time = duration
+    print(note_sequence.total_time)
 
     print("Updating to 100%")
     progress_bar.update(current=quarters, cur_time=time.time())
 
-    note_seq.sequence_proto_to_midi_file(note_sequence, filepath_midi)
-
+    note_seq.note_sequence_to_midi_file(note_sequence, filepath_midi)
     progress_bar.end()
 
 
