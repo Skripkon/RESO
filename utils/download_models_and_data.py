@@ -71,7 +71,7 @@ def request_to_download_files():
             print("No such option!")
             continue
         break
-        
+
     while True:
         do_download_notes = input((
             "Would you like to download notes files? (necessary)\n"

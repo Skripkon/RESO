@@ -10,13 +10,13 @@ from utils.scale import fix_scale
 
 
 def generate_neural01(composer: str,
-                    model_path: str,
-                    duration: int,
-                    tempo: str,
-                    filename: str,
-                    correct_scale: bool = True,
-                    progress_map: dict = None
-                    ):
+                      model_path: str,
+                      duration: int,
+                      tempo: str,
+                      filename: str,
+                      correct_scale: bool = True,
+                      progress_map: dict = None
+                      ):
     """
     Generates and saves as 'filename' a midi file using given model, duration
     and tempo. Composer argument instructs the function which folder to take

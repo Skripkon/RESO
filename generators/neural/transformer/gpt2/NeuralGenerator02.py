@@ -2,9 +2,10 @@ import os
 import time
 
 import note_seq
-from .Decode import token_sequence_to_note_sequence
-from utils.progress_bar import ProgressBar
 from transformers import AutoTokenizer, GPT2LMHeadModel
+from utils.progress_bar import ProgressBar
+
+from .Decode import token_sequence_to_note_sequence
 
 
 def generate_neural02(composer: str,
@@ -35,7 +36,6 @@ def generate_neural02(composer: str,
 
     model = GPT2LMHeadModel.from_pretrained(model_path, device_map="cpu")
     tokenizer = AutoTokenizer.from_pretrained(model_path, device_map="cpu")
-
 
     all_tokens = []
     input_ids = tokenizer.encode(

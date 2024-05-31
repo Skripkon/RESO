@@ -4,7 +4,7 @@ import random
 import subprocess
 
 from fastapi import BackgroundTasks
-from fastapi import FastAPI, File, Request, UploadFile
+from fastapi import FastAPI, Request
 from fastapi.exceptions import HTTPException
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -28,6 +28,7 @@ class ProcessStartAlgo(BaseModel):
     tempo: str
     correct_scale: bool = False
     scale: int = 60
+
 
 class ProcessStartNeural(BaseModel):
     model: str
@@ -204,7 +205,7 @@ async def process_algorithmic(background_tasks: BackgroundTasks,
 
 # task to be added as a background task for neural generation
 # generates the track and subtracts 1 from the according track count
-def generate_neural_task(model, 
+def generate_neural_task(model,
                          composer,
                          model_path,
                          filename,
@@ -217,21 +218,21 @@ def generate_neural_task(model,
     match model:
         case "LSTM":
             generate_neural01(composer=composer,
-                            model_path=model_path,
-                            filename=filename,
-                            tempo=tempo,
-                            duration=duration,
-                            correct_scale=correct_scale,
-                            progress_map=progress_map
-                            )
+                              model_path=model_path,
+                              filename=filename,
+                              tempo=tempo,
+                              duration=duration,
+                              correct_scale=correct_scale,
+                              progress_map=progress_map
+                              )
         case "GPT-2":
             generate_neural02(composer=composer,
-                            model_path=model_path,
-                            filename=filename,
-                            tempo=tempo,
-                            duration=duration,
-                            progress_map=progress_map
-                            )
+                              model_path=model_path,
+                              filename=filename,
+                              tempo=tempo,
+                              duration=duration,
+                              progress_map=progress_map
+                              )
     tracks_number_by_ip[ip_address] -= 1
 
 
@@ -261,12 +262,12 @@ async def process_neural_start(background_tasks: BackgroundTasks,
         match form.model:
             case "LSTM":
                 models_folder = \
-                os.path.join('generators', 'neural', 'lstm',
-                            'models', form.composer)
+                    os.path.join('generators', 'neural', 'lstm',
+                                 'models', form.composer)
             case "GPT-2":
                 models_folder = \
-                os.path.join('generators', 'neural', 'transformer', 'gpt2',
-                            'models', form.composer)
+                    os.path.join('generators', 'neural', 'transformer', 'gpt2',
+                                 'models', form.composer)
         all_models = os.listdir(models_folder)
         random_model = random.choice(all_models)
         model_path = os.path.join(models_folder, random_model)
