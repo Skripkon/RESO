@@ -12,7 +12,7 @@ Our server:
 - [Setup](#Setup)
 - [Usage](#Usage)
 - [Run Tests](#Tests)
-- [Examples of the generated music](#Examples)
+- [Examples of music](#Examples)
 
 ## Setup
 
@@ -73,6 +73,22 @@ You can install it with the following commands:
 
 **No cherry picking**
 
+- Model: Waltz. Tempo: Fast. Scale: C.
 
-GPT2 | Chopin | tempo: Normal | No scale correction
+https://github.com/Skripkon/RESO/assets/78466953/a0dc32c7-c96d-44bf-b442-9d495d744c21
 
+- Model: Etude. Tempo: Normal. Scale: E.
+
+https://github.com/Skripkon/RESO/assets/78466953/2b799837-7927-4fe4-911f-16a2397211a4
+
+- Model: Calm Music. Tempo: Slow. Scale: F#.
+
+https://github.com/Skripkon/RESO/assets/78466953/34e12d50-c5c9-4cb5-a170-58ffad489fd2
+
+- Model: GPT2-Chopin. Tempo: Normal. Scale correction: no.
+
+https://github.com/Skripkon/RESO/assets/78466953/74e8f41e-bf5f-40a8-8200-bd89cb372338
+
+- Model: LSTM-Mozart. Tempo: Fast. Scale correction: no.
+
+https://github.com/Skripkon/RESO/assets/78466953/07b960bb-aa2c-4aae-89b0-a00d2d994e43
