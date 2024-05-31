@@ -57,6 +57,7 @@ RESO
     <select id="AlgoGenerator">
         <option value="AlgoGen01" selected>Calm Melody</option>
         <option value="AlgoGen02">Waltz</option>
+        <option value="AlgoGen03">Etude</option>
     </select>
     <button class="main-button" id="GenerateAlgorithmicMusic" type="button" onclick="generateAlgoTrack()">Generate a song!</button>
 </form>
@@ -158,10 +159,6 @@ RESO
 
 <!-- Enforce correct edit inputs time format -->
 <script src="{{ url_for('static', path='js/edit_input_pattern_enforcement.js') }}"></script>
-
-<div id="loadingContainer">
-    <img src="{{ url_for('static', path='images/loading.gif') }}" alt="Loading...">
-</div>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <!-- Process generated track -->

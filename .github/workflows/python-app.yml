@@ -1,14 +1,13 @@
-# This workflow will install Python dependencies, 
-# lint with a single version of Python, build and run docker.
-# In the future it could also test a functionality of the website.
+# This workflow automates the build, run, and test processes for the project.
+# It triggers on any push or pull request to any branch.
 
-name: Tests
+
+name: Build, run & test
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches:
+      - "**"
 
 permissions:
   contents: read
@@ -16,25 +15,36 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # pdf files require display, which is not available when you run it on Github
+      QT_QPA_PLATFORM: offscreen 
+
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.10
+    
+    - name: Set up Python 3.9.19
       uses: actions/setup-python@v3
       with:
-        python-version: "3.10"
+        python-version: "3.9.19"
+  
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Build docker
-      run: |
-        docker build -t deploy-reso .
-    - name: Run docker
-      run: |
-        docker run -d -p 8000:8000 deploy-reso
+    
     - name: Lint with flake8
       run: |
         flake8 .
+    
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --fix-missing timidity ffmpeg musescore3 libqt5core5a wget unzip dpkg
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo dpkg -i google-chrome-stable_current_amd64.deb
+        sudo apt-get -fy install
+        sudo rm -rf /var/lib/apt/lists/*
 
-
-
+    - name: Run tests
+      run: |
+        python run_tests.py --ip 127.0.0.1 --port 8000 --run-server --get-models 

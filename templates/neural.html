@@ -47,8 +47,8 @@ RESO
         <option value="Chopin">Chopin</option>
     </select>
     <div class="EditSetting">
-        <label id="NeuroCorrectScaleLabel" for="NeuroCorrectScale" class="SettingLabel">Apply scale correction?</label>
-        <input type="checkbox" id="NeuroCorrectScale" class="InputCheckBox" name="NeuroCorrectScale" checked=true>
+        <label id="NeuroCorrectScaleLabel" for="NeuroCorrectScale" class="SettingLabel" title="Simplifies the notes to make the track sound more melodic.">Apply scale correction?</label>
+        <input type="checkbox" id="NeuroCorrectScale" class="InputCheckBox" name="NeuroCorrectScale" checked=true title="Simplifies the notes to make the track sound more melodic.">
     </div>
     <button class="main-button" id="GenerateNeuralMusic" type="button" onclick="generateNeuralTrack()">Generate a song!</button>
 </form>
@@ -135,11 +135,6 @@ RESO
 
 <!-- Enforce correct edit inputs time format -->
 <script src="{{ url_for('static', path='js/edit_input_pattern_enforcement.js') }}"></script>
-
-
-<div id="loadingContainer">
-    <img src="{{ url_for('static', path='images/loading.gif') }}" alt="Loading...">
-</div>
 
 <!-- Process generated track -->
 <script src="{{ url_for('static', path='js/generate_neural_track.js') }}"></script>

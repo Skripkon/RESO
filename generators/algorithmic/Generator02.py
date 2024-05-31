@@ -168,6 +168,3 @@ def generate_music02(scale: int,
     myStream.write('musicxml.pdf', fp=filepath_pdf)
 
     progress_bar.end()
-
-    # For this download MuseScore 3
-    # myStream.show()

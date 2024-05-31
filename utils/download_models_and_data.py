@@ -18,16 +18,20 @@ def print_header(text: str):
 
 def request_to_download_files():
     while True:
-        agree = input((
-            "Dow you want do download missing files? [Y/n] "
-        ))
-        match agree.lower():
-            case 'y':
+        try:
+            agree = input((
+                "Dow you want do download missing files? [Y/n] "
+            ))
+            agree_lower = agree.lower()
+            if agree_lower == 'y':
                 break
-            case 'n':
+            elif agree_lower == 'n':
                 return
-            case _:
+            else:
                 print('No such option!')
+        except ValueError:
+            print("no input")
+            return
 
     while True:
         download_lstm_models_options = input((
@@ -79,18 +83,17 @@ def request_to_download_files():
             "the notes file\n"
             "f - force update of all notes files\n"
             "n - do not download notes files\n"))
-
-        match do_download_notes.lower():
-            case 's':
-                download_notes(force=False)
-                break
-            case 'f':
-                download_notes(force=True)
-                break
-            case 'n':
-                break
-            case _:
-                print("No such option!")
+        do_download_notes_lower = do_download_notes.lower()
+        if do_download_notes_lower == 's':
+            download_notes(force=False)
+        elif do_download_notes_lower == 'f':
+            download_notes(force=True)
+        elif do_download_notes_lower == 'n':
+            break
+        else:
+            print("No such option!")
+            continue
+        break
 
     while True:
         do_download_datasets = input((
@@ -99,18 +102,17 @@ def request_to_download_files():
             "as many MIDIs as required\n"
             "f - force update of all datasets\n"
             "n - do not download datasets\n"))
-
-        match do_download_datasets.lower():
-            case 's':
-                download_datasets(force=False)
-                break
-            case 'f':
-                download_datasets(force=True)
-                break
-            case 'n':
-                break
-            case _:
-                print("No such option!")
+        do_download_datasets_lower = do_download_datasets.lower()
+        if do_download_datasets_lower == 's':
+            download_datasets(force=False)
+        elif do_download_datasets_lower == 'f':
+            download_datasets(force=True)
+        elif do_download_datasets_lower == 'n':
+            break
+        else:
+            print("No such option!")
+            continue
+        break
     return
 
 
