@@ -18,8 +18,7 @@ def generate_neural02(composer: str,
     """
     Generates and saves as 'filename' a midi file using given model, duration
     and tempo. Composer argument instructs the function which folder to take
-    notes file from. The generated track is also corrected to fit the scale
-    better if the corresponding option is selected.
+    notes file from.
     """
     TEMPO_MAP = {"Normal": 100, "Slow": 60, "Fast": 120}
     COMPOSERS = ["Mozart", "Bach", "Chopin"]
@@ -29,14 +28,12 @@ def generate_neural02(composer: str,
     NOTE_LENGTH = 0.25 * 60 / bpm
     BAR_LENGTH = 4.0 * 60 / bpm
 
-    # TODO
-    quarters = 10
-
     filepath_midi = os.path.join("generated_data", f"{filename}.mid")
 
     model = GPT2LMHeadModel.from_pretrained(model_path, device_map="cpu")
     tokenizer = AutoTokenizer.from_pretrained(model_path, device_map="cpu")
 
+    # Generating
     all_tokens = []
     input_ids = tokenizer.encode(
         "PIECE_START TIME_SIGNATURE=4_4 GENRE=OTHER TRACK_START", return_tensors="pt"
@@ -95,6 +92,7 @@ def generate_neural02(composer: str,
         token_sequence, qpm=bpm, NOTE_LENGTH=NOTE_LENGTH, BAR_LENGTH=BAR_LENGTH
     )
 
+    # Duration fixing
     prev_end = 0
     new_notes = []
     for note in note_sequence.notes:
@@ -114,10 +112,8 @@ def generate_neural02(composer: str,
     note_sequence.total_time = duration
     print(note_sequence.total_time)
 
-    progress_bar.update(current=quarters, cur_time=time.time())
+    progress_bar.update(current=duration, cur_time=time.time())
 
+    # Coverting to midi
     note_seq.note_sequence_to_midi_file(note_sequence, filepath_midi)
     progress_bar.end()
-
-
-# generate_neural02("Bach", "path", 60, "Slow", "123")
