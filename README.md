@@ -5,7 +5,7 @@ Our server:
 [http://194.169.163.103:8000/](http://194.169.163.103:8000/)
 
 
-> :warning: Our server (for now) is too weak for Neural Generation. LSTM models take up to 10 min. GPT2 models aren't available. Run the server locally to test these models.
+> :warning: Our server (for now) is too weak for Neural Generation. LSTM models take up to 5 minutes (instead of 30 seconds) per generation. GPT2 models aren't available. Run the server locally to test these models.
 
 ## Table of Contents
 
@@ -18,7 +18,7 @@ Our server:
 
 ![linux_icon](https://github.com/Skripkon/RESO/assets/78466953/cf80bfe7-1595-4260-b9d7-5880df3b14e6)
 
-*Instructions below are for Linux only (it was tested on Ubuntu 20.04+).*
+*The instructions below are for Linux only and have been tested on Ubuntu 20.04 or later.*
 
 ### Via Docker:
 
@@ -71,7 +71,7 @@ You can install it with the following commands:
 
 ## Examples
 
-**No cherry picking**
+**No cherry-picking**
 
 - Model: Waltz. Tempo: Fast. Scale: C.
 
