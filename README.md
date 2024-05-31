@@ -1,16 +1,18 @@
 # RESO: Algorithmic and Neural Piano Music Generator
 
-All the information you need is on our website!
-[80.78.243.117:8000/](http://80.78.243.117:8000/)
+Our server:
 
-Or here, but opening it may take a while due to inactivity.
-[reso.onrender.com/](https://reso.onrender.com/)
+[http://194.169.163.103:8000/](http://194.169.163.103:8000/)
+
+
+> :warning: Our server (for now) is too weak for Neural Generation. LSTM models take up to 10 min. GPT2 models aren't available. Run the server locally to test these models.
 
 ## Table of Contents
 
 - [Setup](#Setup)
 - [Usage](#Usage)
 - [Run Tests](#Tests)
+- [Examples of the generated music](#Examples)
 
 ## Setup
 
@@ -65,3 +67,12 @@ You can install it with the following commands:
 ```wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb```
 
 ```dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install```
+
+
+## Examples
+
+**No cherry picking**
+
+
+GPT2 | Chopin | tempo: Normal | No scale correction
+

@@ -35,16 +35,16 @@ RESO
 </div>
 
 <form class="gen_form" method="post" action="/generate/process_neural_start">
-    <label class="Label">Choose model</label>
-    <select id="Model">
-        <option value="LSTM" selected>LSTM</option>
-        <option value="GPT-2">GPT-2</option>
+    <select id="Model" onchange="checkModel()">
+        <option value="LSTM">LSTM</option>
+        <option value="GPT-2" selected>GPT-2</option>
     </select>
     <label class="Label">Choose composer</label>
     <select id="Composer">
         <option value="Mozart" selected>Mozart</option>
         <option value="Bach">Bach</option>
         <option value="Chopin">Chopin</option>
+        <option value="All">Hybrid</option>
     </select>
     <div class="EditSetting">
         <label id="NeuroCorrectScaleLabel" for="NeuroCorrectScale" class="SettingLabel" title="Simplifies the notes to make the track sound more melodic.">Apply scale correction?</label>

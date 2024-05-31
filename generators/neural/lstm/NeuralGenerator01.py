@@ -24,7 +24,7 @@ def generate_neural01(composer: str,
     better if the corresponding option is selected.
     """
     TEMPO_MAP = {'Normal': 100, 'Slow': 60, 'Fast': 120}
-    COMPOSERS = ['Mozart', 'Bach', 'Chopin']
+    COMPOSERS = ['Mozart', 'Bach', 'Chopin', 'All']
     SEQUENCE_LENGTH = 100
 
     assert composer in COMPOSERS and duration in range(30, 160)

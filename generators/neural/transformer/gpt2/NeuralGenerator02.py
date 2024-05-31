@@ -21,7 +21,7 @@ def generate_neural02(composer: str,
     notes file from.
     """
     TEMPO_MAP = {"Normal": 100, "Slow": 60, "Fast": 120}
-    COMPOSERS = ["Mozart", "Bach", "Chopin"]
+    COMPOSERS = ["Mozart", "Bach", "Chopin", "All"]
 
     assert composer in COMPOSERS and duration in range(30, 160)
     bpm = TEMPO_MAP.get(tempo, TEMPO_MAP["Normal"])

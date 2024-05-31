@@ -132,3 +132,21 @@ function neuroFinish(filename) {
         }
     });   
 }
+
+function checkModel() {
+    var modelSelect = document.getElementById("Model");
+    var composerSelect = document.getElementById("Composer");
+    var selectedModel = modelSelect.options[modelSelect.selectedIndex].value;
+
+    if (selectedModel === "LSTM") {
+        // Disable Hybrid option
+        composerSelect.querySelector('option[value="All"]').disabled = true;
+        // Make sure another option is selected if Hybrid is currently selected
+        if (composerSelect.value === "All") {
+            composerSelect.value = composerSelect.options[0].value;
+        }
+    } else if (selectedModel === "GPT-2") {
+        // Enable Hybrid option
+        composerSelect.querySelector('option[value="All"]').disabled = false;
+    }
+}
