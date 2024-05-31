@@ -12,4 +12,6 @@ data/Mozart/*
 !data/Mozart/mozart.txt
 generators/neural/lstm/models/*
 !generators/neural/lstm/models/links.txt
+generators/neural/transformer/gpt2/models/*
+!generators/neural/transformer/gpt2/models/links.txt
 !.github

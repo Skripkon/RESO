@@ -12,7 +12,8 @@ from fastapi.templating import Jinja2Templates
 from generators.algorithmic.Generator01 import generate_music01
 from generators.algorithmic.Generator02 import generate_music02
 from generators.algorithmic.Generator03 import generate_music03
-from generators.neural.lstm.NeuralGenerator import generate_neural
+from generators.neural.lstm.NeuralGenerator01 import generate_neural01
+from generators.neural.transformer.gpt2.NeuralGenerator02 import generate_neural02
 from pydantic import BaseModel
 from utils.audio_editing import edit_mp3, str_to_secs
 from utils.data_logging import log_data
@@ -22,8 +23,17 @@ from werkzeug.utils import secure_filename
 
 
 # data validation model
-class ProcessStart(BaseModel):
+class ProcessStartAlgo(BaseModel):
     generator: str
+    duration: str
+    tempo: str
+    correct_scale: bool = False
+    scale: int = 60
+
+
+class ProcessStartNeural(BaseModel):
+    model: str
+    composer: str
     duration: str
     tempo: str
     correct_scale: bool = False
@@ -168,7 +178,7 @@ def generate_algo_task(generator,
 @app.post("/generate/process_algorithmic_start")
 async def process_algorithmic(background_tasks: BackgroundTasks,
                               request: Request,
-                              form: ProcessStart):
+                              form: ProcessStartAlgo):
     ip_address = request.client.host
     if max_generations_count_surpass(ip_address):
         return JSONResponse(content={"error": "You have a generation running. Please try again later."},
@@ -196,7 +206,8 @@ async def process_algorithmic(background_tasks: BackgroundTasks,
 
 # task to be added as a background task for neural generation
 # generates the track and subtracts 1 from the according track count
-def generate_neural_task(composer,
+def generate_neural_task(model,
+                         composer,
                          model_path,
                          filename,
                          tempo,
@@ -205,14 +216,23 @@ def generate_neural_task(composer,
                          progress_map,
                          ip_address
                          ):
-    generate_neural(composer=composer,
-                    model_path=model_path,
-                    filename=filename,
-                    tempo=tempo,
-                    duration=duration,
-                    correct_scale=correct_scale,
-                    progress_map=progress_map
-                    )
+    if model == "LSTM":
+        generate_neural01(composer=composer,
+                          model_path=model_path,
+                          filename=filename,
+                          tempo=tempo,
+                          duration=duration,
+                          correct_scale=correct_scale,
+                          progress_map=progress_map
+                          )
+    elif model == "GPT-2":
+        generate_neural02(composer=composer,
+                          model_path=model_path,
+                          filename=filename,
+                          tempo=tempo,
+                          duration=duration,
+                          progress_map=progress_map
+                          )
     tracks_number_by_ip[ip_address] -= 1
 
 
@@ -220,7 +240,7 @@ def generate_neural_task(composer,
 @app.post("/generate/process_neural_start")
 async def process_neural_start(background_tasks: BackgroundTasks,
                                request: Request,
-                               form: ProcessStart):
+                               form: ProcessStartNeural):
     ip_address = request.client.host
     if max_generations_count_surpass(ip_address):
         return JSONResponse(content={"error": "You have a generation running. Please try again later."},
@@ -233,13 +253,14 @@ async def process_neural_start(background_tasks: BackgroundTasks,
     minutes, seconds = map(int, form.duration.split(':'))
     duration_sec = minutes * 60 + seconds
 
-    log_data('utils/log.json', "Neural", form.generator,
+    log_data('utils/log.json', "Neural", form.model,
              datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     try:
-        models_folder = \
-            os.path.join('generators', 'neural', 'lstm',
-                         'models', form.generator)
+        if form.model == "LSTM":
+            models_folder = os.path.join('generators', 'neural', 'lstm', 'models', form.composer)
+        elif form.model == "GPT-2":
+            models_folder = os.path.join('generators', 'neural', 'transformer', 'gpt2', 'models', form.composer)
         all_models = os.listdir(models_folder)
         random_model = random.choice(all_models)
         model_path = os.path.join(models_folder, random_model)
@@ -253,7 +274,8 @@ async def process_neural_start(background_tasks: BackgroundTasks,
 
     progress_map[filename] = 0
     background_tasks.add_task(generate_neural_task,
-                              composer=form.generator,
+                              model=form.model,
+                              composer=form.composer,
                               model_path=model_path,
                               filename=filename,
                               tempo=form.tempo,

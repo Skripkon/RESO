@@ -1,6 +1,3 @@
-import time
-
-
 class ProgressBar:
     """
     Should be initialized with the start time of the tracked process, the
@@ -10,7 +7,7 @@ class ProgressBar:
     of the current progress of generation.
     """
     def __init__(self,
-                 start_time: time,
+                 start_time: float,
                  target,
                  message: str,
                  filename: int,
@@ -24,7 +21,7 @@ class ProgressBar:
         self.bar_length = bar_length
         self.progress_map[filename] = 0
 
-    def update(self, current, cur_time: time):
+    def update(self, current, cur_time: float):
         percent = float(current) * 100 / self.target
         arrow = '-' * int(percent / 100 * self.bar_length - 1) + '>'
         spaces = ' ' * (self.bar_length - len(arrow))

@@ -82,6 +82,15 @@
     cursor: pointer;
 }
 
+.Label {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: left;
+    color: #012a4a;
+    font-weight: 300;
+    cursor: pointer;
+}
+
 #EditAlgoTrackFadesContainer {
     display: none;
 }

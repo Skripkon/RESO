@@ -61,7 +61,8 @@ async function neuroUpdateProgress(filename) {
 
 // main function that initializes the track generation
 function generateNeuralTrack() {
-    var NeuralGenerator = $('#NeuralGenerator').val();
+    var Model = $('#Model').val();
+    var Composer = $('#Composer').val();
     var DurationOfTheTrack = $('#DurationOfTheTrack').val();
     var TempoOfTheTrack = $('#TempoOfTheTrack').val();
     var NeuroCorrectScale = $('#NeuroCorrectScale').val();
@@ -71,7 +72,7 @@ function generateNeuralTrack() {
         type: 'POST',
         url: '/generate/process_neural_start',
         contentType: 'application/json',
-        data: JSON.stringify({ 'generator': NeuralGenerator, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack, 'correct_scale': NeuroCorrectScale}),
+        data: JSON.stringify({ 'model': Model, 'composer': Composer, 'duration': DurationOfTheTrack, 'tempo': TempoOfTheTrack, 'correct_scale': NeuroCorrectScale}),
         success: function (data) {
             document.getElementById('neuroProgressBarText').innerText = "Initializing";
             document.getElementById('neuroProgressBar').setAttribute("style","width: 0%");
