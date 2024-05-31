@@ -13,7 +13,6 @@ from generators.algorithmic.Generator01 import generate_music01
 from generators.algorithmic.Generator02 import generate_music02
 from generators.algorithmic.Generator03 import generate_music03
 from generators.neural.lstm.NeuralGenerator01 import generate_neural01
-from generators.neural.transformer.gpt2.NeuralGenerator02 import generate_neural02
 from pydantic import BaseModel
 from utils.audio_editing import edit_mp3, str_to_secs
 from utils.data_logging import log_data
@@ -225,14 +224,6 @@ def generate_neural_task(model,
                           correct_scale=correct_scale,
                           progress_map=progress_map
                           )
-    elif model == "GPT-2":
-        generate_neural02(composer=composer,
-                          model_path=model_path,
-                          filename=filename,
-                          tempo=tempo,
-                          duration=duration,
-                          progress_map=progress_map
-                          )
     tracks_number_by_ip[ip_address] -= 1
 
 
@@ -259,8 +250,6 @@ async def process_neural_start(background_tasks: BackgroundTasks,
     try:
         if form.model == "LSTM":
             models_folder = os.path.join('generators', 'neural', 'lstm', 'models', form.composer)
-        elif form.model == "GPT-2":
-            models_folder = os.path.join('generators', 'neural', 'transformer', 'gpt2', 'models', form.composer)
         all_models = os.listdir(models_folder)
         random_model = random.choice(all_models)
         model_path = os.path.join(models_folder, random_model)
