@@ -85,7 +85,7 @@ def background_server_runner(ip: str, port: str, get_models: bool, show_logs: bo
     signal.signal(signal.SIGINT, empty_signal_handler)
     f_err = open(LOG_PATH, 'a', os.O_NONBLOCK)
     command = ['uvicorn', 'main:app', '--host', ip, '--port', port]
-    subprocess.run(command, input=b'y\ns\nf\nn' if get_models else b'n', stdout=None if show_logs else f_err, stderr=f_err)
+    subprocess.run(command, input=b'y\ns\ns\ns\nn' if get_models else b'n', stdout=None if show_logs else f_err, stderr=f_err)
 
 
 def start_server(ip: str, port: int, get_models: bool, show_logs: bool) -> int:
