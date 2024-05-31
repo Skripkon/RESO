@@ -47,4 +47,4 @@ jobs:
 
     - name: Run tests
       run: |
-        python run_tests.py --ip 127.0.0.1 --port 8000 --run-server --get-models 
+        python run_tests.py --ip 127.0.0.1 --port 8000 --run-server --get-models --show-logs
