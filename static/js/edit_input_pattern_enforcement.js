@@ -44,15 +44,6 @@ try {
           e.target.value = endOldValue;
       } else {
           endOldValue = value;
-          // TODO: protection from incorrect inputs (i.e. start time > end time)
-
-          // var startInput = document.getElementById('AlgoStartTime');
-          // var numStartValue = convertToSeconds(startInput.value);
-          // var numEndValue = convertToSeconds(value);
-          // if (numEndValue < numStartValue) {
-          //     e.target.value = startInput.value; 
-          //     alert('End time should be greater than start time.')
-          // }
       }
   });
 } catch {
@@ -68,22 +59,12 @@ try {
         e.target.value = endOldValue;
     } else {
         endOldValue = value;
-        // TODO: protection from incorrect inputs (i.e. start time > end time)
-
-        // var startInput = document.getElementById('AlgoStartTime');
-        // var numStartValue = convertToSeconds(startInput.value);
-        // var numEndValue = convertToSeconds(value);
-        // if (numEndValue < numStartValue) {
-        //     e.target.value = startInput.value; 
-        //     alert('End time should be greater than start time.')
-        // }
     }
   });
 } catch {
   // nothing
 }
 
-// TODO: protection from incorrect inputs (i.e. '01' -> '1')
 try {
   document.getElementById('AlgoFadeInTime').addEventListener('change', function(e) {
     var value = e.target.value;

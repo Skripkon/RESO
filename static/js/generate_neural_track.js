@@ -109,8 +109,6 @@ function neuroFinish(filename) {
             // Display download MP3 button
             $('#downloadMP3Button').html('<a class="hyperlink-text" id="DownloadGeneratedMP3File" href="/downloadMP3/' + encodeURIComponent(filenameMP3) + '" download>Download MP3</a>');
 
-            // Hide loading spinner
-            // $('#loadingContainer').hide();
             clearInterval(neuroProgressBarTextRefreshIntervalId);
             $('#neuroProgressBarContainer').hide();
             neuroGenerationState = 'initial';

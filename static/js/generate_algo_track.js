@@ -119,7 +119,6 @@ function algoFinish(filename) {
             $('#downloadPDFButton').html('<a class="hyperlink-text" id="DownloadGeneratedPDFFile" href="/downloadPDF/' + encodeURIComponent(filenamePDF) + '" download>Download PDF</a>');
 
             // Hide loading spinner
-            // $('#loadingContainer').hide();
             clearInterval(algoProgressBarTextRefreshIntervalId);
             $('#algoProgressBarContainer').hide();
             algoGenerationState = 'initial';
