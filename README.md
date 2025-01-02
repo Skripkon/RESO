@@ -1,11 +1,6 @@
 # RESO: Algorithmic and Neural Piano Music Generator
 
-Our server:
-
-[http://194.169.163.103:8000/](http://194.169.163.103:8000/)
-
-
-> :warning: Our server (for now) is too weak for Neural Generation. LSTM models take up to 5 minutes (instead of 30 seconds) per generation. GPT2 models aren't available. Run the server locally to test these models.
+> :warning: Currently not hosted, but can be run locally (see instructions below).
 
 ## Table of Contents
 
